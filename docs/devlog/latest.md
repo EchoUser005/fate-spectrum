@@ -2,7 +2,7 @@
 
 ## Current Status
 
-Bootstrap implementation is complete locally. The project has OpenSpec, docs, app code, tests, CI, Docker, and Vercel files. Final local validation passed. Remote push remains blocked because GitHub CLI is not installed.
+Second-round public demo hardening is implemented locally. Bootstrap OpenSpec has been archived into main specs. `public-demo-hardening` remains active as the current review change.
 
 ## Current Branch
 
@@ -10,58 +10,53 @@ Bootstrap implementation is complete locally. The project has OpenSpec, docs, ap
 
 ## Current OpenSpec Change
 
-`bootstrap-fate-spectrum`
+`public-demo-hardening`
 
 ## Recently Completed
 
-- Local git repository initialized.
-- OpenSpec bootstrap artifacts created and validated as a change.
-- Next.js App Router project files created.
-- Zod schemas, paipan providers, normalizer, scoring engine, LLM adapters, API routes, UI dashboard, exports, and tests added.
-- Next/React/ESLint dependency set upgraded to Next 16, React 19, ESLint 9, Zod 4, and React Hook Form 7.72.
-- Playwright Chromium installed and mock demo E2E passed.
-- User-provided shenjige endpoint mapping implemented.
+- Created `openspec/changes/public-demo-hardening/` with proposal, design, tasks, and spec deltas for paipan provider, report generation, UI dashboard, security, collaboration, and deployment.
+- Updated `docs/test-matrix.md` with Requirement -> Task -> Test traceability.
+- Ran one anonymous shenjige live calibration request. No API key, private input, or full raw response was recorded.
+- Confirmed successful shenjige response field presence for `status`, `message`, `data.zw`, `data.bz`, `data.bz.y`, `data.bz.m`, `data.bz.d`, `data.bz.h`, `data.bz.dayunGZ`, `data.bz.dayunAge`, `data.bz.dayunYear`, and `data.output`.
+- Calibrated shenjige mapping: successful requests need `hour`, `h`, and `m`; response `status` is numeric.
+- Updated Zod schema and normalization to handle numeric provider status, reject malformed BaZi containers, and keep output compatibility.
+- Added unit tests for shenjige normalization, missing optional fields, malformed responses, unsupported lunar input, unknown gender, true-solar-time prompt, SSRF blocking, and export disclaimers.
+- Hardened public demo UI copy, one-click Mock Demo, generation stages, dimension-first report explanation, mobile E2E coverage, and export disclaimer messaging.
+- Added or updated CONTRIBUTING, PR template, issue templates, deployment docs, and a disabled/manual server deploy workflow template.
+- Archived `bootstrap-fate-spectrum` as `openspec/changes/archive/2026-04-30-bootstrap-fate-spectrum/`.
+
+## Shenjige Calibration Summary
+
+- Initial request with only `hour` returned HTTP 200 JSON with numeric status and message but no usable `data.zw` or `data.bz`.
+- Public frontend mapping inspection showed the request also sends numeric `h` and `m`.
+- Anonymous retry with `hour=子`, `h=23`, and `m=0` returned the required successful structure.
+- The repository stores only minimal anonymous fixtures in tests, not the full live response.
 
 ## Commands Run
 
-- `gh auth status` -> failed, `gh` not installed.
-- `npm install -g @fission-ai/openspec@latest` -> success.
-- `openspec init --tools codex` -> local structure created, global Codex prompt setup blocked by sandbox.
-- `openspec new change bootstrap-fate-spectrum` -> success.
-- `openspec validate bootstrap-fate-spectrum --type change --strict --no-interactive` -> success.
-- `pnpm install` -> success.
-- `pnpm add --store-dir /Users/m4pro/Library/pnpm/store/v10 next@16.2.4 react@19.2.4 react-dom@19.2.4 eslint-config-next@16.2.4` -> success after escalation.
-- `pnpm add -D --store-dir /Users/m4pro/Library/pnpm/store/v10 eslint@9.39.1 @typescript-eslint/parser@8.59.1 @typescript-eslint/eslint-plugin@8.59.1 @playwright/test@1.59.1` -> success after escalation.
-- `pnpm add --store-dir /Users/m4pro/Library/pnpm/store/v10 react-hook-form@7.72.0 @hookform/resolvers@5.2.2` -> success after escalation.
-- `pnpm add --store-dir /Users/m4pro/Library/pnpm/store/v10 zod@4.3.6` -> success after escalation.
-- `pnpm exec playwright install chromium` -> success after escalation.
-- `openspec validate --all --strict --no-interactive` -> success.
+- `openspec new change public-demo-hardening` -> success.
+- `openspec validate --all --strict --no-interactive` -> success before implementation.
+- Anonymous shenjige structure check -> success after network escalation, field summary only.
+- `pnpm test` -> success, 23 unit tests passed.
 - `pnpm lint` -> success.
-- `pnpm test` -> success, 13 tests passed.
 - `pnpm build` -> success with `next build --webpack`.
-- `pnpm test:e2e` -> success after escalation, 1 Chromium test passed.
+- `openspec archive bootstrap-fate-spectrum -y` -> success.
+- `openspec validate --all --strict --no-interactive` -> success after archive.
+- `pnpm test:e2e` -> success after escalation and stale dev-server cleanup, 2 Chromium tests passed.
 
-## Failed Commands
+## Fixed During This Round
 
-- `gh auth status`: `zsh:1: command not found: gh`.
-- `openspec init --tools codex`: failed only for global Codex prompt directory `/Users/m4pro/.codex/prompts`; project-local OpenSpec files exist.
-- `pnpm view next@14 version`: transient DNS failure; not required for implementation.
-- Initial `pnpm build`: failed because Next 14 did not support `next.config.ts`; fixed by upgrading to Next 16.
-- Initial Next 16 build: Turbopack attempted a sandbox-blocked port bind; fixed by using `next build --webpack`.
-- Initial `pnpm test:e2e`: failed first because the sandbox blocked port binding, then because Playwright Chromium was missing; fixed by escalated E2E run and Chromium install.
-- E2E dev compile briefly failed because `@hookform/resolvers` 5 required Zod 4; fixed by upgrading Zod.
+- E2E initially failed in sandbox because the Next dev server could not bind port 3000; rerun with escalation.
+- E2E initially reused an old local dev server on port 3000; stopped stale processes and reran against current code.
+- E2E strict text locators were adjusted to heading/exact locators.
 
 ## Unfinished Tasks
 
-- Remote push is blocked until user installs/logs in GitHub CLI or configures git remote access.
+- Public demo deployment to Vercel is still user/maintainer-owned.
+- Production-grade retry/backoff for real paipan provider remains TODO.
+- DeepSeek/OpenAI-compatible model list confirmation remains TODO.
+- Domain binding and brand OG asset remain TODO.
 
 ## Next Codex Step
 
-Remote setup:
-
-```bash
-gh auth login
-gh repo create EchoUser005/fate-spectrum --public --description "Open-source BaZi and Ziwei multidimensional life spectrum dashboard."
-git remote add origin git@github.com:EchoUser005/fate-spectrum.git
-git push -u origin main
-```
+Continue from `openspec/changes/public-demo-hardening/tasks.md`, `docs/test-matrix.md`, and this devlog. If public demo review accepts this change, archive `public-demo-hardening`; otherwise keep it active and add follow-up tasks under the same change.

@@ -11,6 +11,42 @@ describe("normalizePaipan", () => {
     expect(normalized.dayun[0]?.ganzhi).toBe("甲戌");
   });
 
+  it("normalizes a shenjige response with numeric status", () => {
+    const { paipan, normalized } = normalizePaipan({
+      status: 200,
+      message: "",
+      data: {
+        zw: [
+          {
+            MangA: "命宫",
+            MangB: "子",
+            GongWei: 1,
+            ganzhi: { tg: 0, dz: 0 },
+            StarA: ["紫微"],
+            StarB: ["文昌"]
+          }
+        ],
+        bz: {
+          y: "甲子",
+          m: "乙丑",
+          d: "丙寅",
+          h: "丁卯",
+          dayunGZ: ["戊辰"],
+          dayunAge: [8],
+          dayunYear: [2007]
+        },
+        output: {
+          all: "匿名 shenjige minimal fixture"
+        }
+      }
+    });
+
+    expect(paipan.status).toBe("200");
+    expect(normalized.pillars.year).toBe("甲子");
+    expect(normalized.palaces[0]?.stars).toContain("紫微");
+    expect(normalized.outputs.all).toBe("匿名 shenjige minimal fixture");
+  });
+
   it("handles mismatched dayun arrays", () => {
     const { normalized } = normalizePaipan({
       status: "success",
@@ -32,9 +68,9 @@ describe("normalizePaipan", () => {
     expect(normalized.dayun[2]?.ganzhi).toBe("第3运");
   });
 
-  it("handles missing palaces and output", () => {
+  it("handles missing optional palaces, dayun arrays, and output", () => {
     const { normalized } = normalizePaipan({
-      status: "success",
+      status: 200,
       data: {
         bz: {
           y: "甲子",
@@ -47,5 +83,22 @@ describe("normalizePaipan", () => {
 
     expect(normalized.palaces).toHaveLength(0);
     expect(normalized.outputs).toEqual({});
+    expect(normalized.dayun[0]?.ganzhi).toBe("第1运");
+  });
+
+  it("rejects malformed shenjige responses before scoring", () => {
+    expect(() =>
+      normalizePaipan({
+        status: 200,
+        message: "",
+        data: {
+          output: {
+            all: "missing bazi container"
+          }
+        }
+      })
+    ).toThrow(/missing required BaZi/i);
+
+    expect(() => normalizePaipan("not-json")).toThrow(/non-object payload/i);
   });
 });

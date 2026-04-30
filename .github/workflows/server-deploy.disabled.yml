@@ -1,0 +1,27 @@
+name: Server Deploy Disabled Template
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm_deploy:
+        description: "Type deploy to run the disabled server deployment template."
+        required: true
+        default: "no"
+
+jobs:
+  deploy:
+    if: ${{ github.event.inputs.confirm_deploy == 'deploy' }}
+    runs-on: ubuntu-latest
+    environment: disabled-server-deploy
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Explain disabled template
+        run: |
+          echo "This workflow is manual-only and guarded for future server deployment."
+          echo "Required secrets: DEPLOY_HOST, DEPLOY_USER, DEPLOY_PORT, DEPLOY_PATH, SSH_PRIVATE_KEY."
+
+      - name: Stop before real deployment
+        run: |
+          echo "Real deployment commands are intentionally not enabled in public demo hardening."
+          exit 1

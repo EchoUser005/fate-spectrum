@@ -5,6 +5,7 @@ import type { ProviderConfig } from "@/lib/schemas/provider";
 import type { Narrative, ReportResponse } from "@/lib/schemas/report";
 import { ReportResponseSchema } from "@/lib/schemas/report";
 import { normalizePaipan } from "@/lib/paipan/normalize";
+import { buildReportNotices } from "@/lib/report-notices";
 import { DIMENSIONS } from "@/lib/scoring/dimensions";
 import { buildRuleNarrative } from "@/lib/scoring/explanations";
 import { scoreDayun } from "@/lib/scoring/dayun";
@@ -28,7 +29,8 @@ export function buildRuleBasedReport(params: {
       generatedAt: params.generatedAt ?? new Date().toISOString(),
       engineVersion: ENGINE_VERSION,
       provider: params.provider.provider,
-      hasLlmNarrative
+      hasLlmNarrative,
+      notices: buildReportNotices(params.birth, params.provider)
     },
     birth: params.birth,
     normalized,

@@ -1,17 +1,25 @@
 import { z } from "zod";
 
-const StarArraySchema = z.array(z.string()).optional();
+const StarArraySchema = z
+  .union([z.array(z.coerce.string()), z.coerce.string().transform((value) => (value ? [value] : []))])
+  .optional();
+
+const ProviderOutputSchema = z
+  .record(z.string(), z.unknown())
+  .transform((output): Record<string, string> =>
+    Object.fromEntries(Object.entries(output).map(([key, value]) => [key, stringifyProviderOutput(value)]))
+  );
 
 export const ZiweiPalaceSchema = z
   .object({
     MangA: z.string().optional(),
     MangB: z.string().optional(),
     MangC: z.string().optional(),
-    GongWei: z.number().optional(),
+    GongWei: z.coerce.number().optional(),
     ganzhi: z
       .object({
-        tg: z.number(),
-        dz: z.number()
+        tg: z.coerce.number(),
+        dz: z.coerce.number()
       })
       .optional(),
     StarA: StarArraySchema,
@@ -28,23 +36,24 @@ export const ZiweiPalaceSchema = z
 
 export const PaipanResponseSchema = z
   .object({
-    status: z.string(),
-    message: z.string().optional(),
+    status: z.union([z.string(), z.number()]).transform(String),
+    message: z.coerce.string().optional(),
     data: z
       .object({
-        zw: z.array(ZiweiPalaceSchema).optional(),
+        zw: z
+          .union([z.array(ZiweiPalaceSchema), z.record(z.string(), ZiweiPalaceSchema).transform(Object.values)])
+          .optional(),
         bz: z
           .object({
-            y: z.string(),
-            m: z.string(),
-            d: z.string(),
-            h: z.string(),
-            dayunStartDay: z.string().optional(),
-            dayunGZ: z.array(z.string()).optional(),
-            dayunAge: z.array(z.number()).optional(),
-            dayunYear: z.array(z.number()).optional()
+            y: z.coerce.string().optional(),
+            m: z.coerce.string().optional(),
+            d: z.coerce.string().optional(),
+            h: z.coerce.string().optional(),
+            dayunStartDay: z.coerce.string().optional(),
+            dayunGZ: z.array(z.coerce.string()).optional(),
+            dayunAge: z.array(z.coerce.number()).optional(),
+            dayunYear: z.array(z.coerce.number()).optional()
           })
-          .partial()
           .optional(),
         solarday: z.string().optional(),
         lunarday: z.string().optional(),
@@ -54,7 +63,7 @@ export const PaipanResponseSchema = z
         shenzhu: z.string().optional(),
         fiveelement: z.string().optional(),
         yinyanggender: z.string().optional(),
-        output: z.record(z.string(), z.string()).optional()
+        output: ProviderOutputSchema.optional()
       })
       .catchall(z.unknown())
   })
@@ -102,3 +111,14 @@ export type ZiweiPalace = z.infer<typeof ZiweiPalaceSchema>;
 export type PaipanResponse = z.infer<typeof PaipanResponseSchema>;
 export type NormalizedPaipan = z.infer<typeof NormalizedPaipanSchema>;
 export type NormalizedDayun = z.infer<typeof NormalizedDayunSchema>;
+
+function stringifyProviderOutput(value: unknown) {
+  if (typeof value === "string") return value;
+  if (typeof value === "number" || typeof value === "boolean") return String(value);
+  if (value === null || value === undefined) return "";
+  try {
+    return JSON.stringify(value);
+  } catch {
+    return String(value);
+  }
+}

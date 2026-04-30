@@ -79,7 +79,8 @@ export const ReportResponseSchema = z.object({
     generatedAt: z.string(),
     engineVersion: z.string(),
     provider: z.string(),
-    hasLlmNarrative: z.boolean()
+    hasLlmNarrative: z.boolean(),
+    notices: z.array(z.string()).default([])
   }),
   birth: BirthInputSchema,
   normalized: NormalizedPaipanSchema,

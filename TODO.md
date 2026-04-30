@@ -2,14 +2,14 @@
 
 ## P0 - Must have before public demo
 
-- [ ] 接入并实测真实排盘 Provider。
+- [x] 接入并实测真实排盘 Provider。
 - [ ] 补充真实排盘请求代码的生产级错误处理和重试策略。
-- [ ] 校准真实排盘 response mapping，确认 `data.zw`、`data.bz`、`data.output` 的字段完整性。
+- [x] 校准真实排盘 response mapping，确认 `data.zw`、`data.bz`、`data.output` 的字段完整性。
 - [ ] 确认 DeepSeek / OpenAI-compatible model list。
 - [ ] 补充真实品牌 OG 图。
 - [ ] 部署到 Vercel。
 - [ ] 绑定域名。
-- [ ] GitHub CLI 当前不可用，用户需要安装/登录后创建或推送远端仓库。
+- [x] GitHub remote 已由用户推送到 `https://github.com/EchoUser005/fate-spectrum`。
 
 ## P1 - Good for v0.2
 

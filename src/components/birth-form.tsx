@@ -63,6 +63,9 @@ export function BirthForm({ form }: { form: UseFormReturn<BirthInput> }) {
         <input type="checkbox" className="h-4 w-4 rounded border-slate-300" {...register("useTrueSolarTime")} />
         启用真太阳时校正
       </label>
+      <p className="mt-2 text-xs leading-5 text-slate-500">
+        当前真太阳时仅保留开关和提示；未提供经纬度时不会阻塞 Mock Demo。
+      </p>
     </section>
   );
 }

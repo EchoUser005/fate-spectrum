@@ -16,6 +16,8 @@ export const BirthInputSchema = z.object({
   timeBranch: z.enum(TIME_BRANCHES),
   timezone: z.string().trim().min(1),
   birthPlace: z.string().trim().max(120).optional(),
+  latitude: z.number().min(-90).max(90).optional(),
+  longitude: z.number().min(-180).max(180).optional(),
   useTrueSolarTime: z.boolean()
 });
 

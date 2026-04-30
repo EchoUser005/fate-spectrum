@@ -21,6 +21,7 @@ export function DimensionCard({
           <p className="mt-1 text-xs leading-5 text-slate-500">{dimension.meaning}</p>
         </div>
         <div className="text-right">
+          <p className="text-xs text-slate-500">平均色阶</p>
           <p className="text-2xl font-semibold text-ink">{average}</p>
           <p className="text-xs text-slate-500">{getScoreTone(average)}</p>
         </div>
@@ -31,7 +32,9 @@ export function DimensionCard({
           style={{ width: `${average}%`, backgroundColor: dimension.color }}
         />
       </div>
-      <p className="mt-3 text-sm leading-6 text-slate-700">{report.narratives.dimensions[dimension.id]}</p>
+      <p className="mt-3 rounded-md bg-mist p-3 text-sm leading-6 text-slate-700">
+        {report.narratives.dimensions[dimension.id]}
+      </p>
     </article>
   );
 }

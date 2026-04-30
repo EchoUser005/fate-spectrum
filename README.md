@@ -48,12 +48,12 @@ Enable LLM explanation, choose `OpenAI-compatible Custom`, then enter a compatib
 Choose `Custom Paipan` and provide an HTTPS endpoint. For `https://www.shenjige.cn/api/ziwei/getPlateArrangement`, the provider sends form data:
 
 - `year`, `month`, `day`
-- `hour`
+- `hour`, `h`, `m`
 - `genderValue`
 - `settings[sihua]`, `settings[brightness]`, `settings[isShowDStarBright]`, `settings[JKXK]`, `settings[RYType]`, `settings[RYTypeM45]`
 - `zzpAnalysis`
 
-MVP real-provider limitations: solar calendar only, `male` or `female` only, timezone and birthPlace preserved but not converted, true solar time deferred.
+MVP real-provider limitations: solar calendar only, `male` or `female` only, timezone and birthPlace preserved but not converted, overseas timezone conversion deferred, true solar time currently preserves the switch and prompt only.
 
 ## OpenSpec Workflow
 

@@ -57,16 +57,22 @@ export function ProviderKeyForm({
         </label>
 
         {paipanConfig.provider === "custom-paipan" ? (
-          <label className="grid gap-1 text-sm font-medium text-slate-700">
-            Paipan endpoint
-            <Input
-              value={paipanConfig.paipanEndpoint ?? ""}
-              onChange={(event) => onPaipanChange({ ...paipanConfig, paipanEndpoint: event.target.value })}
-            />
-          </label>
+          <div className="grid gap-3">
+            <label className="grid gap-1 text-sm font-medium text-slate-700">
+              Paipan endpoint
+              <Input
+                value={paipanConfig.paipanEndpoint ?? ""}
+                onChange={(event) => onPaipanChange({ ...paipanConfig, paipanEndpoint: event.target.value })}
+              />
+            </label>
+            <div className="rounded-md bg-amber-50 px-3 py-2 text-sm leading-6 text-amber-900">
+              <p>shenjige 当前仅支持公历和 male/female。</p>
+              <p>暂不处理海外时区换算；真太阳时仅保留开关和提示。</p>
+            </div>
+          </div>
         ) : (
           <p className="rounded-md bg-emerald-50 px-3 py-2 text-sm text-emerald-800">
-            Mock Demo 无需 key，会使用匿名样例排盘。
+            Mock Demo 一键生成，无需 Key；没有真实排盘接口时会使用匿名样例星盘。
           </p>
         )}
 
@@ -79,6 +85,9 @@ export function ProviderKeyForm({
           />
           启用 LLM 解释润色
         </label>
+        <p className="rounded-md bg-cyan-50 px-3 py-2 text-sm leading-6 text-cyan-900">
+          DeepSeek / OpenAI-compatible 只负责解释已有排盘和规则分数，不负责排盘，也不会改写分数。
+        </p>
 
         <label className="grid gap-1 text-sm font-medium text-slate-700">
           LLM Provider

@@ -19,6 +19,9 @@ export function ReportDashboard({ report }: { report: ReportResponse }) {
             <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">人生光谱报告</p>
             <h2 className="mt-1 text-2xl font-semibold text-ink">{report.birth.nickname || "匿名命盘"}</h2>
             <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-600">{report.narratives.overview}</p>
+            <p className="mt-2 max-w-3xl text-sm leading-6 text-slate-500">
+              本报告以七个维度的色阶和曲线呈现能量分布，不提供单一总分。
+            </p>
           </div>
           <div className="grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
             <Summary label="生肖" value={report.normalized.identity.shenxiao || "未知"} />
@@ -29,11 +32,25 @@ export function ReportDashboard({ report }: { report: ReportResponse }) {
         </div>
       </section>
 
+      {report.meta.notices.length > 0 ? (
+        <section className="rounded-md border border-cyan-200 bg-cyan-50 p-4 text-sm leading-6 text-cyan-950">
+          {report.meta.notices.map((notice) => (
+            <p key={notice}>{notice}</p>
+          ))}
+        </section>
+      ) : null}
+
       <BaziPillars report={report} />
       <PalaceGrid report={report} />
 
-      <section>
-        <h2 className="mb-3 text-lg font-semibold text-ink">多维度能量谱</h2>
+      <section className="rounded-md bg-white p-5 ring-1 ring-slate-200">
+        <div className="mb-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">Dimension Spectrum</p>
+          <h2 className="mt-1 text-xl font-semibold text-ink">多维度能量谱</h2>
+          <p className="mt-2 text-sm leading-6 text-slate-600">
+            财富、事业、舒适、自我价值、关系、健康能量与风险可控度分别显影，读法以维度解释和大运光谱为准。
+          </p>
+        </div>
         <div className="grid gap-3 lg:grid-cols-2">
           {report.dimensions.map((dimension) => (
             <DimensionCard key={dimension.id} dimension={dimension} report={report} />

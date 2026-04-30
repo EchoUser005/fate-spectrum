@@ -2,33 +2,52 @@
 
 ## Project State
 
-Fate Spectrum is bootstrapped as a local Next.js repository at `/Users/m4pro/Documents/fate_spectrum/fate-spectrum`. It has OpenSpec, code, tests, docs, CI, Docker, and Vercel configuration. Local validation passed.
+Fate Spectrum is a Next.js repository at `/Users/m4pro/Documents/fate_spectrum/fate-spectrum` with OpenSpec, code, tests, docs, CI, Docker, Vercel config, collaboration templates, and deployment guidance. The Git remote is `https://github.com/EchoUser005/fate-spectrum`.
 
-## Completed Modules
+## OpenSpec State
 
-- Schemas: `src/lib/schemas/*`
-- Paipan: mock provider, custom provider, shenjige mapping, normalization
-- Scoring: dimensions, ganzhi helpers, dayun/yearly scoring, rule explanations
-- LLM: DeepSeek/OpenAI-compatible adapters, prompt, safe JSON extraction
-- API: `/api/health`, `/api/paipan`, `/api/report`
-- UI: app shell, forms, report dashboard, charts, heatmap, tables, raw JSON, export actions
-- Export: Markdown and JSON
-- Tests: unit tests and Playwright mock flow
+- `bootstrap-fate-spectrum` has been archived to `openspec/changes/archive/2026-04-30-bootstrap-fate-spectrum/`.
+- Main specs now live in `openspec/specs/`.
+- Active change: `public-demo-hardening`.
+- `public-demo-hardening` remains active for public demo review; archive it after reviewer acceptance or add follow-up tasks if more hardening is needed.
 
-## Not Completed
+## Completed This Round
 
-- Real shenjige response mapping needs live calibration.
-- GitHub remote creation/push is blocked because `gh` is not installed.
-- Bootstrap OpenSpec change remains unarchived until first public-demo validation.
+- Public demo OpenSpec change and traceability matrix.
+- Real shenjige calibration with anonymous sample only.
+- Shenjige mapping update for `hour`, `h`, and `m`.
+- Numeric shenjige `status` compatibility.
+- Malformed provider response rejection before scoring.
+- Non-blocking true-solar-time prompt for Mock Demo when no coordinates are provided.
+- Public demo UI copy for Mock Demo, LLM explanation-only behavior, and shenjige limitations.
+- Visible generation stages, dimension-first explanation, mobile E2E coverage, and export disclaimer coverage.
+- CONTRIBUTING, PR template, bug/feature issue templates, deployment doc expansion, and disabled/manual server deploy workflow template.
 
 ## Current Risks
 
-- shenjige response shape may need mapping adjustments.
-- Playwright browsers may need separate installation on fresh machines with `pnpm exec playwright install chromium`.
+- Real shenjige provider availability and undocumented behavior can still drift.
+- Retry/backoff and richer provider error taxonomy are not implemented yet.
+- No lunar conversion, overseas timezone conversion, or true-solar-time coordinate math yet.
+- Vercel deployment, domain binding, and brand OG image remain open public-demo tasks.
+
+## Current Validation
+
+- `openspec validate --all --strict --no-interactive` passed.
+- `pnpm lint` passed.
+- `pnpm test` passed, 23 unit tests.
+- `pnpm build` passed with `next build --webpack`.
+- `pnpm test:e2e` passed after escalation, 2 Chromium tests.
+
+## Useful Notes
+
+- Do not commit full live shenjige responses. Keep fixtures anonymous and minimal.
+- If Playwright reuses a stale port 3000 server, stop the old local Next process and rerun `pnpm test:e2e`.
+- E2E may need escalation because local port binding can be blocked by the sandbox.
+- The disabled server workflow intentionally exits before real deployment; it only documents future secrets and guard rails.
 
 ## User Must Provide Later
 
-1. GitHub CLI installation/login or SSH remote setup.
+1. Vercel project import/deployment decision.
 2. Domain.
 3. Confirmation for true solar time algorithm.
 4. Confirmation for lunar conversion library.
@@ -43,34 +62,9 @@ Fate Spectrum is bootstrapped as a local Next.js repository at `/Users/m4pro/Doc
 - `AGENTS.md`
 - `README.md`
 - `TODO.md`
-- `openspec/changes/bootstrap-fate-spectrum/`
+- `openspec/specs/`
+- `openspec/changes/public-demo-hardening/`
 - `docs/devlog/latest.md`
 - `docs/handoff/latest.md`
 - `docs/test-matrix.md`
-
-## First Commands To Run Next Time
-
-```bash
-openspec validate --all --strict --no-interactive
-pnpm lint
-pnpm test
-pnpm build
-pnpm test:e2e
-```
-
-## Current Validation
-
-- `openspec validate --all --strict --no-interactive` passed.
-- `pnpm lint` passed.
-- `pnpm test` passed, 13 unit tests.
-- `pnpm build` passed with `next build --webpack`.
-- `pnpm test:e2e` passed, 1 Chromium test.
-
-## Remote Push Commands If Needed
-
-```bash
-gh auth login
-gh repo create EchoUser005/fate-spectrum --public --description "Open-source BaZi and Ziwei multidimensional life spectrum dashboard."
-git remote add origin git@github.com:EchoUser005/fate-spectrum.git
-git push -u origin main
-```
+- `docs/adr/`

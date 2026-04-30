@@ -51,11 +51,14 @@ export const customPaipanProvider: PaipanProvider = {
 
 export function buildShenjigeFormBody(input: BirthInput) {
   const [year, month, day] = input.birthDate.split("-").map(Number);
+  const clock = getClockTime(input);
   const params = new URLSearchParams();
   params.set("year", String(year));
   params.set("month", String(month));
   params.set("day", String(day));
   params.set("hour", input.timeBranch);
+  params.set("h", String(clock.hour));
+  params.set("m", String(clock.minute));
   params.set("genderValue", input.gender === "female" ? "F" : "M");
   params.set("settings[sihua]", "D");
   params.set("settings[brightness]", "D");
@@ -99,7 +102,11 @@ async function callShenjigeProvider(input: BirthInput, endpoint: string) {
     throw new Error(`Paipan provider failed with HTTP ${response.status}`);
   }
 
-  return coercePaipanResponse(await response.json());
+  const paipan = coercePaipanResponse(await response.json());
+  if (!isSuccessfulProviderStatus(paipan.status)) {
+    throw new Error(`shenjige provider returned status ${paipan.status}: ${paipan.message || "unknown error"}`);
+  }
+  return paipan;
 }
 
 export async function assertAllowedEndpoint(endpoint: string) {
@@ -144,4 +151,38 @@ function isPrivateIp(address: string) {
   }
   if (address.toLowerCase().startsWith("fc") || address.toLowerCase().startsWith("fd")) return true;
   return false;
+}
+
+function getClockTime(input: BirthInput) {
+  const match = input.birthTime?.match(/^(\d{2}):(\d{2})$/);
+  if (match) {
+    return {
+      hour: Number(match[1]),
+      minute: Number(match[2])
+    };
+  }
+
+  const branchHour: Record<BirthInput["timeBranch"], number> = {
+    子: 23,
+    丑: 1,
+    寅: 3,
+    卯: 5,
+    辰: 7,
+    巳: 9,
+    午: 11,
+    未: 13,
+    申: 15,
+    酉: 17,
+    戌: 19,
+    亥: 21
+  };
+
+  return {
+    hour: branchHour[input.timeBranch],
+    minute: 0
+  };
+}
+
+function isSuccessfulProviderStatus(status: string) {
+  return status === "200" || status.toLowerCase() === "success" || status.toLowerCase() === "ok";
 }

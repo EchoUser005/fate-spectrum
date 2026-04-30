@@ -41,17 +41,14 @@ export function coercePaipanResponse(raw: unknown): PaipanResponse {
     };
   }
 
-  return {
-    status: "error",
-    message: "Provider returned a non-object payload.",
-    data: {}
-  };
+  throw new Error("Provider returned a non-object payload.");
 }
 
 export function normalizePaipan(raw: unknown): { paipan: PaipanResponse; normalized: NormalizedPaipan } {
   const paipan = coercePaipanResponse(raw);
   const data = paipan.data ?? {};
   const bz = data.bz ?? {};
+  assertNormalizableBazi(bz);
   const dayunGZ = Array.isArray(bz.dayunGZ) ? bz.dayunGZ : [];
   const dayunAge = Array.isArray(bz.dayunAge) ? bz.dayunAge : [];
   const dayunYear = Array.isArray(bz.dayunYear) ? bz.dayunYear : [];
@@ -97,6 +94,18 @@ export function normalizePaipan(raw: unknown): { paipan: PaipanResponse; normali
   };
 
   return { paipan, normalized };
+}
+
+function assertNormalizableBazi(bz: PaipanResponse["data"]["bz"]) {
+  if (!bz || typeof bz !== "object") {
+    throw new Error("Provider response is missing required BaZi data.");
+  }
+
+  const requiredFields = ["y", "m", "d", "h"] as const;
+  const missingFields = requiredFields.filter((field) => !bz[field]);
+  if (missingFields.length > 0) {
+    throw new Error(`Provider response is missing required BaZi fields: ${missingFields.join(", ")}.`);
+  }
 }
 
 function collectStars(palace: NonNullable<PaipanResponse["data"]["zw"]>[number]) {

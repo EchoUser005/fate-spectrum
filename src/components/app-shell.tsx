@@ -14,7 +14,7 @@ import { BirthForm } from "@/components/birth-form";
 import { ProviderKeyForm } from "@/components/provider-key-form";
 import { ReportDashboard } from "@/components/report-dashboard";
 
-const generationSteps = ["校验生辰", "获取排盘 JSON", "归一化排盘", "计算大运流年光谱", "生成解释报告", "渲染可视化"];
+const generationSteps = ["校验输入", "获取排盘", "归一化排盘", "计算光谱分数", "生成解释", "渲染结果"];
 
 export function AppShell() {
   const [paipanConfig, setPaipanConfig] = useState<ProviderConfig>({
@@ -49,9 +49,9 @@ export function AppShell() {
 
   const providerNote = useMemo(() => {
     if (paipanConfig.provider === "mock") {
-      return "当前为样例排盘。DeepSeek 或 OpenAI-compatible 只会润色解释，不会决定分数。";
+      return "Mock Demo 一键生成，无需排盘 Key；没有真实排盘接口时使用匿名样例星盘。DeepSeek / OpenAI-compatible 只负责解释已有排盘和规则分数。";
     }
-    return "真实 shenjige 映射当前只支持公历和 male/female；农历、海外时区换算、真太阳时算法列入 TODO。";
+    return "shenjige provider 当前只支持公历和 male/female；暂不处理海外时区换算，真太阳时仅保留开关和提示。";
   }, [paipanConfig.provider]);
 
   const onSubmit = form.handleSubmit(async (birth) => {
@@ -126,6 +126,9 @@ export function AppShell() {
               <p className="mt-5 text-lg leading-8 text-white/88">
                 把八字、紫微、大运与流年拆解成可解释的多维人生光谱。
               </p>
+              <p className="mt-3 max-w-lg text-sm leading-6 text-white/78">
+                首屏默认就是 Mock Demo，公开评审可以直接生成样例星盘，不需要填写任何 Key。
+              </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button type="submit" disabled={isGenerating}>
                   {isGenerating ? <Loader2 size={17} className="animate-spin" /> : <Sparkles size={17} />}
@@ -163,11 +166,11 @@ export function AppShell() {
               <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">Generation Status</p>
               <h2 className="mt-1 text-xl font-semibold text-ink">生成状态</h2>
             </div>
-            <div className="flex flex-wrap gap-2">
+            <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-6">
               {generationSteps.map((step) => (
                 <span
                   key={step}
-                  className={`rounded-md px-3 py-1 text-sm ${
+                  className={`rounded-md px-3 py-2 text-center text-sm ${
                     status.includes(step) ? "bg-cyan-50 text-cyan-800" : "bg-slate-100 text-slate-500"
                   }`}
                 >
