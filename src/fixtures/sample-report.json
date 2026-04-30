@@ -1,0 +1,71 @@
+{
+  "meta": {
+    "generatedAt": "2026-04-30T00:00:00.000Z",
+    "engineVersion": "0.1.0-rule-spectrum",
+    "provider": "mock",
+    "hasLlmNarrative": false
+  },
+  "birth": {
+    "nickname": "匿名样例",
+    "gender": "female",
+    "calendar": "solar",
+    "birthDate": "1999-09-15",
+    "birthTime": "23:00",
+    "timeBranch": "子",
+    "timezone": "Asia/Shanghai",
+    "birthPlace": "Shanghai",
+    "useTrueSolarTime": false
+  },
+  "normalized": {
+    "pillars": {
+      "year": "己卯",
+      "month": "癸酉",
+      "day": "庚午",
+      "hour": "丙子"
+    },
+    "dayun": [
+      {
+        "index": 0,
+        "ganzhi": "甲戌",
+        "age": 8,
+        "startYear": 2007,
+        "endYear": 2016
+      }
+    ],
+    "palaces": [],
+    "identity": {
+      "solarday": "1999-09-15",
+      "lunarday": "己卯年八月初六",
+      "shenxiao": "兔",
+      "age": 27,
+      "mingzhu": "禄存",
+      "shenzhu": "天梁",
+      "fiveelement": "金四局",
+      "yinyanggender": "阴女"
+    },
+    "outputs": {
+      "all": "匿名开发样例"
+    }
+  },
+  "dimensions": [],
+  "dayunScores": [],
+  "yearlyScores": [],
+  "narratives": {
+    "overview": "匿名样例报告占位。",
+    "dimensions": {
+      "wealth": "占位",
+      "career": "占位",
+      "comfort": "占位",
+      "selfValue": "占位",
+      "relationship": "占位",
+      "healthEnergy": "占位",
+      "riskControl": "占位"
+    },
+    "keyWindows": [],
+    "actionPlan": []
+  },
+  "rawPaipan": {
+    "status": "success",
+    "data": {}
+  }
+}
