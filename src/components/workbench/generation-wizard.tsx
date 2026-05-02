@@ -18,6 +18,7 @@ type Props = {
   onLlmChange: (config: ProviderConfig) => void;
   onClearCachedLlm: () => void;
   onSubmit: () => void;
+  onCancelAddProfile?: () => void;
 };
 
 export function GenerationWizard({
@@ -28,7 +29,8 @@ export function GenerationWizard({
   isGenerating,
   onLlmChange,
   onClearCachedLlm,
-  onSubmit
+  onSubmit,
+  onCancelAddProfile
 }: Props) {
   return (
     <section id="wizard" className="mx-auto w-full max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
@@ -46,6 +48,14 @@ export function GenerationWizard({
                 </h1>
               </div>
             </header>
+
+            {onCancelAddProfile ? (
+              <div className="mt-4 flex justify-end">
+                <Button type="button" variant="secondary" onClick={onCancelAddProfile}>
+                  返回命盘
+                </Button>
+              </div>
+            ) : null}
 
             <section className="mt-8">
               <div className="flex items-end justify-between gap-4">

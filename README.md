@@ -44,7 +44,15 @@ Apply for a key at `https://platform.deepseek.com` and check current model names
 
 LLM keys are cached only in browser `sessionStorage` for the current session and can be cleared from the UI.
 
-Prompts live in `prompts/` and are versioned with the repository. Optional Langfuse integration can read a managed prompt at runtime through server-only environment variables; if those variables are absent or Langfuse is unavailable, Fate Spectrum uses the local prompt file. Do not commit real Langfuse hosts, keys, or model keys.
+Prompts live in `prompts/` and are versioned with the repository. Runtime prompt lookup prefers Langfuse `production` prompts when server-only `LANGFUSE_BASE_URL`, `LANGFUSE_PUBLIC_KEY`, and `LANGFUSE_SECRET_KEY` are configured; if those variables are absent or Langfuse is unavailable, Fate Spectrum falls back to the local prompt files.
+
+The report AI surface is split into separate prompts for overview, dimension reading, and key windows/action plan. Publish local prompt files explicitly with:
+
+```bash
+pnpm prompts:sync
+```
+
+Do not commit real Langfuse hosts, keys, model keys, traces, user birth data, provider responses, or generated private reports.
 
 ## Real Paipan
 

@@ -84,7 +84,7 @@ export function ReportNav({
 function formatProfileLabel(profile: { label: string; isPrimary: boolean }) {
   const role = profile.isPrimary ? "命主" : "缘主";
   const label = normalizeStoredProfileLabel(profile.label, role);
-  return label === role ? role : `${label} · ${role}`;
+  return label === role ? role : `${role} · ${label}`;
 }
 
 function normalizeStoredProfileLabel(label: string, fallback: string) {

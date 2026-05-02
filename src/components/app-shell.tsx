@@ -168,6 +168,7 @@ export function AppShell() {
         onLlmChange={setLlmConfig}
         onClearCachedLlm={clearCachedLlm}
         onSubmit={generateReport}
+        onCancelAddProfile={isAddingProfile ? () => router.push("/chart") : undefined}
       />
       <footer className="border-t border-fs-line bg-fs-surface px-4 py-6 text-center text-sm text-fs-muted">
         仅供自我反思、娱乐和规划参考。

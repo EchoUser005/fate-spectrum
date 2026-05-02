@@ -7,6 +7,9 @@ import {
   WEALTH_DISCLAIMER
 } from "@/lib/constants";
 import narrativePromptDefinition from "../../../prompts/fate-spectrum-narrative.v2.json";
+import overviewPromptDefinition from "../../../prompts/fate-spectrum-overview.v1.json";
+import dimensionsPromptDefinition from "../../../prompts/fate-spectrum-dimensions.v1.json";
+import windowsPromptDefinition from "../../../prompts/fate-spectrum-windows.v1.json";
 
 type LocalPromptDefinition = {
   name: string;
@@ -16,9 +19,17 @@ type LocalPromptDefinition = {
 };
 
 const localNarrativePrompt = narrativePromptDefinition as LocalPromptDefinition;
+const localOverviewPrompt = overviewPromptDefinition as LocalPromptDefinition;
+const localDimensionsPrompt = dimensionsPromptDefinition as LocalPromptDefinition;
+const localWindowsPrompt = windowsPromptDefinition as LocalPromptDefinition;
 
 export const LOCAL_NARRATIVE_PROMPT_NAME = localNarrativePrompt.name;
 export const LOCAL_NARRATIVE_PROMPT_VERSION = localNarrativePrompt.version;
+export const LOCAL_REPORT_PROMPTS = {
+  overview: localOverviewPrompt.name,
+  dimensions: localDimensionsPrompt.name,
+  windows: localWindowsPrompt.name
+} as const;
 
 export function buildNarrativePrompt(input: {
   normalized: NormalizedPaipan;
@@ -27,12 +38,36 @@ export function buildNarrativePrompt(input: {
   yearlyScores: YearlyScore[];
   generatedAt?: string;
 }) {
+  return buildPromptFromDefinition(localNarrativePrompt, input);
+}
+
+export function buildOverviewPrompt(input: PromptInput) {
+  return buildPromptFromDefinition(localOverviewPrompt, input);
+}
+
+export function buildDimensionsPrompt(input: PromptInput) {
+  return buildPromptFromDefinition(localDimensionsPrompt, input);
+}
+
+export function buildWindowsPrompt(input: PromptInput) {
+  return buildPromptFromDefinition(localWindowsPrompt, input);
+}
+
+type PromptInput = {
+  normalized: NormalizedPaipan;
+  dimensions: DimensionDefinition[];
+  dayunScores: DayunScore[];
+  yearlyScores: YearlyScore[];
+  generatedAt?: string;
+};
+
+function buildPromptFromDefinition(promptDefinition: LocalPromptDefinition, input: PromptInput) {
   const context = JSON.stringify(
     buildNarrativeContext(input),
     null,
     2
   );
-  const messages = localNarrativePrompt.messages.map((message) => ({
+  const messages = promptDefinition.messages.map((message) => ({
     role: message.role,
     content: compileTemplate(message.content, { context })
   }));

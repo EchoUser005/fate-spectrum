@@ -40,20 +40,6 @@ export function ReportOverview({
             </div>
           </div>
           <div className="space-y-3">
-            <div className="inline-flex rounded-md border border-fs-line bg-fs-surface p-1">
-              {(["bazi", "ziwei"] as const).map((source) => (
-                <button
-                  key={source}
-                  type="button"
-                  onClick={() => onChartModeChange(source)}
-                  className={`rounded px-3 py-1.5 text-sm font-medium transition ${
-                    chartMode === source ? "bg-fs-ink text-white" : "text-fs-muted hover:bg-white hover:text-fs-ink"
-                  }`}
-                >
-                  {source === "bazi" ? "八字" : "紫微"}
-                </button>
-              ))}
-            </div>
             <CurrentCycleCard report={report} source={chartMode} />
           </div>
         </div>
@@ -61,7 +47,23 @@ export function ReportOverview({
           <MainSignalCards report={report} />
         </div>
       </div>
-      <div id="chart" className="scroll-mt-24">
+      <div id="chart" className="scroll-mt-24 space-y-3">
+        <div className="flex justify-end">
+          <div className="inline-flex rounded-md border border-fs-line bg-fs-surface p-1">
+            {(["bazi", "ziwei"] as const).map((source) => (
+              <button
+                key={source}
+                type="button"
+                onClick={() => onChartModeChange(source)}
+                className={`rounded px-3 py-1.5 text-sm font-medium transition ${
+                  chartMode === source ? "bg-fs-ink text-white" : "text-fs-muted hover:bg-white hover:text-fs-ink"
+                }`}
+              >
+                {source === "bazi" ? "八字" : "紫微"}
+              </button>
+            ))}
+          </div>
+        </div>
         {chartMode === "bazi" ? <BaziElementBoard report={report} /> : <ZiweiPalaceBoard report={report} />}
       </div>
     </section>

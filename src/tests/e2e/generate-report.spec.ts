@@ -153,10 +153,14 @@ test("desktop user flow renders the report workbench and visual report", async (
   await page.getByLabel("模型密钥").fill("sk-test-session");
   await page.getByRole("button", { name: "生成命运光谱" }).click();
   await expect(page).toHaveURL(/\/chart$/);
-  await expect(page.getByLabel("命盘切换")).toContainText("缘主A · 缘主");
-  await page.getByLabel("命盘切换").selectOption({ label: "命主A · 命主" });
+  await expect(page.getByLabel("命盘切换")).toContainText("缘主 · 缘主A");
+  await page.getByLabel("命盘切换").selectOption({ label: "命主 · 命主A" });
   await expect(page.locator("#overview").getByText("命主A").first()).toBeVisible();
-  await expect(page.getByLabel("命盘切换")).toContainText("命主A · 命主");
+  await expect(page.getByLabel("命盘切换")).toContainText("命主 · 命主A");
+  await page.getByRole("button", { name: "新增命盘" }).click();
+  await expect(page.getByRole("button", { name: "返回命盘" })).toBeVisible();
+  await page.getByRole("button", { name: "返回命盘" }).click();
+  await expect(page).toHaveURL(/\/chart$/);
 });
 
 test("model configuration is visible without advanced settings", async ({ page }) => {
