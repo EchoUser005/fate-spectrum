@@ -1,20 +1,18 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { Github, Loader2, Sparkles } from "lucide-react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { providerPresets } from "@/lib/config/providers";
 import type { BirthInput } from "@/lib/schemas/birth";
 import { BirthInputSchema } from "@/lib/schemas/birth";
 import type { ProviderConfig } from "@/lib/schemas/provider";
 import { ReportResponseSchema, type ReportResponse } from "@/lib/schemas/report";
-import { Button } from "@/components/ui/button";
-import { BirthForm } from "@/components/birth-form";
-import { ProviderKeyForm } from "@/components/provider-key-form";
-import { ReportDashboard } from "@/components/report-dashboard";
+import { generationPhaseLabels, type ReadingMode } from "@/lib/ui-copy/labels";
+import { LandingHero } from "@/components/marketing/landing-hero";
+import { ReportShell } from "@/components/report/report-shell";
+import { GenerationWizard } from "@/components/workbench/generation-wizard";
 
-const generationSteps = ["校验输入", "获取排盘", "归一化排盘", "计算光谱分数", "生成解释", "渲染结果"];
 const LLM_SESSION_STORAGE_KEY = "fate-spectrum.llm-session.v1";
 
 export function AppShell() {
@@ -27,7 +25,7 @@ export function AppShell() {
     baseUrl: providerPresets.deepseek.baseUrl,
     model: providerPresets.deepseek.model
   });
-  const [useLlmNarrative, setUseLlmNarrative] = useState(false);
+  const [readingMode, setReadingMode] = useState<ReadingMode>("off");
   const [report, setReport] = useState<ReportResponse | null>(null);
   const [status, setStatus] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -43,7 +41,7 @@ export function AppShell() {
       birthTime: "23:00",
       timeBranch: "子",
       timezone: "Asia/Shanghai",
-      birthPlace: "Shanghai",
+      birthPlace: "上海",
       useTrueSolarTime: false
     }
   });
@@ -53,16 +51,12 @@ export function AppShell() {
       const cached = window.sessionStorage.getItem(LLM_SESSION_STORAGE_KEY);
       if (!cached) return;
       const parsed = JSON.parse(cached) as {
-        enabled?: boolean;
+        readingMode?: ReadingMode;
         config?: ProviderConfig;
       };
       const timer = window.setTimeout(() => {
-        if (parsed.config) {
-          setLlmConfig(parsed.config);
-        }
-        if (parsed.enabled) {
-          setUseLlmNarrative(true);
-        }
+        if (parsed.config) setLlmConfig(parsed.config);
+        if (parsed.readingMode) setReadingMode(parsed.readingMode);
       }, 0);
       return () => window.clearTimeout(timer);
     } catch {
@@ -73,20 +67,18 @@ export function AppShell() {
 
   useEffect(() => {
     try {
-      if (!useLlmNarrative && !llmConfig.apiKey) {
-        return;
-      }
+      if (readingMode === "off" && !llmConfig.apiKey) return;
       window.sessionStorage.setItem(
         LLM_SESSION_STORAGE_KEY,
         JSON.stringify({
-          enabled: useLlmNarrative,
+          readingMode,
           config: llmConfig
         })
       );
     } catch {
-      // Session cache is a UX convenience only.
+      // Session cache is a browser-only convenience.
     }
-  }, [llmConfig, useLlmNarrative]);
+  }, [llmConfig, readingMode]);
 
   const clearCachedLlm = () => {
     window.sessionStorage.removeItem(LLM_SESSION_STORAGE_KEY);
@@ -95,27 +87,16 @@ export function AppShell() {
       baseUrl: providerPresets.deepseek.baseUrl,
       model: providerPresets.deepseek.model
     });
-    setUseLlmNarrative(false);
+    setReadingMode("off");
   };
 
-  const providerNote = useMemo(() => {
-    if (paipanConfig.provider === "mock") {
-      return "先用匿名样例体验完整报告；想让解释更像人话，再打开 DeepSeek V4 润色。";
-    }
-    return "真实接口用于换成你的排盘来源，但报告仍然先呈现节奏、窗口和行动建议。";
-  }, [paipanConfig.provider]);
-
-  const onSubmit = form.handleSubmit(async (birth) => {
+  const generateReport = form.handleSubmit(async (birth) => {
     setIsGenerating(true);
     setError(null);
     setReport(null);
-    setStatus([]);
+    setStatus([generationPhaseLabels[0]]);
 
     try {
-      for (const step of generationSteps.slice(0, 3)) {
-        setStatus((items) => [...items, step]);
-      }
-
       const response = await fetch("/api/report", {
         method: "POST",
         headers: {
@@ -126,12 +107,13 @@ export function AppShell() {
           paipanProvider: paipanConfig,
           llmProvider: llmConfig,
           options: {
-            useLlmNarrative,
+            useLlmNarrative: readingMode !== "off",
             includeRawJson: true
           }
         })
       });
 
+      setStatus([generationPhaseLabels[0], generationPhaseLabels[1], generationPhaseLabels[2]]);
       const json = (await response.json()) as unknown;
       if (!response.ok) {
         const message =
@@ -139,8 +121,10 @@ export function AppShell() {
         throw new Error(message);
       }
 
-      setStatus(generationSteps);
-      setReport(ReportResponseSchema.parse(json));
+      setStatus([...generationPhaseLabels]);
+      const parsed = ReportResponseSchema.parse(json);
+      setReport(parsed);
+      window.setTimeout(() => document.getElementById("report")?.scrollIntoView({ behavior: "smooth" }), 80);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "报告生成失败。");
     } finally {
@@ -148,103 +132,38 @@ export function AppShell() {
     }
   });
 
+  const scrollToWizard = () => {
+    document.getElementById("wizard")?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
-    <main className="min-h-screen bg-mist">
-      <section className="spectrum-plane spectral-grid relative overflow-hidden">
-        <form
-          onSubmit={onSubmit}
-          className="mx-auto flex min-h-[92svh] w-full max-w-7xl flex-col px-4 py-5 sm:px-6 lg:px-8"
-        >
-          <header className="flex items-center justify-between gap-4 text-white">
-            <div className="font-semibold">Fate Spectrum · 命运光谱</div>
-            <a
-              href="https://github.com/EchoUser005/fate-spectrum"
-              className="inline-flex items-center gap-2 rounded-md bg-white/18 px-3 py-2 text-sm backdrop-blur transition hover:bg-white/28"
-            >
-              <Github size={16} />
-              GitHub
-            </a>
-          </header>
-
-          <div className="grid flex-1 items-center gap-8 py-10 lg:grid-cols-[0.92fr_1.08fr]">
-            <div className="max-w-xl text-white">
-              <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/78">
-                A life rhythm report you can actually read.
-              </p>
-              <h1 className="mt-4 text-5xl font-semibold leading-tight sm:text-6xl">
-                Fate Spectrum · 命运光谱
-              </h1>
-              <p className="mt-5 text-lg leading-8 text-white/88">
-                先看未来阶段怎么发力、哪里要稳住、下一步怎么做。
-              </p>
-              <p className="mt-3 max-w-lg text-sm leading-6 text-white/78">
-                原始排盘和 JSON 会保留在高级源数据里，默认报告只讲人能读懂的节奏、窗口和行动。
-              </p>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Button type="submit" disabled={isGenerating}>
-                  {isGenerating ? <Loader2 size={17} className="animate-spin" /> : <Sparkles size={17} />}
-                  生成我的人生光谱
-                </Button>
-                <a
-                  href="#report"
-                  className="inline-flex h-10 items-center rounded-md bg-white px-4 text-sm font-medium text-ink transition hover:bg-slate-100"
-                >
-                  查看节奏报告
-                </a>
-              </div>
-              <p className="mt-5 max-w-lg text-sm leading-6 text-white/78">{providerNote}</p>
-            </div>
-
-            <div className="grid gap-4 xl:grid-cols-2">
-              <BirthForm form={form} />
-              <ProviderKeyForm
-                paipanConfig={paipanConfig}
-                llmConfig={llmConfig}
-                useLlmNarrative={useLlmNarrative}
-                onPaipanChange={setPaipanConfig}
-                onLlmChange={setLlmConfig}
-                onUseLlmChange={setUseLlmNarrative}
-                onClearCachedLlm={clearCachedLlm}
-              />
-            </div>
-          </div>
-        </form>
-      </section>
-
-      <section id="report" className="mx-auto grid w-full max-w-7xl gap-5 px-4 py-8 sm:px-6 lg:px-8">
-        <div className="rounded-md bg-white p-5 ring-1 ring-slate-200">
-          <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">Report Status</p>
-              <h2 className="mt-1 text-xl font-semibold text-ink">报告生成进度</h2>
-            </div>
-            <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-6">
-              {generationSteps.map((step) => (
-                <span
-                  key={step}
-                  className={`rounded-md px-3 py-2 text-center text-sm ${
-                    status.includes(step) ? "bg-cyan-50 text-cyan-800" : "bg-slate-100 text-slate-500"
-                  }`}
-                >
-                  {step}
-                </span>
-              ))}
-            </div>
-          </div>
-          {error ? <p className="mt-4 rounded-md bg-rose-50 p-3 text-sm text-rose-700">{error}</p> : null}
-        </div>
-
+    <main className="min-h-screen bg-fs-bg text-fs-ink">
+      <LandingHero onStart={scrollToWizard} onSampleReport={generateReport} isGenerating={isGenerating} />
+      <GenerationWizard
+        form={form}
+        paipanConfig={paipanConfig}
+        llmConfig={llmConfig}
+        readingMode={readingMode}
+        status={status}
+        error={error}
+        isGenerating={isGenerating}
+        onPaipanChange={setPaipanConfig}
+        onLlmChange={setLlmConfig}
+        onReadingModeChange={setReadingMode}
+        onClearCachedLlm={clearCachedLlm}
+        onSubmit={generateReport}
+      />
+      <section id="report" className="mx-auto w-full max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
         {report ? (
-          <ReportDashboard report={report} />
+          <ReportShell report={report} />
         ) : (
-          <div className="rounded-md border border-dashed border-slate-300 bg-white p-8 text-center text-slate-500">
-            等待生成第一份节奏报告。
+          <div className="rounded-md border border-dashed border-fs-line bg-white p-8 text-center text-fs-muted">
+            生成后会在这里看到总览、大运、流年、星盘和详细解读。
           </div>
         )}
       </section>
-
-      <footer className="border-t border-slate-200 bg-white px-4 py-6 text-center text-sm text-slate-500">
-        Open source under MIT. Fate Spectrum outputs are for reflection, entertainment, and planning reference.
+      <footer className="border-t border-fs-line bg-fs-surface px-4 py-6 text-center text-sm text-fs-muted">
+        开源项目，仅供自我反思、娱乐和规划参考。
       </footer>
     </main>
   );

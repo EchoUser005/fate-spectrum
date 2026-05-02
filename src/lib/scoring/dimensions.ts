@@ -5,43 +5,43 @@ export const DIMENSIONS: DimensionDefinition[] = [
     id: "wealth",
     label: "财富量级",
     meaning: "资源、现金流、资产、项目规模、变现上限。",
-    color: "#f59e0b"
+    color: "#d97706"
   },
   {
     id: "career",
     label: "事业推进",
     meaning: "职位、权责、可见度、组织资源、项目推进。",
-    color: "#3b82f6"
+    color: "#2563eb"
   },
   {
     id: "comfort",
     label: "生活舒适度",
     meaning: "体感稳定、低消耗、居住和作息舒适、心理松弛。",
-    color: "#22c55e"
+    color: "#16a34a"
   },
   {
     id: "selfValue",
     label: "自我价值成就",
     meaning: "是否符合命主主线体验，是否能做出有身份感和价值感的成果。",
-    color: "#06b6d4"
+    color: "#0891b2"
   },
   {
     id: "relationship",
     label: "关系助力",
     meaning: "伴侣、合作、客户、贵人、人脉对人生路径的放大或消耗。",
-    color: "#ec4899"
+    color: "#e11d48"
   },
   {
     id: "healthEnergy",
     label: "健康能量",
     meaning: "传统命理视角下的承载力、恢复力、压力水平，不是医学诊断。",
-    color: "#84cc16"
+    color: "#65a30d"
   },
   {
     id: "riskControl",
     label: "风险可控度",
     meaning: "合约、冲突、破耗、健康、关系、合规等风险能否被制度化压住。",
-    color: "#64748b"
+    color: "#475569"
   }
 ];
 

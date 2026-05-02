@@ -21,7 +21,7 @@ export function buildRuleBasedReport(params: {
   const { paipan, normalized } = normalizePaipan(params.paipan);
   const dayunScores = scoreDayun(normalized);
   const yearlyScores = scoreYearly(normalized, dayunScores);
-  const ruleNarrative = buildRuleNarrative(normalized, dayunScores, yearlyScores);
+  const ruleNarrative = buildRuleNarrative(dayunScores, yearlyScores);
   const hasLlmNarrative = Boolean(params.narrativeOverride);
 
   const report: ReportResponse = {

@@ -39,7 +39,8 @@ export const DayunScoreSchema = z.object({
   startYear: z.number(),
   endYear: z.number(),
   scores: ScoreMapSchema,
-  notes: z.array(z.string())
+  notes: z.array(z.string()),
+  summary: z.string()
 });
 
 export const YearlyScoreSchema = z.object({

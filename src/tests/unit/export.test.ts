@@ -3,6 +3,7 @@ import samplePaipan from "@/fixtures/sample-paipan.json";
 import { GENERAL_DISCLAIMER, HEALTH_DISCLAIMER, WEALTH_DISCLAIMER } from "@/lib/constants";
 import { exportReportJson } from "@/lib/export/json";
 import { exportReportMarkdown } from "@/lib/export/markdown";
+import { BANNED_PUBLIC_TERMS } from "@/lib/ui-copy/glossary";
 import type { BirthInput } from "@/lib/schemas/birth";
 import { PaipanResponseSchema } from "@/lib/schemas/paipan";
 import { buildRuleBasedReport } from "@/lib/scoring/engine";
@@ -54,5 +55,15 @@ describe("report exports", () => {
   it("does not export cached API keys", () => {
     expect(exportReportJson(buildReport())).not.toContain("sk-test");
     expect(exportReportMarkdown(buildReport())).not.toContain("sk-test");
+  });
+
+  it("keeps the Markdown export product-facing and includes target scores", () => {
+    const markdown = exportReportMarkdown(buildReport());
+
+    expect(markdown).toContain("| 戊寅 | 26 | 2024-2033 | 76 | 84 | 52 | 86 | 78 | 55 | 50 | 当前主战场，开创、竞争、身份升级，但很耗 |");
+    expect(markdown).toContain("财富分高不等于适合冒险");
+    for (const term of BANNED_PUBLIC_TERMS) {
+      expect(markdown).not.toContain(term);
+    }
   });
 });

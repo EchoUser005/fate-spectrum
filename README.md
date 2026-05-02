@@ -1,8 +1,8 @@
-# Fate Spectrum · 命运光谱
+# 命运光谱
 
 不是一个笼统总分，而是一组可解释的人生维度光谱。
 
-Fate Spectrum is an open-source life rhythm dashboard. It accepts birth input and BYOK provider configuration, computes rule-based multidimensional scores from paipan data, and renders an outcome-first spectrum report with source data kept in an advanced panel.
+Fate Spectrum is an open-source life rhythm dashboard. It accepts birth input, computes rule-based multidimensional scores from paipan data, and renders a Chinese-first visual report. Provider, model, and source details stay in advanced settings for collaborators.
 
 ## Screenshot
 
@@ -10,12 +10,14 @@ Fate Spectrum is an open-source life rhythm dashboard. It accepts birth input an
 
 ## Features
 
-- Mock Demo sample paipan with no key required
-- Custom paipan endpoint support, including the shenjige form-encoded mapping
+- 使用样例体验 with no key required
+- 使用真实排盘 through an advanced custom endpoint, including the shenjige form-encoded mapping
 - Rule-based scoring for wealth, career, comfort, selfValue, relationship, healthEnergy, and riskControl
-- Optional DeepSeek V4 or OpenAI-compatible narrative generation
-- Outcome summary, action plan, timing windows, radar spectrum, dayun spectrum, yearly color scale, line chart, heatmap
-- Advanced source panel for BaZi pillars, Ziwei palace grid, and raw JSON
+- Optional DeepSeek V4 narrative polish, with model details hidden from the main user flow
+- Visual report shell with 总览, 大运, 流年, 星盘, 详细解读, and 高级数据
+- Golden sample score regression aligned to the original Excel-style report target
+- Dayun spectrum curve, dayun color scale, dayun score table, yearly focus table
+- Advanced source panel for BaZi pillars, Ziwei palace grid, normalized data, and raw JSON
 - JSON and Markdown export
 - OpenSpec, ADRs, devlog, handoff, test matrix, CI, Docker, Vercel
 
@@ -34,11 +36,11 @@ Open `http://localhost:3000`.
 
 ## Mock Demo
 
-Select `Mock Demo · 样例星盘`, keep the default birth input, and click `生成我的命盘光谱`. No API key is needed.
+Click `查看样例报告` or keep `使用样例体验` selected and click `生成报告`. No API key is needed.
 
 ## DeepSeek Key
 
-Enable LLM explanation, choose `DeepSeek`, enter a model and key. Default model is `deepseek-v4-flash`; `deepseek-v4-pro` is also available. DeepSeek only writes explanation text from existing paipan JSON and rule-based scores. It does not calculate scores or fabricate a chart.
+Open `高级设置` if you want model polish. The ordinary UI shows 关闭、快速、高质量、兼容. The default high-quality model is `deepseek-v4-pro`; `deepseek-v4-flash` is available for fast/low-cost use and `deepseek-chat` remains as a compatibility option. DeepSeek only writes explanation text from existing paipan data and rule-based scores. It does not calculate scores or fabricate a chart.
 
 Apply for a key at `https://platform.deepseek.com` and check current model names at `https://api-docs.deepseek.com/`.
 
@@ -50,7 +52,7 @@ Enable LLM explanation, choose `OpenAI-compatible Custom`, then enter a compatib
 
 ## Custom Paipan
 
-Choose `Custom Paipan` and provide an HTTPS endpoint. For `https://www.shenjige.cn/api/ziwei/getPlateArrangement`, the provider sends form data:
+Choose `使用真实排盘`, open `高级设置`, and provide an HTTPS endpoint. For `https://www.shenjige.cn/api/ziwei/getPlateArrangement`, the provider sends form data:
 
 - `year`, `month`, `day`
 - `hour`, `h`, `m`

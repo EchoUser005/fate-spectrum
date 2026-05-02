@@ -4,6 +4,18 @@
 
 :root {
   color-scheme: light;
+  --fs-bg: #f7f3ea;
+  --fs-surface: #fffaf2;
+  --fs-surface-2: #ffffff;
+  --fs-ink: #1f2937;
+  --fs-muted: #6b7280;
+  --fs-line: #e7dcc8;
+  --fs-gold: #d97706;
+  --fs-blue: #2563eb;
+  --fs-cyan: #0891b2;
+  --fs-green: #16a34a;
+  --fs-rose: #e11d48;
+  --fs-slate: #475569;
 }
 
 * {
@@ -16,21 +28,8 @@ html {
 
 body {
   margin: 0;
-  background: #f6f7fb;
-  color: #12151f;
-}
-
-.spectrum-plane {
-  background:
-    linear-gradient(115deg, rgba(245, 158, 11, 0.95), rgba(6, 182, 212, 0.92) 36%, rgba(34, 197, 94, 0.88) 64%, rgba(244, 63, 94, 0.85)),
-    repeating-linear-gradient(90deg, rgba(255, 255, 255, 0.26) 0 1px, transparent 1px 32px);
-}
-
-.spectral-grid {
-  background-image:
-    linear-gradient(rgba(18, 21, 31, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(18, 21, 31, 0.08) 1px, transparent 1px);
-  background-size: 28px 28px;
+  background: var(--fs-bg);
+  color: var(--fs-ink);
 }
 
 .fade-in {

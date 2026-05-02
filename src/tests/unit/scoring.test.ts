@@ -29,7 +29,7 @@ describe("scoring engine", () => {
     for (const dimensionId of DIMENSION_IDS) {
       expect(report.dayunScores[0]?.scores[dimensionId]).toBeGreaterThanOrEqual(0);
       expect(report.dayunScores[0]?.scores[dimensionId]).toBeLessThanOrEqual(100);
-      expect(report.narratives.dimensions[dimensionId]).toContain("规则引擎");
+      expect(report.narratives.dimensions[dimensionId]).toContain("分");
     }
   });
 

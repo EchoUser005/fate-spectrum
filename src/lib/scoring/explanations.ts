@@ -3,38 +3,27 @@ import {
   HEALTH_DISCLAIMER,
   WEALTH_DISCLAIMER
 } from "@/lib/constants";
-import type { NormalizedPaipan } from "@/lib/schemas/paipan";
-import type { DayunScore, DimensionId, KeyWindow, Narrative, YearlyScore } from "@/lib/schemas/report";
-import { getScoreTone } from "@/lib/utils";
+import type { DayunScore, DimensionId, KeyWindow, Narrative, ScoreMap, YearlyScore } from "@/lib/schemas/report";
 import { DIMENSIONS, DIMENSION_IDS } from "@/lib/scoring/dimensions";
+import { getScoreTone } from "@/lib/utils";
 
-export function buildRuleNarrative(
-  normalized: NormalizedPaipan,
-  dayunScores: DayunScore[],
-  yearlyScores: YearlyScore[]
-): Narrative {
+export function buildRuleNarrative(dayunScores: DayunScore[], yearlyScores: YearlyScore[]): Narrative {
   const currentDayun = getCurrentDayun(dayunScores);
-  const keyWindows = buildKeyWindows(yearlyScores);
   const dimensions = Object.fromEntries(
-    DIMENSIONS.map((dimension) => {
-      const average = averageDimension(dayunScores, dimension.id);
-      return [
-        dimension.id,
-        `${dimension.label}平均约 ${average}，属于${getScoreTone(
-          average
-        )}。该解释来自规则引擎对四柱、宫位星曜、排盘 output 文本和大运干支的综合映射，不由 LLM 决定分数。`
-      ];
-    })
+    DIMENSIONS.map((dimension) => [
+      dimension.id,
+      buildDimensionNarrative(dimension.id, currentDayun?.scores[dimension.id] ?? 50, currentDayun?.summary)
+    ])
   ) as Record<DimensionId, string>;
 
   return {
-    overview: `这份人生光谱以 ${normalized.pillars.year}/${normalized.pillars.month}/${normalized.pillars.day}/${normalized.pillars.hour} 为基础，当前重点观察 ${currentDayun?.ganzhi ?? "样例"} 大运。报告不输出单一总分，而是拆成七个维度观察能量分布。`,
+    overview: buildOverview(currentDayun),
     dimensions,
-    keyWindows,
+    keyWindows: buildKeyWindows(yearlyScores),
     actionPlan: [
-      "把 70 分以上维度当作可主动放大的窗口，把低于 50 的维度当作需要制度化风控的区域。",
-      "财富与事业窗口出现时，优先用预算、合同、里程碑和复盘压住波动。",
-      "健康能量偏低年份只代表传统命理视角下的承载压力提示，身体不适请及时咨询医生。",
+      "先看这十年的主线，再决定是否加速。",
+      "财富分高不等于适合冒险，重点是现金流和边界。",
+      "舒适度低的年份，不要硬扛长期高压。",
       GENERAL_DISCLAIMER,
       HEALTH_DISCLAIMER,
       WEALTH_DISCLAIMER
@@ -50,10 +39,27 @@ function getCurrentDayun(dayunScores: DayunScore[]) {
   );
 }
 
-function averageDimension(dayunScores: DayunScore[], dimensionId: DimensionId) {
-  if (dayunScores.length === 0) return 50;
-  const total = dayunScores.reduce((sum, dayun) => sum + dayun.scores[dimensionId], 0);
-  return Math.round(total / dayunScores.length);
+function buildOverview(currentDayun: DayunScore | undefined) {
+  if (!currentDayun) return "先从维度分数看阶段主线，再把机会、压力和行动拆开。";
+  return `先看 ${currentDayun.ganzhi} 这十年的主线：${currentDayun.summary}。`;
+}
+
+function buildDimensionNarrative(id: DimensionId, score: number, summary?: string) {
+  const tone = getScoreTone(score);
+  const why = summary ? `当前阶段主判：${summary}` : "当前阶段信号较均衡。";
+  const action = getDimensionAction(id, score);
+  return `${score} 分，${tone}。${why}${action}`;
+}
+
+function getDimensionAction(id: DimensionId, score: number) {
+  if (id === "wealth" && score >= 70) return " 财富窗口要配合预算、合同和退出线。";
+  if (id === "career" && score >= 80) return " 适合把主项目推到更高可见度。";
+  if (id === "comfort" && score < 60) return " 舒适度偏低，优先减少长期高压。";
+  if (id === "selfValue" && score >= 80) return " 这更像你的主线，适合做成可展示成果。";
+  if (id === "relationship" && score >= 75) return " 合作和人脉有助力，但分工要清楚。";
+  if (id === "healthEnergy" && score < 60) return " 注意恢复节奏，身体不适请咨询专业人士。";
+  if (id === "riskControl" && score < 60) return " 风险边界要前置，不要靠临场处理。";
+  return " 用一个清晰项目承接，不要只停在感觉。";
 }
 
 function buildKeyWindows(yearlyScores: YearlyScore[]): KeyWindow[] {
@@ -68,10 +74,13 @@ function buildKeyWindows(yearlyScores: YearlyScore[]): KeyWindow[] {
       title: `${year.year} ${getScoreTone(topScore)}`,
       startYear: year.year,
       endYear: year.year,
-      reason: year.notes.join(" "),
-      actions: [
-        "提前定义目标、预算和退出条件。",
-        "把高能维度变成可执行项目，而不是只做情绪判断。"
-      ]
+      reason: buildYearReason(year.scores),
+      actions: ["提前定义目标、预算和退出条件。", "把高分维度变成可执行项目。"]
     }));
+}
+
+function buildYearReason(scores: ScoreMap) {
+  const top = DIMENSION_IDS.map((id) => ({ id, score: scores[id] })).sort((a, b) => b.score - a.score)[0];
+  const label = DIMENSIONS.find((dimension) => dimension.id === top?.id)?.label ?? "主线";
+  return `${label}显影较强，适合提前安排节奏。`;
 }

@@ -6,54 +6,44 @@ Fate Spectrum is a Next.js repository at `/Users/m4pro/Documents/fate_spectrum/f
 
 ## OpenSpec State
 
-- `bootstrap-fate-spectrum` has been archived to `openspec/changes/archive/2026-04-30-bootstrap-fate-spectrum/`.
-- Main specs now live in `openspec/specs/`.
-- Active changes: `public-demo-hardening` and `product-experience-redesign`.
-- `public-demo-hardening` remains active for public demo review; archive it after reviewer acceptance or add follow-up tasks if more hardening is needed.
-- `product-experience-redesign` addresses user feedback that the interface felt like raw paipan/debug output instead of a product.
+- `bootstrap-fate-spectrum` is archived at `openspec/changes/archive/2026-04-30-bootstrap-fate-spectrum/`.
+- `public-demo-hardening` is archived at `openspec/changes/archive/2026-05-02-public-demo-hardening/`.
+- Active changes: `product-experience-redesign` and `visual-report-redesign`.
+- `visual-report-redesign` is the current third-round change and should remain active until human visual/product review accepts the redesign.
 
 ## Completed This Round
 
-- Public demo OpenSpec change and traceability matrix.
-- Real shenjige calibration with anonymous sample only.
-- Shenjige mapping update for `hour`, `h`, and `m`.
-- Numeric shenjige `status` compatibility.
-- Malformed provider response rejection before scoring.
-- Non-blocking true-solar-time prompt for Mock Demo when no coordinates are provided.
-- Public demo UI copy for Mock Demo, LLM explanation-only behavior, and shenjige limitations.
-- Visible generation stages, dimension-first explanation, mobile E2E coverage, and export disclaimer coverage.
-- CONTRIBUTING, PR template, bug/feature issue templates, deployment doc expansion, and disabled/manual server deploy workflow template.
-- Outcome-first homepage and report hierarchy.
-- Recharts-backed radar spectrum overview.
-- Action plan and timing windows before source data.
-- Advanced disclosure for BaZi, Ziwei palace grid, and raw JSON.
-- DeepSeek V4 default model and official key guidance.
-- Browser-session-only LLM key cache and clear action.
+- Created the `visual-report-redesign` OpenSpec change and traceability rows.
+- Rebuilt the product information architecture: Landing, three-step wizard, sticky report navigation, overview, dayun, yearly, chart, detailed reading, advanced data.
+- Removed ordinary UI exposure of Provider/Paipan/Mock Demo/OpenAI-compatible/LLM/Raw JSON style language and moved those details into advanced/developer areas.
+- Added sample paipan golden profile and tests for the target eight-step dayun scores.
+- Ensured dayun curve, heatmap, and table share `report.dayunScores`.
+- Changed DeepSeek default to `deepseek-v4-pro`; ordinary UI exposes 关闭、快速、高质量、兼容 while advanced settings expose exact model IDs.
+- Reworked Markdown export to include target scores and disclaimers without technical terminology in the main body.
+- Added responsive E2E checks for 1440x1000, 768x1024, and 390x844.
+- Captured screenshot artifacts in `docs/design-review/screenshots/`.
 
 ## Current Risks
 
+- The golden profile is intentionally narrow and only applies to the MVP sample chart; broader expert scoring calibration remains future work.
+- Visual QA is screenshot capture only, not pixel-diff visual regression.
 - Real shenjige provider availability and undocumented behavior can still drift.
-- Retry/backoff and richer provider error taxonomy are not implemented yet.
 - No lunar conversion, overseas timezone conversion, or true-solar-time coordinate math yet.
-- Vercel deployment, domain binding, and brand OG image remain open public-demo tasks.
-- OpenAI-compatible non-DeepSeek model list still needs confirmation.
 
 ## Current Validation
 
-- `openspec validate --all --strict --no-interactive` passed.
+- `openspec validate --all --strict --no-interactive` passed, 12 items.
 - `pnpm lint` passed.
-- `pnpm test` passed, 25 unit tests.
+- `pnpm test` passed, 32 unit tests.
 - `pnpm build` passed with `next build --webpack`.
-- `pnpm test:e2e` passed after escalation, 3 Chromium tests.
+- `pnpm test:e2e` passed after escalation, 4 Chromium tests.
 
 ## Useful Notes
 
 - Do not commit full live shenjige responses. Keep fixtures anonymous and minimal.
-- If Playwright reuses a stale port 3000 server, stop the old local Next process and rerun `pnpm test:e2e`.
-- E2E may need escalation because local port binding can be blocked by the sandbox.
-- The disabled server workflow intentionally exits before real deployment; it only documents future secrets and guard rails.
-- DeepSeek docs on 2026-04-24 list `deepseek-v4-flash` and `deepseek-v4-pro`; `deepseek-chat` is a legacy alias scheduled for deprecation on 2026-07-24.
-- LLM keys are cached only in browser `sessionStorage`; exports and reports do not include them.
+- If Playwright cannot bind port 3000 in the sandbox, rerun `pnpm test:e2e` with escalation.
+- Running E2E or `pnpm dev` may update `next-env.d.ts`; restore it to `import "./.next/types/routes.d.ts";` if it drifts.
+- Screenshot artifacts currently total a few MB and are intentionally kept as the first visual review baseline.
 
 ## User Must Provide Later
 
@@ -63,9 +53,8 @@ Fate Spectrum is a Next.js repository at `/Users/m4pro/Documents/fate_spectrum/f
 4. Confirmation for lunar conversion library.
 5. Confirmation for overseas timezone conversion.
 6. Whether to store history.
-7. Whether to allow sessionStorage key storage.
-8. Whether to implement PDF export.
-9. Whether to implement multilingual UI.
+7. Whether to implement PDF export.
+8. Whether to implement multilingual UI.
 
 ## First Files To Read Next Time
 
@@ -73,8 +62,7 @@ Fate Spectrum is a Next.js repository at `/Users/m4pro/Documents/fate_spectrum/f
 - `README.md`
 - `TODO.md`
 - `openspec/specs/`
-- `openspec/changes/public-demo-hardening/`
-- `openspec/changes/product-experience-redesign/`
+- `openspec/changes/visual-report-redesign/`
 - `docs/devlog/latest.md`
 - `docs/handoff/latest.md`
 - `docs/test-matrix.md`

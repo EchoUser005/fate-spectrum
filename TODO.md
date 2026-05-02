@@ -10,6 +10,8 @@
 - [ ] 部署到 Vercel。
 - [ ] 绑定域名。
 - [x] GitHub remote 已由用户推送到 `https://github.com/EchoUser005/fate-spectrum`。
+- [x] 第三轮视觉报告重构：普通用户界面隐藏技术术语，报告回到维度评分、大运光谱、流年色阶。
+- [x] sample-paipan golden profile 对齐最初 Excel 目标分数。
 
 ## P1 - Good for v0.2
 
@@ -18,6 +20,7 @@
 - [ ] 实现真太阳时经纬度校正。
 - [x] 允许当前浏览器会话用 `sessionStorage` 缓存 LLM Key，并提供清除动作。
 - [ ] 校准更多真实样例盘和评分规则。
+- [ ] 将 visual screenshot capture 升级为像素级视觉回归。
 - [ ] 增加 CI 到自有服务器的自动发布方案。
 
 ## P2 - Future

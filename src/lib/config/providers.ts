@@ -14,7 +14,7 @@ export const providerPresets = {
     label: "DeepSeek",
     description: "只用于生成解释文案，不负责排盘或评分。",
     baseUrl: process.env.DEEPSEEK_BASE_URL ?? "https://api.deepseek.com",
-    model: process.env.DEFAULT_DEEPSEEK_MODEL ?? "deepseek-v4-flash"
+    model: process.env.DEFAULT_DEEPSEEK_MODEL ?? "deepseek-v4-pro"
   },
   openaiCompatible: {
     label: "OpenAI-compatible",
@@ -25,9 +25,9 @@ export const providerPresets = {
 } as const;
 
 export const deepseekModelOptions = [
-  { value: "deepseek-v4-flash", label: "deepseek-v4-flash · V4 Flash" },
-  { value: "deepseek-v4-pro", label: "deepseek-v4-pro · V4 Pro" },
-  { value: "deepseek-chat", label: "deepseek-chat · legacy alias" }
+  { value: "deepseek-v4-flash", label: "快速", userLabel: "快速" },
+  { value: "deepseek-v4-pro", label: "高质量", userLabel: "高质量" },
+  { value: "deepseek-chat", label: "兼容", userLabel: "兼容" }
 ] as const;
 
 export function allowSessionKeyStorage() {

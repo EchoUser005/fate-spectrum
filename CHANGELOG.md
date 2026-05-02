@@ -18,6 +18,10 @@
 - Added `product-experience-redesign` OpenSpec change for outcome-first public demo UX.
 - Added Recharts-backed spectrum radar, action plan, timing window, and advanced source data panels.
 - Added DeepSeek V4 model defaults, official key guidance links, and session-only LLM key cache controls.
+- Added `visual-report-redesign` OpenSpec change for product IA, visual report redesign, golden scoring, copy hardening, and visual review screenshots.
+- Added sample paipan golden profile regression for the original Excel-style eight-step dayun score targets.
+- Added report view-model helpers so dayun curve, heatmap, and table share `report.dayunScores`.
+- Added UI copy, golden scoring, chart-source, export, and responsive visual E2E coverage.
 
 ### Changed
 
@@ -26,6 +30,10 @@
 - Expanded deployment and contribution documentation for multi-person collaboration.
 - Archived `bootstrap-fate-spectrum` into main OpenSpec specs after MVP acceptance.
 - Reworked homepage and report copy away from raw paipan/source-data framing toward user outcomes and next actions.
+- Rebuilt the main UI as a Chinese-first product flow: landing, three-step wizard, sticky report navigation, overview, dayun, yearly, chart, detailed reading, and folded developer data.
+- Moved technical provider/model/source data into Advanced Settings and Developer Data.
+- Changed DeepSeek default to `deepseek-v4-pro` for high-quality interpretation while retaining `deepseek-v4-flash` and `deepseek-chat`.
+- Reworked Markdown export into a cleaner user-facing report with target scores and disclaimers.
 
 ### Fixed
 

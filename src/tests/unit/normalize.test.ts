@@ -8,7 +8,10 @@ describe("normalizePaipan", () => {
 
     expect(normalized.pillars.year).toBe("己卯");
     expect(normalized.palaces).toHaveLength(12);
-    expect(normalized.dayun[0]?.ganzhi).toBe("甲戌");
+    expect(normalized.pillars.month).toBe("乙亥");
+    expect(normalized.pillars.day).toBe("戊寅");
+    expect(normalized.pillars.hour).toBe("癸亥");
+    expect(normalized.dayun[0]?.ganzhi).toBe("丙子");
   });
 
   it("normalizes a shenjige response with numeric status", () => {
