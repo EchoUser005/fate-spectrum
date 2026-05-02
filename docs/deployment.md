@@ -33,7 +33,7 @@ conda create -n fate-spectrum python=3.12 -y
 conda activate fate-spectrum
 ```
 
-The current public app does not require Python at runtime.
+The Next.js app can run without Python. Docker Compose includes the optional FastAPI memory service for private JSON/Markdown persistence.
 
 ## Vercel Manual Import
 
@@ -59,12 +59,14 @@ pnpm build
 docker compose up -d --build
 ```
 
-Default port: `3000`.
+Default app port: `3000`.
+Default memory API port: `8000`.
 
 Health check:
 
 ```bash
 curl http://127.0.0.1:3000/api/health
+curl http://127.0.0.1:8000/health
 ```
 
 ## Custom Domain
@@ -81,7 +83,7 @@ Prompts are versioned locally in `prompts/` and work without any prompt server. 
 LANGFUSE_BASE_URL=
 LANGFUSE_PUBLIC_KEY=
 LANGFUSE_SECRET_KEY=
-LANGFUSE_PROMPT_LABEL=production
+LANGFUSE_PROMPT_LABEL=prod
 ```
 
 Keep these values in deployment secrets or a local `.env.local` file only. Do not commit real Langfuse hosts, public keys, secret keys, traces, or private prompt payloads.

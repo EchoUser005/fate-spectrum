@@ -62,6 +62,7 @@ export const KeyWindowSchema = z.object({
 
 export const NarrativeSchema = z.object({
   overview: z.string(),
+  currentEnvironment: z.string().default(""),
   dimensions: z.object({
     wealth: z.string(),
     career: z.string(),
@@ -108,7 +109,8 @@ export const ReportApiRequestSchema = z.object({
   llmProvider: ProviderConfigSchema,
   options: z.object({
     useLlmNarrative: z.boolean(),
-    includeRawJson: z.boolean()
+    includeRawJson: z.boolean(),
+    profileRole: z.enum(["owner", "guest"]).optional()
   })
 });
 

@@ -1,30 +1,18 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-const promptsDir = path.join(process.cwd(), "prompts");
+const promptsRoot = path.join(process.cwd(), "prompts", "fate-spectrum");
 const baseUrl = process.env.LANGFUSE_BASE_URL || process.env.LANGFUSE_HOST;
 const publicKey = process.env.LANGFUSE_PUBLIC_KEY;
 const secretKey = process.env.LANGFUSE_SECRET_KEY;
-const label = process.env.LANGFUSE_PROMPT_LABEL || "production";
+const label = process.env.LANGFUSE_PROMPT_LABEL || "prod";
 
 if (!baseUrl || !publicKey || !secretKey) {
   console.error("Missing LANGFUSE_BASE_URL, LANGFUSE_PUBLIC_KEY, or LANGFUSE_SECRET_KEY.");
   process.exit(1);
 }
 
-const entries = await fs.readdir(promptsDir, { withFileTypes: true });
-const promptFiles = entries
-  .filter((entry) => entry.isFile() && entry.name.endsWith(".json"))
-  .map((entry) => path.join(promptsDir, entry.name));
-
-for (const filePath of promptFiles) {
-  const raw = await fs.readFile(filePath, "utf8");
-  const prompt = JSON.parse(raw);
-  if (!prompt.name || prompt.type !== "chat" || !Array.isArray(prompt.messages)) {
-    console.log(`skip ${path.basename(filePath)}: not a chat prompt definition`);
-    continue;
-  }
-
+for (const prompt of await readPromptCatalog()) {
   const response = await fetch(new URL("/api/public/v2/prompts", baseUrl), {
     method: "POST",
     headers: {
@@ -38,7 +26,7 @@ for (const filePath of promptFiles) {
       labels: [label],
       config: {
         localVersion: prompt.version,
-        source: path.relative(process.cwd(), filePath)
+        source: prompt.source
       }
     })
   });
@@ -49,4 +37,29 @@ for (const filePath of promptFiles) {
   }
 
   console.log(`synced ${prompt.name} -> ${label}`);
+}
+
+async function readPromptCatalog() {
+  const entries = await fs.readdir(promptsRoot, { withFileTypes: true });
+  const prompts = [];
+  for (const entry of entries) {
+    if (!entry.isDirectory()) continue;
+    const promptDir = path.join(promptsRoot, entry.name);
+    const meta = JSON.parse(await fs.readFile(path.join(promptDir, "prompt.json"), "utf8"));
+    if (!meta.name || meta.type !== "chat") {
+      console.log(`skip ${entry.name}: not a chat prompt definition`);
+      continue;
+    }
+    prompts.push({
+      name: meta.name,
+      version: meta.version,
+      type: meta.type,
+      source: path.relative(process.cwd(), promptDir),
+      messages: [
+        { role: "system", content: (await fs.readFile(path.join(promptDir, "system.md"), "utf8")).trim() },
+        { role: "user", content: (await fs.readFile(path.join(promptDir, "user.md"), "utf8")).trim() }
+      ]
+    });
+  }
+  return prompts.sort((a, b) => a.name.localeCompare(b.name));
 }

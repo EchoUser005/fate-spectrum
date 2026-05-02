@@ -10,6 +10,12 @@ test-results
 *.log
 .DS_Store
 pnpm-debug.log*
+__pycache__/
+.pycache/
+
+# Private runtime memory.
+data/*
+!data/README.md
 
 # Local agent / specification workspace files.
 .codex/

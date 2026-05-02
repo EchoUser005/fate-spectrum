@@ -6,7 +6,8 @@ import { buildRuleBasedReport } from "@/lib/scoring/engine";
 
 const screenshotDir = "docs/design-review/screenshots";
 const narrativeOverride: Narrative = {
-  overview: "戊寅大运：当前主战场，开创、竞争、身份升级，但很耗。",
+  overview: "日主: 戊土重承载。\n命盘格局: 当前主战场，开创、竞争、身份升级。\n喜用神: 先看火土承接。\n忌神: 避免长期高压。",
+  currentEnvironment: "当前正行戊寅大运（2024-2033年），开创、竞争、身份升级，但很耗。2026 年适合把压力转成学习、证书、贵人和项目推进。",
   dimensions: {
     wealth: "财富机会来自资源整合和现金流边界。",
     career: "事业推进适合争取更高可见度。",

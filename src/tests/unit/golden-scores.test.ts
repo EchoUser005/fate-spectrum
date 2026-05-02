@@ -19,6 +19,7 @@ const birth = {
 
 const narrativeOverride: Narrative = {
   overview: "这一步只测试文字润色不会改分。",
+  currentEnvironment: "当前大环境文字润色不会改分。",
   dimensions: {
     wealth: "财富文字润色",
     career: "事业文字润色",

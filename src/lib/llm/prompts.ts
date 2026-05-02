@@ -1,3 +1,5 @@
+import fs from "node:fs";
+import path from "node:path";
 import type { NormalizedPaipan } from "@/lib/schemas/paipan";
 import type { ChatMessage } from "@/lib/llm/openai-compatible";
 import type { DayunScore, DimensionDefinition, YearlyScore } from "@/lib/schemas/report";
@@ -6,30 +8,44 @@ import {
   HEALTH_DISCLAIMER,
   WEALTH_DISCLAIMER
 } from "@/lib/constants";
-import narrativePromptDefinition from "../../../prompts/fate-spectrum-narrative.v2.json";
-import overviewPromptDefinition from "../../../prompts/fate-spectrum-overview.v1.json";
-import dimensionsPromptDefinition from "../../../prompts/fate-spectrum-dimensions.v1.json";
-import windowsPromptDefinition from "../../../prompts/fate-spectrum-windows.v1.json";
 
 type LocalPromptDefinition = {
   name: string;
   version: number;
   type: "chat";
+  key: LocalPromptKey;
+  source: string;
   messages: ChatMessage[];
 };
 
-const localNarrativePrompt = narrativePromptDefinition as LocalPromptDefinition;
-const localOverviewPrompt = overviewPromptDefinition as LocalPromptDefinition;
-const localDimensionsPrompt = dimensionsPromptDefinition as LocalPromptDefinition;
-const localWindowsPrompt = windowsPromptDefinition as LocalPromptDefinition;
+export type LocalPromptKey =
+  | "overview"
+  | "current-environment"
+  | "dimensions"
+  | "windows"
+  | "weekly-daily"
+  | "monthly-rollup"
+  | "yearly-memory";
 
-export const LOCAL_NARRATIVE_PROMPT_NAME = localNarrativePrompt.name;
-export const LOCAL_NARRATIVE_PROMPT_VERSION = localNarrativePrompt.version;
+export const LOCAL_PROMPT_KEYS: LocalPromptKey[] = [
+  "overview",
+  "current-environment",
+  "dimensions",
+  "windows",
+  "weekly-daily",
+  "monthly-rollup",
+  "yearly-memory"
+];
+
+const PROMPT_ROOT = path.join(process.cwd(), "prompts", "fate-spectrum");
+const localPromptCache = new Map<LocalPromptKey, LocalPromptDefinition>();
+
 export const LOCAL_REPORT_PROMPTS = {
-  overview: localOverviewPrompt.name,
-  dimensions: localDimensionsPrompt.name,
-  windows: localWindowsPrompt.name
-} as const;
+  overview: getLocalPromptDefinition("overview").name,
+  currentEnvironment: getLocalPromptDefinition("current-environment").name,
+  dimensions: getLocalPromptDefinition("dimensions").name,
+  windows: getLocalPromptDefinition("windows").name
+};
 
 export function buildNarrativePrompt(input: {
   normalized: NormalizedPaipan;
@@ -38,19 +54,60 @@ export function buildNarrativePrompt(input: {
   yearlyScores: YearlyScore[];
   generatedAt?: string;
 }) {
-  return buildPromptFromDefinition(localNarrativePrompt, input);
+  return buildPromptFromDefinition(getLocalPromptDefinition("overview"), input);
 }
 
 export function buildOverviewPrompt(input: PromptInput) {
-  return buildPromptFromDefinition(localOverviewPrompt, input);
+  return buildPromptFromDefinition(getLocalPromptDefinition("overview"), input);
+}
+
+export function buildCurrentEnvironmentPrompt(input: PromptInput) {
+  return buildPromptFromDefinition(getLocalPromptDefinition("current-environment"), input);
 }
 
 export function buildDimensionsPrompt(input: PromptInput) {
-  return buildPromptFromDefinition(localDimensionsPrompt, input);
+  return buildPromptFromDefinition(getLocalPromptDefinition("dimensions"), input);
 }
 
 export function buildWindowsPrompt(input: PromptInput) {
-  return buildPromptFromDefinition(localWindowsPrompt, input);
+  return buildPromptFromDefinition(getLocalPromptDefinition("windows"), input);
+}
+
+export function getLocalPromptCatalog() {
+  return LOCAL_PROMPT_KEYS.map((key) => getLocalPromptDefinition(key));
+}
+
+export function getLocalPromptDefinition(key: LocalPromptKey): LocalPromptDefinition {
+  const cached = localPromptCache.get(key);
+  if (cached) return cached;
+
+  const promptDir = path.join(PROMPT_ROOT, key);
+  const metaPath = path.join(promptDir, "prompt.json");
+  const systemPath = path.join(promptDir, "system.md");
+  const userPath = path.join(promptDir, "user.md");
+  const meta = JSON.parse(fs.readFileSync(metaPath, "utf8")) as {
+    name?: unknown;
+    version?: unknown;
+    type?: unknown;
+  };
+
+  if (typeof meta.name !== "string" || typeof meta.version !== "number" || meta.type !== "chat") {
+    throw new Error(`Invalid local prompt metadata: ${metaPath}`);
+  }
+
+  const prompt: LocalPromptDefinition = {
+    key,
+    name: meta.name,
+    version: meta.version,
+    type: "chat",
+    source: path.relative(process.cwd(), promptDir),
+    messages: [
+      { role: "system" as const, content: fs.readFileSync(systemPath, "utf8").trim() },
+      { role: "user" as const, content: fs.readFileSync(userPath, "utf8").trim() }
+    ]
+  };
+  localPromptCache.set(key, prompt);
+  return prompt;
 }
 
 type PromptInput = {
@@ -75,8 +132,10 @@ function buildPromptFromDefinition(promptDefinition: LocalPromptDefinition, inpu
   const user = messages.find((message) => message.role === "user")?.content;
 
   return {
+    name: promptDefinition.name,
     system: system ?? "",
-    user: user ?? context
+    user: user ?? context,
+    variables: { context }
   };
 }
 
@@ -98,12 +157,13 @@ function buildNarrativeContext(input: {
     task: "生成命运光谱 narrative。prompt 模板不得硬编码任何示例命盘；只分析本次 context 中的脱敏排盘与规则分数。",
     writingFrame: {
       reportStyle: "参考 Excel 式一生大运流年维度评分报告：八字大运流年为主，紫微宫位用于校准主题；重视维度分数、主判、机会、风险和行动。",
-      overviewSections: ["日主", "命盘格局", "喜用神", "忌神", "当下大环境"],
+      overviewSections: ["日主", "命盘格局", "喜用神", "忌神"],
       currentEnvironment: "当下大环境必须使用 currentDayun 和 currentYearly；没有 currentMonth 时不要写流月干支。",
       forbiddenOverviewCopy: ["本报告基于", "免责声明", "高能维度突出", "适合集中资源推进主线", "先看这八步怎么起伏"]
     },
     outputShape: {
-      overview: "string with sections 日主:/命盘格局:/喜用神:/忌神:/当下大环境:",
+      overview: "string with sections 日主:/命盘格局:/喜用神:/忌神:",
+      currentEnvironment: "string focused on currentDayun/currentYear/currentYearly",
       dimensions: {
         wealth: "string",
         career: "string",

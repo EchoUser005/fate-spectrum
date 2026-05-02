@@ -16,8 +16,10 @@ export type ProfileRecord = {
 };
 
 export function savePrimaryReport(report: ReportResponse) {
-  saveProfileReport(report);
-  window.localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(report));
+  const profile = saveProfileReport(report);
+  if (profile.isPrimary) {
+    window.localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(report));
+  }
 }
 
 export function loadPrimaryReport() {

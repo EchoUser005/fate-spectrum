@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import {
   beginAddProfile,
   clearPrimaryReport,
@@ -24,6 +24,10 @@ export function ChartShell() {
   useEffect(() => {
     if (!activeProfile) router.replace("/");
   }, [activeProfile, router]);
+
+  useLayoutEffect(() => {
+    if (activeProfile) window.scrollTo({ top: 0, left: 0 });
+  }, [activeProfile]);
 
   const resetPrimaryReport = () => {
     clearPrimaryReport();

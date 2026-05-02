@@ -18,6 +18,7 @@ export function buildRuleNarrative(dayunScores: DayunScore[], yearlyScores: Year
 
   return {
     overview: buildOverview(currentDayun),
+    currentEnvironment: buildCurrentEnvironment(currentDayun),
     dimensions,
     keyWindows: buildKeyWindows(yearlyScores),
     actionPlan: [
@@ -41,7 +42,17 @@ function getCurrentDayun(dayunScores: DayunScore[]) {
 
 function buildOverview(currentDayun: DayunScore | undefined) {
   if (!currentDayun) return "维度分数用于拆开机会、压力和行动，不提供单一总分。";
-  return `${currentDayun.ganzhi}大运：${currentDayun.summary}。`;
+  return [
+    "日主: 先看日主承载力、调候与四柱结构，再判断十年节奏。",
+    `命盘格局: 当前主判为${currentDayun.summary}，需要结合四柱、紫微宫位和流年窗口继续校准。`,
+    "喜用神: 优先寻找能提高承载力、恢复力和边界感的信号。",
+    "忌神: 避免被高压、人情、现金流和关系牵动长期消耗。"
+  ].join("\n");
+}
+
+function buildCurrentEnvironment(currentDayun: DayunScore | undefined) {
+  if (!currentDayun) return "";
+  return `当前正行${currentDayun.ganzhi}大运（${currentDayun.startYear}-${currentDayun.endYear}年），${currentDayun.summary}。这一阶段适合把机会拆成项目、现金流、关系边界和身体承载四条线逐项校准。`;
 }
 
 function buildDimensionNarrative(id: DimensionId, score: number, summary?: string) {

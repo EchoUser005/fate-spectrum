@@ -1,0 +1,6 @@
+{
+  "name": "fate-spectrum/monthly-rollup",
+  "version": 1,
+  "type": "chat",
+  "description": "Roll weekly reports into a monthly insight memory."
+}

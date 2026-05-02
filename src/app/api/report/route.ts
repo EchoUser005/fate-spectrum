@@ -4,6 +4,7 @@ import { ReportApiRequestSchema } from "@/lib/schemas/report";
 import { getPaipanProvider } from "@/lib/paipan/providers";
 import { buildRuleBasedReport } from "@/lib/scoring/engine";
 import { generateLlmNarrative } from "@/lib/llm";
+import { persistReportSnapshot } from "@/lib/memory/persistence";
 import { readJsonWithLimit, safeErrorResponse } from "@/app/api/_lib";
 
 export async function POST(request: NextRequest) {
@@ -24,6 +25,10 @@ export async function POST(request: NextRequest) {
     });
 
     if (!payload.options.useLlmNarrative) {
+      await persistReportSnapshot({
+        report: baseReport,
+        role: payload.options.profileRole ?? "owner"
+      });
       return NextResponse.json(baseReport);
     }
 
@@ -32,15 +37,20 @@ export async function POST(request: NextRequest) {
       throw new Error("模型解读失败，请检查模型密钥或稍后重试。");
     }
 
-    return NextResponse.json(
-      buildRuleBasedReport({
+    const report = buildRuleBasedReport({
         birth: payload.birth,
         paipan,
         provider: payload.paipanProvider,
         generatedAt,
         narrativeOverride: narrative
-      })
-    );
+      });
+
+    await persistReportSnapshot({
+      report,
+      role: payload.options.profileRole ?? "owner"
+    });
+
+    return NextResponse.json(report);
   } catch (error) {
     return safeErrorResponse(error);
   }

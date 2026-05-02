@@ -1,9 +1,25 @@
 services:
+  fate-spectrum-api:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      FATE_DATA_DIR: /data/fate-spectrum
+    volumes:
+      - fate-spectrum-data:/data/fate-spectrum
+
   fate-spectrum:
     build: .
     ports:
       - "3000:3000"
     env_file:
-      - .env
+      - path: .env
+        required: false
     environment:
       NODE_ENV: production
+      FATE_MEMORY_API_URL: http://fate-spectrum-api:8000
+    depends_on:
+      - fate-spectrum-api
+
+volumes:
+  fate-spectrum-data:

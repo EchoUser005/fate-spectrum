@@ -7,6 +7,10 @@ export function CurrentCycleCard({ report, source }: { report: ReportResponse; s
   const currentDayun = source === "ziwei" ? getCurrentZiweiLimit(report) : getCurrentDayun(report);
 
   if (!currentDayun) return null;
+  const summary =
+    source === "bazi" && report.narratives.currentEnvironment
+      ? report.narratives.currentEnvironment
+      : currentDayun.summary;
 
   return (
     <div className="rounded-md border border-fs-line bg-fs-surface p-4">
@@ -17,7 +21,7 @@ export function CurrentCycleCard({ report, source }: { report: ReportResponse; s
           {currentDayun.startYear}-{currentDayun.endYear}，约 {currentDayun.age}-{currentDayun.age + 9} 岁
         </span>
       </div>
-      <p className="mt-3 text-sm leading-6 text-fs-muted">{currentDayun.summary}</p>
+      <p className="mt-3 whitespace-pre-line text-sm leading-6 text-fs-muted">{summary}</p>
     </div>
   );
 }

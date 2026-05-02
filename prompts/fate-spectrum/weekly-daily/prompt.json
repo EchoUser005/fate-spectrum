@@ -1,0 +1,6 @@
+{
+  "name": "fate-spectrum/weekly-daily",
+  "version": 1,
+  "type": "chat",
+  "description": "Weekly report with daily flow reading, designed for later memory rollup."
+}

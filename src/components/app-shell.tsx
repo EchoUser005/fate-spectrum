@@ -119,7 +119,8 @@ export function AppShell() {
             llmProvider: llmConfig,
             options: {
               useLlmNarrative: true,
-              includeRawJson: false
+              includeRawJson: false,
+              profileRole: isAddingProfile ? "guest" : "owner"
             }
           })
         });

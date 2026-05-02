@@ -27,12 +27,17 @@
 - Added UI copy, golden scoring, chart-source, export, and responsive visual E2E coverage.
 - Added reviewer-correction coverage that blocks sample-entry copy, numbered steps, optional labels, advanced data, and manual-like dayun headings from the visible UI.
 - Added reviewer-correction coverage that requires model keys, verifies `custom-paipan` report requests, and blocks model-mode/local-rule copy from the visible UI.
+- Added directory-based prompt registry with separate system/user files for overview, current environment, dimensions, windows, weekly daily-flow, monthly rollup, and yearly memory.
+- Added optional FastAPI memory service that persists 命主/缘主 snapshots plus weekly/monthly/yearly JSON and Markdown files.
+- Added `pnpm prompts:pull` to download tuned Langfuse `prod` prompts back into local prompt files.
 
 ### Changed
 
 - Changed share actions to generate watermarked PNG share images with the GitHub project address instead of copying plain text.
 - Changed the shared Select component to use the Fate Spectrum visual treatment instead of the browser-default control chrome.
 - Changed report generation to call separate AI prompts for overview, dimension reading, and key windows/action plan instead of one monolithic narrative prompt.
+- Changed report generation to call a separate current-environment prompt and render it in the current-stage card above the main signal cards.
+- Changed Langfuse prompt lookup to prefer `prod`, seed missing local prompts once, and avoid overwriting existing Langfuse prompts at runtime.
 - Calibrated shenjige form mapping to include `h` and `m` fields and numeric `status` response handling.
 - Improved public demo copy, generation stages, dimension-first report presentation, mobile E2E coverage, and export disclaimer coverage.
 - Expanded deployment and contribution documentation for multi-person collaboration.

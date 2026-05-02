@@ -2,15 +2,14 @@ import { describe, expect, it } from "vitest";
 import samplePaipan from "@/fixtures/sample-paipan.json";
 import { PaipanResponseSchema } from "@/lib/schemas/paipan";
 import {
+  buildCurrentEnvironmentPrompt,
   buildDimensionsPrompt,
   buildOverviewPrompt,
   buildWindowsPrompt,
+  getLocalPromptCatalog,
   LOCAL_REPORT_PROMPTS
 } from "@/lib/llm/prompts";
 import { buildRuleBasedReport } from "@/lib/scoring/engine";
-import overviewPromptDefinition from "../../../prompts/fate-spectrum-overview.v1.json";
-import dimensionsPromptDefinition from "../../../prompts/fate-spectrum-dimensions.v1.json";
-import windowsPromptDefinition from "../../../prompts/fate-spectrum-windows.v1.json";
 
 const birth = {
   nickname: "匿名样例",
@@ -41,16 +40,29 @@ describe("local prompt registry", () => {
     };
     const prompts = [
       buildOverviewPrompt(input),
+      buildCurrentEnvironmentPrompt(input),
       buildDimensionsPrompt(input),
       buildWindowsPrompt(input)
     ];
+    const catalog = getLocalPromptCatalog();
 
     expect(LOCAL_REPORT_PROMPTS).toEqual({
-      overview: overviewPromptDefinition.name,
-      dimensions: dimensionsPromptDefinition.name,
-      windows: windowsPromptDefinition.name
+      overview: "fate-spectrum/overview",
+      currentEnvironment: "fate-spectrum/current-environment",
+      dimensions: "fate-spectrum/dimensions",
+      windows: "fate-spectrum/windows"
     });
-    expect(prompts[0]?.system).toBe(overviewPromptDefinition.messages[0]?.content);
+    expect(catalog.map((prompt) => prompt.name)).toEqual([
+      "fate-spectrum/overview",
+      "fate-spectrum/current-environment",
+      "fate-spectrum/dimensions",
+      "fate-spectrum/windows",
+      "fate-spectrum/weekly-daily",
+      "fate-spectrum/monthly-rollup",
+      "fate-spectrum/yearly-memory"
+    ]);
+    expect(prompts[0]?.system).toContain("总览主笔");
+    expect(prompts[1]?.system).toContain("当下大环境");
     for (const prompt of prompts) {
       expect(prompt.user).not.toContain("{{context}}");
       expect(prompt.user).toContain("requiredDisclaimers");
@@ -58,6 +70,7 @@ describe("local prompt registry", () => {
       expect(prompt.user).toContain("currentYearly");
       expect(prompt.user).toContain("currentDayunYears");
       expect(prompt.user).not.toContain("1999-09-15");
+      expect(prompt.variables.context).toContain("currentDayun");
     }
   });
 });

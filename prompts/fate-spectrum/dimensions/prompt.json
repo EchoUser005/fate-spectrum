@@ -1,0 +1,6 @@
+{
+  "name": "fate-spectrum/dimensions",
+  "version": 1,
+  "type": "chat",
+  "description": "Seven dimension reading based on deterministic scores."
+}

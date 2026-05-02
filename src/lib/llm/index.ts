@@ -3,17 +3,20 @@ import { NarrativeSchema, type Narrative, type ReportResponse } from "@/lib/sche
 import type { z } from "zod";
 import type { ProviderConfig } from "@/lib/schemas/provider";
 import { callDeepSeekChat } from "@/lib/llm/deepseek";
-import { getLangfuseChatMessages } from "@/lib/llm/langfuse";
+import { ensureLangfusePromptCatalogSeeded, getLangfuseChatMessages } from "@/lib/llm/langfuse";
 import { callOpenAiCompatibleChat } from "@/lib/llm/openai-compatible";
 import {
+  buildCurrentEnvironmentPrompt,
   buildDimensionsPrompt,
   buildOverviewPrompt,
   buildWindowsPrompt,
+  getLocalPromptCatalog,
   LOCAL_REPORT_PROMPTS
 } from "@/lib/llm/prompts";
 import { extractJsonObject } from "@/lib/llm/safe-json";
 
 const OverviewNarrativeSchema = NarrativeSchema.pick({ overview: true });
+const CurrentEnvironmentNarrativeSchema = NarrativeSchema.pick({ currentEnvironment: true });
 const DimensionsNarrativeSchema = NarrativeSchema.pick({ dimensions: true });
 const WindowsNarrativeSchema = NarrativeSchema.pick({ keyWindows: true, actionPlan: true });
 
@@ -36,11 +39,19 @@ export async function generateLlmNarrative(
     generatedAt: baseReport.meta.generatedAt
   };
 
-  const [overview, dimensions, windows] = await Promise.all([
+  await ensureLangfusePromptCatalogSeeded(getLocalPromptCatalog());
+
+  const [overview, currentEnvironment, dimensions, windows] = await Promise.all([
     runPromptPart({
       name: LOCAL_REPORT_PROMPTS.overview,
       prompt: buildOverviewPrompt(promptInput),
       schema: OverviewNarrativeSchema,
+      config
+    }),
+    runPromptPart({
+      name: LOCAL_REPORT_PROMPTS.currentEnvironment,
+      prompt: buildCurrentEnvironmentPrompt(promptInput),
+      schema: CurrentEnvironmentNarrativeSchema,
       config
     }),
     runPromptPart({
@@ -57,10 +68,11 @@ export async function generateLlmNarrative(
     })
   ]);
 
-  if (!overview || !dimensions || !windows) return null;
+  if (!overview || !currentEnvironment || !dimensions || !windows) return null;
 
   return NarrativeSchema.parse({
     ...overview,
+    ...currentEnvironment,
     ...dimensions,
     ...windows
   });
@@ -68,7 +80,7 @@ export async function generateLlmNarrative(
 
 async function runPromptPart<T extends z.ZodTypeAny>(params: {
   name: string;
-  prompt: { system: string; user: string };
+  prompt: { system: string; user: string; variables: Record<string, string> };
   schema: T;
   config: ProviderConfig;
 }): Promise<z.infer<T> | null> {
@@ -78,9 +90,7 @@ async function runPromptPart<T extends z.ZodTypeAny>(params: {
   ];
   const messages = await getLangfuseChatMessages({
     name: params.name,
-    variables: {
-      context: params.prompt.user
-    },
+    variables: params.prompt.variables,
     fallback: fallbackMessages
   });
 

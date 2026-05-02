@@ -13,6 +13,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "prompts:sync": "node scripts/sync-langfuse-prompts.mjs",
+    "prompts:pull": "node scripts/pull-langfuse-prompts.mjs",
     "format": "prettier --check .",
     "format:write": "prettier --write ."
   },

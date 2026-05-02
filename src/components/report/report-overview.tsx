@@ -22,26 +22,24 @@ export function ReportOverview({
   return (
     <section id="overview" className="scroll-mt-20 space-y-5">
       <div className="rounded-md border border-fs-line bg-white p-5 md:p-6">
-        <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
-          <div>
-            <p className="text-sm font-medium text-fs-gold">{report.birth.nickname || "匿名命盘"}</p>
-            <h2 className="mt-2 text-2xl font-semibold text-fs-ink md:text-3xl">总览</h2>
-            <div className="mt-4 max-w-2xl space-y-3">
-              {overviewSections.length > 0 ? (
-                overviewSections.map((section) => (
-                  <div key={section.title} className="border-l-2 border-fs-line pl-3">
-                    <p className="text-xs font-semibold text-fs-gold">{section.title}</p>
-                    <p className="mt-1 whitespace-pre-line text-sm leading-7 text-fs-muted">{section.body}</p>
-                  </div>
-                ))
-              ) : (
-                <p className="whitespace-pre-line text-base leading-7 text-fs-muted">{overview}</p>
-              )}
-            </div>
+        <div>
+          <p className="text-sm font-medium text-fs-gold">{report.birth.nickname || "匿名命盘"}</p>
+          <h2 className="mt-2 text-2xl font-semibold text-fs-ink md:text-3xl">总览</h2>
+          <div className="mt-4 max-w-3xl space-y-3">
+            {overviewSections.length > 0 ? (
+              overviewSections.map((section) => (
+                <div key={section.title} className="border-l-2 border-fs-line pl-3">
+                  <p className="text-xs font-semibold text-fs-gold">{section.title}</p>
+                  <p className="mt-1 whitespace-pre-line text-sm leading-7 text-fs-muted">{section.body}</p>
+                </div>
+              ))
+            ) : (
+              <p className="whitespace-pre-line text-base leading-7 text-fs-muted">{overview}</p>
+            )}
           </div>
-          <div className="space-y-3">
-            <CurrentCycleCard report={report} source={chartMode} />
-          </div>
+        </div>
+        <div className="mt-5">
+          <CurrentCycleCard report={report} source={chartMode} />
         </div>
         <div className="mt-5">
           <MainSignalCards report={report} />

@@ -12,6 +12,7 @@ Fate Spectrum is an open-source life rhythm dashboard. It accepts birth input, r
 
 - 生辰配置 + 模型配置 in one direct workbench
 - Real paipan generation through a server-side provider path
+- Optional FastAPI memory service for local owner/guest JSON and Markdown persistence
 - Rule-based scoring for wealth, career, comfort, selfValue, relationship, healthEnergy, and riskControl
 - Required DeepSeek V4 narrative generation for interpreted reports; scores remain deterministic and are not changed by the model
 - Visual report shell with 总览, 大运, 流年, 星盘, and 详细解读
@@ -44,12 +45,18 @@ Apply for a key at `https://platform.deepseek.com` and check current model names
 
 LLM keys are cached only in browser `sessionStorage` for the current session and can be cleared from the UI.
 
-Prompts live in `prompts/` and are versioned with the repository. Runtime prompt lookup prefers Langfuse `production` prompts when server-only `LANGFUSE_BASE_URL`, `LANGFUSE_PUBLIC_KEY`, and `LANGFUSE_SECRET_KEY` are configured; if those variables are absent or Langfuse is unavailable, Fate Spectrum falls back to the local prompt files.
+Prompts live in `prompts/fate-spectrum/<ai-function>/` and are versioned with the repository. Runtime prompt lookup prefers Langfuse prompts labeled `prod` when server-only `LANGFUSE_BASE_URL` or `LANGFUSE_HOST`, `LANGFUSE_PUBLIC_KEY`, and `LANGFUSE_SECRET_KEY` are configured; if those variables are absent or Langfuse is unavailable, Fate Spectrum falls back to the local prompt files.
 
-The report AI surface is split into separate prompts for overview, dimension reading, and key windows/action plan. Publish local prompt files explicitly with:
+The report AI surface is split into separate prompts for overview, current environment, dimension reading, and key windows/action plan. Weekly, monthly, and yearly memory prompts are also scaffolded for the next product loop. Runtime will seed missing prompts into Langfuse once, but it will not overwrite an existing `prod` prompt. Publish local prompt files explicitly with:
 
 ```bash
 pnpm prompts:sync
+```
+
+Pull edited Langfuse prompts back to local files with:
+
+```bash
+pnpm prompts:pull
 ```
 
 Do not commit real Langfuse hosts, keys, model keys, traces, user birth data, provider responses, or generated private reports.
@@ -75,11 +82,36 @@ Import `EchoUser005/fate-spectrum` in Vercel. The default build command is `pnpm
 
 ## Docker
 
+For ordinary users, Docker Compose starts the Next.js app and the local FastAPI memory service. Langfuse is not required.
+
 ```bash
 docker compose up -d
 ```
 
-The app listens on port `3000`.
+The app listens on port `3000`. The memory service listens on port `8000` and writes private JSON/Markdown memory into the `fate-spectrum-data` Docker volume.
+
+For secondary development:
+
+1. Copy `.env.example` to `.env` if you keep one locally, or create `.env` with only the provider values you need.
+2. Optional Langfuse variables belong in server-only env, never `NEXT_PUBLIC_`:
+   - `LANGFUSE_BASE_URL` or `LANGFUSE_HOST`
+   - `LANGFUSE_PUBLIC_KEY`
+   - `LANGFUSE_SECRET_KEY`
+   - `LANGFUSE_PROMPT_LABEL=prod`
+3. Use `pnpm prompts:sync` to publish local prompt files to your own Langfuse project.
+4. Use `pnpm prompts:pull` to download the `prod` prompt text you tuned in Langfuse back into `prompts/fate-spectrum/`.
+
+## Local Memory Files
+
+The app can run without the FastAPI memory service, using browser storage for the current UI. For private long-term memory, run the FastAPI service or Docker Compose and keep `FATE_MEMORY_API_URL` pointed at it.
+
+The intended data flywheel is:
+
+```text
+weekly daily-flow reports -> monthly rollup -> yearly memory -> next report context
+```
+
+The file layout is documented in `data/README.md`. Generated `data/owner/` and `data/guests/` files are ignored by Git.
 
 ## Security
 
