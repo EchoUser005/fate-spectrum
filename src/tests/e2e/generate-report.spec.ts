@@ -171,7 +171,10 @@ test("mobile report stays readable with contained overflow", async ({ page }) =>
   await page.getByRole("button", { name: "生成命运光谱" }).click();
   await expect(page).toHaveURL(/\/chart$/);
   await expect(page.getByRole("navigation").getByText("总览")).toBeVisible();
-  await expect(page.getByRole("button", { name: "导出报告" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "分享到微信" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "分享到小红书" })).toBeVisible();
+  await expect(page.getByText("导出内容包含免责声明")).not.toBeVisible();
+  await expect(page.getByText("生成说明")).not.toBeVisible();
   await expect(page.getByText("原始排盘 JSON")).not.toBeVisible();
   await expect(page.getByText("高级数据")).not.toBeVisible();
   await expect(page.getByText("Report Status")).not.toBeVisible();

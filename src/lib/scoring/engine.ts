@@ -30,7 +30,7 @@ export function buildRuleBasedReport(params: {
       engineVersion: ENGINE_VERSION,
       provider: params.provider.provider,
       hasLlmNarrative,
-      notices: buildReportNotices(params.birth, params.provider)
+      notices: buildReportNotices(params.birth)
     },
     birth: params.birth,
     normalized,
