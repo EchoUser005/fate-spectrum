@@ -1,5 +1,5 @@
 import type { DimensionId, ReportResponse, ScoreMap } from "@/lib/schemas/report";
-import { cleanGanzhiText } from "@/lib/wuxing";
+import { cleanGanzhiText, cleanProviderText, isGanzhiText } from "@/lib/wuxing";
 
 export const FEATURED_DIMENSIONS: DimensionId[] = ["wealth", "comfort", "selfValue", "relationship"];
 
@@ -64,6 +64,21 @@ export function getCurrentDayun(report: ReportResponse) {
   return current ? { ...current, ganzhi: cleanGanzhiText(current.ganzhi) || current.ganzhi } : current;
 }
 
+export function getCurrentZiweiLimit(report: ReportResponse) {
+  const currentDayun = getCurrentDayun(report);
+  if (!currentDayun) return null;
+
+  const palace = report.normalized.palaces[currentDayun.index % Math.max(report.normalized.palaces.length, 1)];
+  const palaceGanzhi = findPalaceGanzhi(palace) || currentDayun.ganzhi;
+  const palaceName = findPalaceName(palace) || "紫微宫位";
+
+  return {
+    ...currentDayun,
+    ganzhi: `${palaceGanzhi}大限`,
+    summary: `${palaceName}对应当前阶段，十年主题以该宫位星曜和宫干为主。`
+  };
+}
+
 export function getFocusedYearlyScores(report: ReportResponse) {
   const currentDayun = getCurrentDayun(report);
   if (!currentDayun) return report.yearlyScores.slice(0, 10);
@@ -107,4 +122,28 @@ function buildAction(scores: ScoreMap) {
   if (scores.career >= 80) return "把主项目拆成里程碑，集中资源推进。";
   if (scores.comfort < 50) return "减少无效消耗，把日程和边界写清楚。";
   return "围绕最高分维度做一个可交付项目。";
+}
+
+function findPalaceGanzhi(palace: ReportResponse["normalized"]["palaces"][number] | undefined) {
+  const candidates = [
+    palace?.branch,
+    palace?.name,
+    palace?.raw.MangA,
+    palace?.raw.MangB,
+    palace?.raw.MangC
+  ];
+  return candidates.map((candidate) => cleanGanzhiText(candidate)).find((candidate) => isGanzhiText(candidate));
+}
+
+function findPalaceName(palace: ReportResponse["normalized"]["palaces"][number] | undefined) {
+  const name = cleanProviderText(palace?.name);
+  const branch = cleanProviderText(palace?.branch);
+
+  if (isGanzhiText(name) && isPalaceName(branch)) return branch;
+  return name;
+}
+
+function isPalaceName(value?: string) {
+  const cleanValue = cleanProviderText(value);
+  return cleanValue.endsWith("宫");
 }

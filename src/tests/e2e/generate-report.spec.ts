@@ -113,6 +113,9 @@ test("desktop user flow renders the report workbench and visual report", async (
   await expect(page.getByRole("heading", { name: "星盘要点" })).not.toBeVisible();
   await page.getByRole("navigation").getByText("星盘").click();
   await expect(page.getByRole("heading", { name: "八字四柱" })).toBeVisible();
+  await expect(page.getByText("当前阶段 · 八字")).toBeVisible();
+  await page.getByRole("button", { name: "紫微" }).click();
+  await expect(page.getByText("当前阶段 · 紫微")).toBeVisible();
   await expect(page.getByRole("heading", { name: "紫微十二宫" })).toBeVisible();
   await expect(page.getByText("藏干未返回")).not.toBeVisible();
   await expect(page.getByRole("heading", { name: "七个维度分别看" })).not.toBeVisible();

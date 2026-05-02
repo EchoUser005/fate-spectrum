@@ -1,4 +1,5 @@
 import type { ReportResponse } from "@/lib/schemas/report";
+import { cleanProviderText, isGanzhiText } from "@/lib/wuxing";
 
 const palacePositions: Record<number, string> = {
   0: "col-start-1 row-start-1",
@@ -68,14 +69,15 @@ function PalaceCell({
   palace: ReportResponse["normalized"]["palaces"][number];
   className: string;
 }) {
-  const visibleStars = palace.stars.slice(0, 7);
+  const display = getPalaceDisplay(palace);
+  const visibleStars = palace.stars.map(cleanProviderText).filter(Boolean).slice(0, 7);
 
   return (
     <div className={`min-h-[150px] rounded-lg border border-fs-line bg-fs-surface-2 p-3 ${className}`}>
       <div className="flex items-start justify-between gap-2">
         <div>
-          <p className="font-semibold text-fs-ink">{palace.name}</p>
-          <p className="mt-0.5 text-xs text-fs-muted">{palace.branch ?? "地支未定"}</p>
+          <p className="font-semibold text-fs-ink">{display.name}</p>
+          <p className="mt-0.5 text-xs text-fs-muted">{display.branch ?? "地支未定"}</p>
         </div>
         <span className="rounded-full bg-fs-bg px-2 py-0.5 text-xs text-fs-muted">{palace.index + 1}</span>
       </div>
@@ -98,9 +100,31 @@ function CenterLabel({ label, value }: { label: string; value?: string }) {
   return (
     <div className="rounded-md bg-white/70 px-3 py-2">
       <p className="text-xs text-fs-muted">{label}</p>
-      <p className="mt-1 font-semibold text-fs-ink">{value ?? "-"}</p>
+      <p className="mt-1 font-semibold text-fs-ink">{cleanProviderText(value) || "-"}</p>
     </div>
   );
+}
+
+function getPalaceDisplay(palace: ReportResponse["normalized"]["palaces"][number]) {
+  const name = cleanProviderText(palace.name);
+  const branch = cleanProviderText(palace.branch);
+
+  if (isGanzhiText(name) && isPalaceName(branch)) {
+    return {
+      name: branch,
+      branch: name
+    };
+  }
+
+  return {
+    name: name || "宫位",
+    branch: branch || undefined
+  };
+}
+
+function isPalaceName(value?: string) {
+  const cleanValue = cleanProviderText(value);
+  return cleanValue.endsWith("宫") || ["兄弟", "夫妻", "子女", "财帛", "疾厄", "迁移", "仆役", "官禄", "田宅", "福德", "父母"].includes(cleanValue);
 }
 
 function starClassName(star: string) {

@@ -75,6 +75,13 @@ describe("normalizePaipan", () => {
     const { normalized } = normalizePaipan({
       status: 200,
       data: {
+        zw: [
+          {
+            MangA: "丙<br/>子",
+            MangB: "命宫",
+            StarA: ["廉贞<br/>平"]
+          }
+        ],
         bz: {
           y: "甲<br/>子",
           m: "乙<br />丑",
@@ -94,6 +101,11 @@ describe("normalizePaipan", () => {
       hour: "丁卯"
     });
     expect(normalized.dayun[0]?.ganzhi).toBe("戊辰");
+    expect(normalized.palaces[0]).toMatchObject({
+      name: "命宫",
+      branch: "丙子",
+      stars: ["廉贞平"]
+    });
   });
 
   it("handles missing optional palaces, dayun arrays, and output", () => {

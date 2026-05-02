@@ -92,8 +92,17 @@ export function splitGanzhi(value: string) {
 }
 
 export function cleanGanzhiText(value?: string) {
+  return cleanProviderText(value);
+}
+
+export function cleanProviderText(value?: string) {
   return (value ?? "")
     .replace(/<br\s*\/?>/gi, "")
+    .replace(/<\/?[^>]+>/g, "")
     .replace(/\s+/g, "")
     .trim();
+}
+
+export function isGanzhiText(value?: string) {
+  return /^[甲乙丙丁戊己庚辛壬癸][子丑寅卯辰巳午未申酉戌亥]$/.test(cleanGanzhiText(value));
 }

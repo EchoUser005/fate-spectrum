@@ -1,5 +1,5 @@
 import { PaipanResponseSchema, type NormalizedPaipan, type PaipanResponse } from "@/lib/schemas/paipan";
-import { cleanGanzhiText } from "@/lib/wuxing";
+import { cleanGanzhiText, cleanProviderText, isGanzhiText } from "@/lib/wuxing";
 
 const palaceStarKeys = [
   "StarA",
@@ -74,13 +74,16 @@ export function normalizePaipan(raw: unknown): { paipan: PaipanResponse; normali
         endYear: startYear + 9
       };
     }),
-    palaces: (data.zw ?? []).map((palace, index) => ({
-      index,
-      name: palace.MangA ?? palaceNames[index] ?? `宫位 ${index + 1}`,
-      branch: palace.MangB,
-      stars: collectStars(palace),
-      raw: palace
-    })),
+    palaces: (data.zw ?? []).map((palace, index) => {
+      const display = normalizePalaceDisplay(palace, index);
+      return {
+        index,
+        name: display.name,
+        branch: display.branch,
+        stars: collectStars(palace),
+        raw: palace
+      };
+    }),
     identity: {
       solarday: data.solarday,
       lunarday: data.lunarday,
@@ -111,7 +114,32 @@ function assertNormalizableBazi(bz: PaipanResponse["data"]["bz"]) {
 
 function collectStars(palace: NonNullable<PaipanResponse["data"]["zw"]>[number]) {
   const stars = palaceStarKeys.flatMap((key) => palace[key] ?? []);
-  return [...new Set(stars)].filter(Boolean);
+  return [...new Set(stars.map((star) => cleanProviderText(star)).filter(Boolean))];
+}
+
+function normalizePalaceDisplay(
+  palace: NonNullable<PaipanResponse["data"]["zw"]>[number],
+  index: number
+) {
+  const first = cleanProviderText(palace.MangA);
+  const second = cleanProviderText(palace.MangB);
+
+  if (isPalaceName(second) && isGanzhiText(first)) {
+    return {
+      name: second,
+      branch: first
+    };
+  }
+
+  return {
+    name: first || palaceNames[index] || `宫位${index + 1}`,
+    branch: second || undefined
+  };
+}
+
+function isPalaceName(value?: string) {
+  const cleanValue = cleanProviderText(value);
+  return cleanValue.endsWith("宫") || palaceNames.includes(cleanValue);
 }
 
 function getYearFromDate(date?: string) {
