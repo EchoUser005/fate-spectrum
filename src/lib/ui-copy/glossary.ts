@@ -19,17 +19,26 @@ export const BANNED_PUBLIC_TERMS = [
   "API route",
   "Report Status",
   "Dimension Spectrum",
-  "Birth Input"
+  "Birth Input",
+  "使用样例体验",
+  "查看样例报告",
+  "高级设置",
+  "高级数据",
+  "可选",
+  "Step",
+  "第 1 步",
+  "第 2 步",
+  "第 3 步",
+  "先看这八步怎么起伏"
 ] as const;
 
 export const PUBLIC_UI_COPY = [
   "命运光谱",
-  "把八字、紫微、大运与流年拆解成可解释的人生维度报告。",
-  "开始生成",
-  "查看样例报告",
-  "使用样例体验",
-  "使用真实排盘",
-  "开启文字润色",
+  "生辰配置",
+  "模型配置",
+  "生成报告",
+  "模型模式",
+  "模型密钥",
   "正在排盘",
   "正在计算维度",
   "正在生成报告",
@@ -39,17 +48,19 @@ export const PUBLIC_UI_COPY = [
   "流年",
   "星盘",
   "详细解读",
-  "高级数据",
   "多维度能量谱",
   "大运光谱",
   "流年色阶",
   "色阶图",
+  "大运维度评分曲线",
+  "大运评分表",
+  "流年维度评分表",
   "财富量级",
   "生活舒适度",
   "自我价值成就"
 ] as const;
 
-export const ADVANCED_TECHNICAL_COPY = [
+export const INTERNAL_TECHNICAL_COPY = [
   "shenjige endpoint",
   "provider mapping",
   "Raw JSON",

@@ -8,7 +8,7 @@ export function DayunSpectrumChart({ report }: { report: ReportResponse }) {
       <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div>
           <p className="text-sm font-medium text-fs-gold">大运光谱</p>
-          <h2 className="mt-2 text-2xl font-semibold text-fs-ink">先看这八步怎么起伏</h2>
+          <h2 className="mt-2 text-2xl font-semibold text-fs-ink">大运维度评分曲线</h2>
         </div>
         <ScoreLegend />
       </div>

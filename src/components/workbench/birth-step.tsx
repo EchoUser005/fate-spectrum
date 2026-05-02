@@ -16,7 +16,7 @@ export function BirthStep({ form }: { form: UseFormReturn<BirthInput> }) {
   return (
     <div className="grid gap-4 sm:grid-cols-2">
       <Field label="昵称">
-        <Input placeholder="匿名样例" {...register("nickname")} />
+        <Input placeholder="匿名" {...register("nickname")} />
       </Field>
       <Field label="性别">
         <Select {...register("gender")}>
@@ -39,12 +39,12 @@ export function BirthStep({ form }: { form: UseFormReturn<BirthInput> }) {
       <Field label="出生时间">
         <Input type="time" {...register("birthTime")} />
       </Field>
-      <Field label="出生地，可选">
+      <Field label="出生地">
         <Input placeholder="上海" {...register("birthPlace")} />
       </Field>
       <label className="flex items-center gap-2 rounded-md border border-fs-line bg-white px-3 py-3 text-sm font-medium text-fs-ink sm:col-span-2">
         <input type="checkbox" className="h-4 w-4 rounded border-fs-line" {...register("useTrueSolarTime")} />
-        真太阳时校准，可选
+        真太阳时校准
       </label>
     </div>
   );

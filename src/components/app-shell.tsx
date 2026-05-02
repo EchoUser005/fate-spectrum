@@ -9,23 +9,18 @@ import { BirthInputSchema } from "@/lib/schemas/birth";
 import type { ProviderConfig } from "@/lib/schemas/provider";
 import { ReportResponseSchema, type ReportResponse } from "@/lib/schemas/report";
 import { generationPhaseLabels, type ReadingMode } from "@/lib/ui-copy/labels";
-import { LandingHero } from "@/components/marketing/landing-hero";
 import { ReportShell } from "@/components/report/report-shell";
 import { GenerationWizard } from "@/components/workbench/generation-wizard";
 
 const LLM_SESSION_STORAGE_KEY = "fate-spectrum.llm-session.v1";
 
 export function AppShell() {
-  const [paipanConfig, setPaipanConfig] = useState<ProviderConfig>({
-    provider: "mock",
-    paipanEndpoint: providerPresets.customPaipan.endpoint
-  });
   const [llmConfig, setLlmConfig] = useState<ProviderConfig>({
     provider: "deepseek",
     baseUrl: providerPresets.deepseek.baseUrl,
     model: providerPresets.deepseek.model
   });
-  const [readingMode, setReadingMode] = useState<ReadingMode>("off");
+  const [readingMode, setReadingMode] = useState<ReadingMode>("quality");
   const [report, setReport] = useState<ReportResponse | null>(null);
   const [status, setStatus] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -34,14 +29,14 @@ export function AppShell() {
   const form = useForm<BirthInput>({
     resolver: zodResolver(BirthInputSchema),
     defaultValues: {
-      nickname: "匿名样例",
+      nickname: "",
       gender: "female",
       calendar: "solar",
-      birthDate: "1999-09-15",
-      birthTime: "23:00",
+      birthDate: "",
+      birthTime: "",
       timeBranch: "子",
       timezone: "Asia/Shanghai",
-      birthPlace: "上海",
+      birthPlace: "",
       useTrueSolarTime: false
     }
   });
@@ -87,7 +82,7 @@ export function AppShell() {
       baseUrl: providerPresets.deepseek.baseUrl,
       model: providerPresets.deepseek.model
     });
-    setReadingMode("off");
+    setReadingMode("quality");
   };
 
   const generateReport = form.handleSubmit(async (birth) => {
@@ -104,7 +99,10 @@ export function AppShell() {
         },
         body: JSON.stringify({
           birth,
-          paipanProvider: paipanConfig,
+          paipanProvider: {
+            provider: "mock",
+            paipanEndpoint: providerPresets.customPaipan.endpoint
+          },
           llmProvider: llmConfig,
           options: {
             useLlmNarrative: readingMode !== "off",
@@ -132,38 +130,25 @@ export function AppShell() {
     }
   });
 
-  const scrollToWizard = () => {
-    document.getElementById("wizard")?.scrollIntoView({ behavior: "smooth" });
-  };
-
   return (
     <main className="min-h-screen bg-fs-bg text-fs-ink">
-      <LandingHero onStart={scrollToWizard} onSampleReport={generateReport} isGenerating={isGenerating} />
       <GenerationWizard
         form={form}
-        paipanConfig={paipanConfig}
         llmConfig={llmConfig}
         readingMode={readingMode}
         status={status}
         error={error}
         isGenerating={isGenerating}
-        onPaipanChange={setPaipanConfig}
         onLlmChange={setLlmConfig}
         onReadingModeChange={setReadingMode}
         onClearCachedLlm={clearCachedLlm}
         onSubmit={generateReport}
       />
       <section id="report" className="mx-auto w-full max-w-7xl px-4 pb-10 sm:px-6 lg:px-8">
-        {report ? (
-          <ReportShell report={report} />
-        ) : (
-          <div className="rounded-md border border-dashed border-fs-line bg-white p-8 text-center text-fs-muted">
-            生成后会在这里看到总览、大运、流年、星盘和详细解读。
-          </div>
-        )}
+        {report ? <ReportShell report={report} /> : null}
       </section>
       <footer className="border-t border-fs-line bg-fs-surface px-4 py-6 text-center text-sm text-fs-muted">
-        开源项目，仅供自我反思、娱乐和规划参考。
+        仅供自我反思、娱乐和规划参考。
       </footer>
     </main>
   );

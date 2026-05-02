@@ -14,12 +14,7 @@ export function SpectrumLineChart({ report }: { report: ReportResponse }) {
   return (
     <div>
       <div className="flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-        <div>
-          <h3 className="text-lg font-semibold text-fs-ink">大运光谱曲线</h3>
-          <p className="mt-1 text-sm leading-6 text-fs-muted">
-            默认看财富量级、生活舒适度、自我价值成就；其他维度可按需切换。
-          </p>
-        </div>
+        <div />
         <div className="flex max-w-full gap-2 overflow-x-auto pb-1">
           {report.dimensions.map((dimension) => (
             <Button

@@ -22,6 +22,7 @@
 - Added sample paipan golden profile regression for the original Excel-style eight-step dayun score targets.
 - Added report view-model helpers so dayun curve, heatmap, and table share `report.dayunScores`.
 - Added UI copy, golden scoring, chart-source, export, and responsive visual E2E coverage.
+- Added reviewer-correction coverage that blocks sample-entry copy, numbered steps, optional labels, advanced data, and manual-like dayun headings from the visible UI.
 
 ### Changed
 
@@ -30,14 +31,15 @@
 - Expanded deployment and contribution documentation for multi-person collaboration.
 - Archived `bootstrap-fate-spectrum` into main OpenSpec specs after MVP acceptance.
 - Reworked homepage and report copy away from raw paipan/source-data framing toward user outcomes and next actions.
-- Rebuilt the main UI as a Chinese-first product flow: landing, three-step wizard, sticky report navigation, overview, dayun, yearly, chart, detailed reading, and folded developer data.
-- Moved technical provider/model/source data into Advanced Settings and Developer Data.
+- Rebuilt the main UI as a Chinese-first single workbench: birth configuration, model configuration, generate action, sticky report navigation, overview, dayun, yearly, chart, detailed reading, export, and disclaimer.
+- Removed sample experience CTAs, numbered wizard steps, optional-label clutter, Advanced Settings, Developer Data, and raw source-data panels from the product UI.
 - Changed DeepSeek default to `deepseek-v4-pro` for high-quality interpretation while retaining `deepseek-v4-flash` and `deepseek-chat`.
 - Reworked Markdown export into a cleaner user-facing report with target scores and disclaimers.
 
 ### Fixed
 
 - Fixed JSON export so exported artifacts include professional-advice disclaimers.
+- Fixed true-solar-time notices so user-facing copy no longer mentions Mock Demo or provider internals.
 
 ### Security
 

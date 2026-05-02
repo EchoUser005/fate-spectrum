@@ -7,8 +7,7 @@ export const reportNavItems = [
   { id: "dayun", label: "大运" },
   { id: "yearly", label: "流年" },
   { id: "chart", label: "星盘" },
-  { id: "reading", label: "详细解读" },
-  { id: "developer", label: "高级数据" }
+  { id: "reading", label: "详细解读" }
 ] as const;
 
 export const dimensionShortLabels: Record<DimensionId, string> = {

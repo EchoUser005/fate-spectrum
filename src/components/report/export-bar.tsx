@@ -2,7 +2,6 @@
 
 import { Download } from "lucide-react";
 import type { ReportResponse } from "@/lib/schemas/report";
-import { exportReportJson } from "@/lib/export/json";
 import { exportReportMarkdown } from "@/lib/export/markdown";
 import { downloadTextFile } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
@@ -26,16 +25,6 @@ export function ExportBar({ report }: { report: ReportResponse }) {
           >
             <Download size={16} />
             导出报告
-          </Button>
-          <Button
-            type="button"
-            variant="secondary"
-            onClick={() =>
-              downloadTextFile(`mingyun-spectrum-${stamp}.json`, exportReportJson(report), "application/json")
-            }
-          >
-            <Download size={16} />
-            导出数据
           </Button>
         </div>
       </div>

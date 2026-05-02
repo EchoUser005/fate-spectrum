@@ -4,7 +4,6 @@ import { DayunHeatmap } from "@/components/report/dayun-heatmap";
 import { DayunScoreTable } from "@/components/report/dayun-score-table";
 import { DayunSpectrumChart } from "@/components/report/dayun-spectrum-chart";
 import { DetailedReading } from "@/components/report/detailed-reading";
-import { DeveloperDataDrawer } from "@/components/report/developer-data-drawer";
 import { DisclaimerNote } from "@/components/report/disclaimer-note";
 import { ExportBar } from "@/components/report/export-bar";
 import { ReportNav } from "@/components/report/report-nav";
@@ -38,7 +37,6 @@ export function ReportShell({ report }: { report: ReportResponse }) {
         <ZiweiPalaceGrid report={report} />
       </section>
       <DetailedReading report={report} />
-      <DeveloperDataDrawer report={report} />
       <DisclaimerNote />
       <ExportBar report={report} />
     </div>

@@ -19,8 +19,7 @@ export function YearlyFocusTable({ report }: { report: ReportResponse }) {
       <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
         <div>
           <p className="text-sm font-medium text-fs-gold">流年色阶</p>
-          <h2 className="mt-2 text-2xl font-semibold text-fs-ink">先看当前阶段内的年份变化</h2>
-          <p className="mt-1 text-sm leading-6 text-fs-muted">默认展示十年窗口，完整年份可展开。</p>
+          <h2 className="mt-2 text-2xl font-semibold text-fs-ink">流年维度评分表</h2>
         </div>
         <div className="flex flex-col gap-2 sm:flex-row">
           <Select value={filter} onChange={(event) => setFilter(event.target.value as Filter)} className="sm:w-44">

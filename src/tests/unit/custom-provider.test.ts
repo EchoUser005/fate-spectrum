@@ -45,7 +45,7 @@ describe("custom paipan provider", () => {
     expect(() => assertShenjigeInput({ ...baseBirth, gender: "unknown" })).toThrow(/male 或 female/);
   });
 
-  it("keeps true solar time as a non-blocking mock demo prompt", async () => {
+  it("keeps true solar time as a non-blocking product prompt", async () => {
     const birth: BirthInput = {
       ...baseBirth,
       useTrueSolarTime: true
@@ -58,7 +58,7 @@ describe("custom paipan provider", () => {
       generatedAt: "2026-04-30T00:00:00.000Z"
     });
 
-    expect(report.meta.notices).toContain("已保留真太阳时开关；当前未提供经纬度，Mock Demo 不做校正。");
+    expect(report.meta.notices).toContain("已保留真太阳时校准；当前未提供经纬度，本次报告暂不做校正。");
     expect(report.dayunScores.length).toBeGreaterThan(0);
   });
 

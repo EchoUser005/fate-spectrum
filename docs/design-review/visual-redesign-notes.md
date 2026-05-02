@@ -13,12 +13,12 @@ Sources reviewed:
 
 ## Implemented
 
-- Landing now starts with `命运光谱`, one Chinese subtitle, two actions, and a compact sample report preview.
-- Generation uses a three-step wizard: 生辰信息, 解读方式, 生成报告.
-- Technical provider/model/source fields moved into 高级设置 or 高级数据.
-- Report navigation now exposes 总览, 大运, 流年, 星盘, 详细解读, 高级数据.
+- The first viewport now starts with `命运光谱`, 生辰配置, 模型配置, and one `生成报告` action.
+- Removed sample-entry copy, numbered steps, `可选` labels, 高级设置, and 高级数据 from the product UI.
+- Model configuration is visible where the user needs it; provider/source diagnostics stay out of the product surface.
+- Report navigation now exposes 总览, 大运, 流年, 星盘, 详细解读.
 - Report body prioritizes summary, current cycle, three main signals, dayun curve, heatmap, table, and yearly focus.
-- Raw provider data and normalized data are closed by default.
+- Raw provider data and normalized data are not rendered in the product report UI.
 - Sample paipan now uses a golden profile aligned to the original Excel target dayun scores.
 
 ## Screenshot Artifacts

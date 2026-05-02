@@ -21,7 +21,7 @@ export function buildRuleNarrative(dayunScores: DayunScore[], yearlyScores: Year
     dimensions,
     keyWindows: buildKeyWindows(yearlyScores),
     actionPlan: [
-      "先看这十年的主线，再决定是否加速。",
+      "用十年主线决定资源投入顺序。",
       "财富分高不等于适合冒险，重点是现金流和边界。",
       "舒适度低的年份，不要硬扛长期高压。",
       GENERAL_DISCLAIMER,
@@ -40,8 +40,8 @@ function getCurrentDayun(dayunScores: DayunScore[]) {
 }
 
 function buildOverview(currentDayun: DayunScore | undefined) {
-  if (!currentDayun) return "先从维度分数看阶段主线，再把机会、压力和行动拆开。";
-  return `先看 ${currentDayun.ganzhi} 这十年的主线：${currentDayun.summary}。`;
+  if (!currentDayun) return "维度分数用于拆开机会、压力和行动，不提供单一总分。";
+  return `${currentDayun.ganzhi}大运：${currentDayun.summary}。`;
 }
 
 function buildDimensionNarrative(id: DimensionId, score: number, summary?: string) {

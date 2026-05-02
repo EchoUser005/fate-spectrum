@@ -5,13 +5,14 @@
 - [x] 接入并实测真实排盘 Provider。
 - [ ] 补充真实排盘请求代码的生产级错误处理和重试策略。
 - [x] 校准真实排盘 response mapping，确认 `data.zw`、`data.bz`、`data.output` 的字段完整性。
-- [x] 确认 DeepSeek V4 model list：默认 `deepseek-v4-flash`，可选 `deepseek-v4-pro`，`deepseek-chat` 为 legacy alias。
+- [x] 确认 DeepSeek V4 model list：默认 `deepseek-v4-pro`，可选 `deepseek-v4-flash`，`deepseek-chat` 为兼容选项。
 - [ ] 补充真实品牌 OG 图。
 - [ ] 部署到 Vercel。
 - [ ] 绑定域名。
 - [x] GitHub remote 已由用户推送到 `https://github.com/EchoUser005/fate-spectrum`。
 - [x] 第三轮视觉报告重构：普通用户界面隐藏技术术语，报告回到维度评分、大运光谱、流年色阶。
 - [x] sample-paipan golden profile 对齐最初 Excel 目标分数。
+- [x] 第三轮纠偏：移除样例体验、1/2/3 步骤、可选标签、高级数据入口和说明书式首屏。
 
 ## P1 - Good for v0.2
 

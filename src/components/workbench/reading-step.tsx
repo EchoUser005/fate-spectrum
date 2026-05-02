@@ -1,56 +1,43 @@
 "use client";
 
+import { Trash2 } from "lucide-react";
+import { deepseekModelOptions, providerPresets } from "@/lib/config/providers";
 import type { ProviderConfig } from "@/lib/schemas/provider";
-import { providerPresets } from "@/lib/config/providers";
 import { readingModeOptions, type ReadingMode } from "@/lib/ui-copy/labels";
-import { AdvancedSettings } from "@/components/workbench/advanced-settings";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Select } from "@/components/ui/select";
 
 type Props = {
-  paipanConfig: ProviderConfig;
   llmConfig: ProviderConfig;
   readingMode: ReadingMode;
-  onPaipanChange: (config: ProviderConfig) => void;
   onLlmChange: (config: ProviderConfig) => void;
   onReadingModeChange: (mode: ReadingMode) => void;
   onClearCachedLlm: () => void;
 };
 
-export function ReadingStep(props: Props) {
+export function ReadingStep({
+  llmConfig,
+  readingMode,
+  onLlmChange,
+  onReadingModeChange,
+  onClearCachedLlm
+}: Props) {
   return (
-    <div className="grid gap-5">
-      <div className="grid gap-3 md:grid-cols-2">
-        <ChoiceButton
-          selected={props.paipanConfig.provider === "mock"}
-          title="使用样例体验"
-          text="无需填写密钥，直接生成完整样例报告。"
-          onClick={() => props.onPaipanChange({ provider: "mock", paipanEndpoint: providerPresets.customPaipan.endpoint })}
-        />
-        <ChoiceButton
-          selected={props.paipanConfig.provider === "custom-paipan"}
-          title="使用真实排盘"
-          text="适合接入自己的真实排盘来源。"
-          onClick={() =>
-            props.onPaipanChange({
-              ...props.paipanConfig,
-              provider: "custom-paipan",
-              paipanEndpoint: props.paipanConfig.paipanEndpoint ?? providerPresets.customPaipan.endpoint
-            })
-          }
-        />
-      </div>
+    <div className="grid gap-4">
       <div>
-        <p className="mb-2 text-sm font-medium text-fs-ink">模型润色</p>
-        <div className="grid gap-3 md:grid-cols-4">
+        <p className="mb-2 text-sm font-medium text-fs-ink">模型模式</p>
+        <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
           {readingModeOptions.map((option) => (
             <ChoiceButton
               key={option.id}
-              selected={props.readingMode === option.id}
+              selected={readingMode === option.id}
               title={option.label}
               text={option.description}
               onClick={() => {
-                props.onReadingModeChange(option.id);
-                props.onLlmChange({
-                  ...props.llmConfig,
+                onReadingModeChange(option.id);
+                onLlmChange({
+                  ...llmConfig,
                   provider: "deepseek",
                   baseUrl: providerPresets.deepseek.baseUrl,
                   model: modelForMode(option.id)
@@ -60,7 +47,40 @@ export function ReadingStep(props: Props) {
           ))}
         </div>
       </div>
-      <AdvancedSettings {...props} />
+      <div className="grid gap-4 md:grid-cols-[0.7fr_1fr]">
+        <label className="grid gap-1 text-sm font-medium text-fs-ink">
+          模型名称
+          <Select
+            value={llmConfig.model ?? providerPresets.deepseek.model}
+            onChange={(event) => {
+              const value = event.target.value;
+              onReadingModeChange(modeForModel(value));
+              onLlmChange({ ...llmConfig, provider: "deepseek", model: value });
+            }}
+          >
+            {deepseekModelOptions.map((option) => (
+              <option key={option.value} value={option.value}>
+                {option.value}
+              </option>
+            ))}
+          </Select>
+        </label>
+        <label className="grid gap-1 text-sm font-medium text-fs-ink">
+          模型密钥
+          <Input
+            type="password"
+            placeholder="当前浏览器会话保存"
+            value={llmConfig.apiKey ?? ""}
+            onChange={(event) => onLlmChange({ ...llmConfig, apiKey: event.target.value })}
+          />
+        </label>
+      </div>
+      <div className="flex justify-end">
+        <Button type="button" size="sm" variant="secondary" onClick={onClearCachedLlm}>
+          <Trash2 size={14} />
+          清除本会话 Key
+        </Button>
+      </div>
     </div>
   );
 }
@@ -94,4 +114,10 @@ function modelForMode(mode: ReadingMode) {
   if (mode === "fast") return "deepseek-v4-flash";
   if (mode === "compat") return "deepseek-chat";
   return "deepseek-v4-pro";
+}
+
+function modeForModel(model: string): ReadingMode {
+  if (model === "deepseek-v4-flash") return "fast";
+  if (model === "deepseek-chat") return "compat";
+  return "quality";
 }

@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
-  ADVANCED_TECHNICAL_COPY,
   BANNED_PUBLIC_TERMS,
+  INTERNAL_TECHNICAL_COPY,
   PUBLIC_UI_COPY
 } from "@/lib/ui-copy/glossary";
 
@@ -14,11 +14,19 @@ describe("user-facing copy", () => {
     }
   });
 
-  it("keeps technical copy inside advanced/developer areas", () => {
-    const advancedCopy = ADVANCED_TECHNICAL_COPY.join("\n");
+  it("keeps ordinary UI copy free from manual-like flow words", () => {
+    const publicCopy = PUBLIC_UI_COPY.join("\n");
 
-    expect(advancedCopy).toContain("shenjige");
-    expect(advancedCopy).toContain("endpoint");
-    expect(advancedCopy).toContain("JSON");
+    for (const term of ["使用样例体验", "查看样例报告", "Step", "第 1 步", "可选", "高级设置", "高级数据"]) {
+      expect(publicCopy).not.toContain(term);
+    }
+  });
+
+  it("tracks technical copy separately from public UI copy", () => {
+    const internalCopy = INTERNAL_TECHNICAL_COPY.join("\n");
+
+    expect(internalCopy).toContain("shenjige");
+    expect(internalCopy).toContain("endpoint");
+    expect(internalCopy).toContain("JSON");
   });
 });

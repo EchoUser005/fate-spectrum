@@ -4,27 +4,31 @@ The second-round public demo hardening made the app functional, but the interfac
 
 ## What Changes
 
-- Redesign the information architecture around Landing, a 3-step generation wizard, and a navigable report shell.
-- Keep ordinary UI Chinese-first and hide technical terms inside Advanced Settings or Developer Data.
-- Rebuild the report around overview, dayun spectrum, yearly color scale, chart/palace summary, detailed reading, and developer data.
+- Redesign the information architecture around one direct workbench: fill birth information, configure the model, and generate the report.
+- Keep ordinary UI Chinese-first and remove technical/source-data disclosures from the product surface.
+- Rebuild the report around overview, dayun spectrum, yearly color scale, chart/palace summary, detailed reading, and table-first score outputs.
 - Use dashboard-layout patterns inspired by shadcn dashboard blocks and Recharts chart guidance while keeping the MVP stateless.
 - Add a golden profile for the sample paipan so the demo report matches the original Excel target scores.
 - Add copy, golden scoring, chart-source, export, and responsive E2E tests.
 - Capture local Playwright screenshots for design review notes without committing large binary artifacts if they are too heavy.
 
+## Reviewer Correction
+
+The first implementation still felt like a user manual. The next correction removes sample-entry language, numbered steps, optional copy, and all visible advanced/developer data. The ordinary UI becomes a single workbench: fill birth information, configure the model, generate the report, then read Excel-style score tables and charts.
+
 ## Capabilities
 
 ### Modified Capabilities
 
-- `ui-dashboard`: Product-first layout, responsive report navigation, clean charts/tables, advanced-data hiding, and banned technical copy rules.
+- `ui-dashboard`: Single workbench layout, responsive report navigation, clean charts/tables, no advanced-data surface, and banned technical copy rules.
 - `report-generation`: Report sections and progress states aligned to user-facing phases instead of engineering internals.
 - `scoring-engine`: Sample paipan golden profile regression and traceable scoring outputs.
-- `llm-provider`: DeepSeek V4 model quality modes in advanced settings, with LLM narrative unable to change scores.
+- `llm-provider`: DeepSeek V4 model quality modes in the visible model configuration area, with narrative unable to change scores.
 - `export`: Cleaner user-facing Markdown export without technical terminology in the main body.
-- `security`: API keys and developer/provider details remain hidden from public UI and exports unless explicitly opened in developer areas.
+- `security`: API keys remain session-only; developer/provider details stay out of public UI and exports.
 
 ## Impact
 
 - Touches frontend component structure, copy, chart/table rendering, scoring calibration, exports, tests, and docs.
 - Does not add login, database, payment, PDF export, multilingual UI, server deployment, or new external provider behavior.
-- Keeps shenjige and raw paipan details available for debugging but removes them from the primary product experience.
+- Keeps shenjige and raw paipan details in docs/tests only; the ordinary product experience does not expose them.

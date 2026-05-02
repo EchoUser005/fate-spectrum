@@ -13,16 +13,25 @@ Warm paper, restrained dashboard density, and editorial report hierarchy: a read
 
 ## Content Plan
 
-1. **Landing / Hero:** `命运光谱`, short promise, two actions, and a compact sample preview.
-2. **Wizard:** 生辰信息 -> 解读方式 -> 生成报告, with technical fields folded into advanced settings.
-3. **Report:** sticky section navigation, overview-first, dayun and yearly visual analysis, chart summary, detailed reading, and folded developer data.
-4. **Export / Disclaimer:** concise actions and professional-advice boundaries after the report content.
+1. **Workbench:** `命运光谱`, 生辰配置, 模型配置, and one generate action in the first viewport.
+2. **Report:** Excel-like score report with dimension curves, color-scale tables, dayun score instructions, yearly score tables, chart summary, and concise interpretation.
+3. **Export / Disclaimer:** concise actions and professional-advice boundaries after the report content.
 
 ## Interaction Thesis
 
-- The user starts with one obvious primary action and can inspect a sample report without filling technical fields.
-- Report navigation is sticky and horizontal on small screens so the user can jump between 总览, 大运, 流年, 星盘, 详细解读, and 高级数据.
-- Long or technical content uses disclosure controls; charts and tables get stable responsive containers and internal scrolling.
+- The user starts with the fields they must complete and one obvious primary action.
+- Report navigation is sticky and horizontal on small screens so the user can jump between 总览, 大运, 流年, 星盘, and 详细解读.
+- Charts and tables get stable responsive containers and internal scrolling; technical/raw data is not exposed in the product UI.
+
+## Product Correction
+
+- Remove sample-experience and sample-report CTA language from the ordinary UI.
+- Remove numbered 1/2/3 step framing and `Step` headings.
+- Remove `可选` wording from ordinary labels.
+- Remove 高级设置 and 高级数据 from the product surface.
+- Make model configuration visible enough to use without reading a manual.
+- Replace broad headings such as `先看这八步怎么起伏` with report/table headings such as `大运维度评分曲线`.
+- Add per-dayun opportunity, risk, and action columns so every score row has an explicit instruction.
 
 ## Design Decisions
 
@@ -32,12 +41,12 @@ Warm paper, restrained dashboard density, and editorial report hierarchy: a read
 
 2. **Information architecture reset**
    - `AppShell` becomes state orchestration only.
-   - New component folders separate marketing, workbench, report, charts, and UI copy.
-   - Provider/model/raw-data settings move into `AdvancedSettings` and `DeveloperDataDrawer`.
+   - Component folders separate workbench, report, charts, and UI copy.
+   - Model configuration is visible in the workbench; provider/raw-data details are omitted from the product surface.
 
 3. **Dashboard layout without product bloat**
    - Use shadcn dashboard-block density and chart guidance as references, but do not add auth/database/sidebar systems.
-   - Keep cards only for report sections, repeated score summaries, and folded developer areas.
+   - Keep cards only for report sections and repeated score summaries.
    - Use warm background tokens and the specified dimension/color scale palette.
 
 4. **Golden profile as MVP regression**
@@ -59,13 +68,13 @@ Warm paper, restrained dashboard density, and editorial report hierarchy: a read
 ## Test Strategy
 
 - **Unit:** golden sample scores, LLM-on/off score invariance, chart/table source helpers, export copy, provider config defaults.
-- **UI copy:** public-facing component strings do not contain banned technical terms outside advanced/developer areas.
-- **E2E:** desktop, tablet, and mobile generation; tabs; advanced data disclosure; export buttons; no horizontal page overflow.
+- **UI copy:** public-facing component strings do not contain banned technical terms or manual-like labels.
+- **E2E:** desktop, tablet, and mobile generation; tabs; no advanced data disclosure; export buttons; no horizontal page overflow.
 - **Visual review:** Playwright screenshot capture for desktop home, desktop overview, desktop dayun, mobile home, and mobile report.
 - **STT:** run OpenSpec validation, lint, unit tests, build, and E2E before commit.
 
 ## Risks / Trade-offs
 
 - The golden sample override is intentionally narrow; future expert calibration should replace it with broader rule weights.
-- Strong copy filtering can accidentally remove useful developer affordances; advanced settings and developer data remain available for contributors.
+- Strong copy filtering can accidentally remove useful contributor affordances; those details should live in docs/tests instead of the product UI.
 - Screenshot capture is a first visual guardrail, not full pixel-diff visual regression yet.

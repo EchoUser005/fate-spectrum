@@ -8,7 +8,6 @@ export function ZiweiPalaceGrid({ report }: { report: ReportResponse }) {
   return (
     <div className="rounded-md border border-fs-line bg-white p-4">
       <h3 className="font-semibold text-fs-ink">紫微十二宫摘要</h3>
-      <p className="mt-1 text-sm leading-6 text-fs-muted">先看关键宫位，星曜细节折叠查看。</p>
       <div className="mt-4 grid gap-3 md:grid-cols-2 xl:grid-cols-3">
         {palaces.map((palace) => (
           <details key={`${palace.index}-${palace.name}`} className="rounded-md border border-fs-line bg-fs-surface p-3">
