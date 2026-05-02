@@ -13,8 +13,7 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "format": "prettier --check .",
-    "format:write": "prettier --write .",
-    "openspec:validate": "openspec validate --all --strict --no-interactive"
+    "format:write": "prettier --write ."
   },
   "dependencies": {
     "@hookform/resolvers": "5.2.2",

@@ -23,10 +23,6 @@ jobs:
 
       - run: pnpm install --frozen-lockfile
 
-      - run: npm install -g @fission-ai/openspec@latest
-
-      - run: openspec validate --all --strict --no-interactive
-
       - run: pnpm lint
 
       - run: pnpm test

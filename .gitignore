@@ -10,3 +10,22 @@ test-results
 *.log
 .DS_Store
 pnpm-debug.log*
+
+# Local agent / specification workspace files.
+.codex/
+AGENTS.md
+TODO.md
+openspec/
+
+# Internal planning and handoff notes.
+docs/adr/
+docs/devlog/
+docs/handoff/
+docs/design-review/
+docs/test-matrix.md
+docs/product-spec.md
+docs/project-brief.md
+docs/roadmap.md
+
+# Disabled/private deployment experiments.
+.github/workflows/server-deploy*.yml

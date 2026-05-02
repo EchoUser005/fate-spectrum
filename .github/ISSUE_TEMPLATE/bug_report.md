@@ -23,12 +23,9 @@ assignees: ""
 - Browser:
 - OS:
 - Node/pnpm:
-- Provider mode: Mock Demo / shenjige / custom / LLM
+- Data source:
+- Model channel:
 
 ## Logs or Screenshots
 
 Do not include API keys, private birth data, or full provider responses.
-
-## OpenSpec Impact
-
-- Related change id, if known:

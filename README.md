@@ -11,7 +11,7 @@ Fate Spectrum is an open-source life rhythm dashboard. It accepts birth input, r
 ## Features
 
 - 生辰配置 + 模型配置 in one direct workbench
-- Real paipan generation through the shenjige-compatible provider path
+- Real paipan generation through a server-side provider path
 - Rule-based scoring for wealth, career, comfort, selfValue, relationship, healthEnergy, and riskControl
 - Required DeepSeek V4 narrative generation for interpreted reports; scores remain deterministic and are not changed by the model
 - Visual report shell with 总览, 大运, 流年, 星盘, and 详细解读
@@ -19,7 +19,7 @@ Fate Spectrum is an open-source life rhythm dashboard. It accepts birth input, r
 - Dayun spectrum curve, dayun color scale, dayun score table, yearly focus table
 - BaZi pillars and Ziwei palace summary without raw source data in the product UI
 - Markdown export
-- OpenSpec, ADRs, devlog, handoff, test matrix, CI, Docker, Vercel
+- CI, Docker, and Vercel-ready deployment
 
 ## Why Fate Spectrum
 
@@ -44,48 +44,9 @@ LLM keys are cached only in browser `sessionStorage` for the current session and
 
 ## Real Paipan
 
-Ordinary report generation uses the shenjige-compatible provider path. For `https://www.shenjige.cn/api/ziwei/getPlateArrangement`, the provider sends form data:
+Ordinary report generation uses a server-side paipan provider path. The public UI does not ask users to inspect provider payloads or raw source data.
 
-- `year`, `month`, `day`
-- `hour`, `h`, `m`
-- `genderValue`
-- `settings[sihua]`, `settings[brightness]`, `settings[isShowDStarBright]`, `settings[JKXK]`, `settings[RYType]`, `settings[RYTypeM45]`
-- `zzpAnalysis`
-
-MVP real-provider limitations: solar calendar only, `male` or `female` only, timezone and birthPlace preserved but not converted, overseas timezone conversion deferred, true solar time currently preserves the switch and prompt only.
-
-## OpenSpec Workflow
-
-Develop new feature:
-
-```bash
-/opsx:propose <feature>
-```
-
-Implement:
-
-```bash
-/opsx:apply
-```
-
-Validate:
-
-```bash
-openspec validate --all --strict --no-interactive
-pnpm lint
-pnpm test
-pnpm build
-```
-
-Archive:
-
-```bash
-/opsx:archive
-```
-
-## Codex Workflow
-
-Before edits, read `AGENTS.md`, `README.md`, active OpenSpec changes, ADRs, `docs/devlog/latest.md`, `docs/handoff/latest.md`, and `TODO.md`. After edits, update the active tasks, devlog, handoff, changelog, and TODO.
+Current limitations: solar calendar only, `male` or `female` only, timezone and birthPlace preserved but not converted, overseas timezone conversion deferred, true solar time currently preserves the switch and prompt only.
 
 ## Development Commands
 
@@ -94,7 +55,6 @@ pnpm lint
 pnpm test
 pnpm test:e2e
 pnpm build
-openspec validate --all --strict --no-interactive
 ```
 
 ## Deploy to Vercel

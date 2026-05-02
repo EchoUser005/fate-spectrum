@@ -4,9 +4,9 @@ Thanks for helping Fate Spectrum grow carefully.
 
 ## Before Development
 
-1. Read `AGENTS.md` before any code change.
-2. Read `README.md`, `TODO.md`, `CHANGELOG.md`, `docs/devlog/latest.md`, `docs/handoff/latest.md`, `docs/test-matrix.md`, `docs/adr/`, and active OpenSpec changes.
-3. Create a new OpenSpec change before implementing a new feature or complex behavior change.
+1. Read `README.md`, `CHANGELOG.md`, and the relevant source files before making a change.
+2. Keep changes focused and avoid committing private data, local handoff notes, or tool-specific workspace files.
+3. For larger changes, open an issue first so the scope and user experience can be reviewed.
 
 ## Branch Naming
 
@@ -26,23 +26,21 @@ Thanks for helping Fate Spectrum grow carefully.
 Run these before opening or updating a PR:
 
 ```bash
-openspec validate --all --strict --no-interactive
 pnpm lint
 pnpm test
 pnpm build
 pnpm test:e2e
 ```
 
-If a command cannot run because of the local environment, record the command and reason in `docs/devlog/latest.md` and `docs/handoff/latest.md`.
+If a command cannot run because of the local environment, include the command and reason in the PR.
 
 ## Pull Requests
 
 Every PR must include:
 
-- OpenSpec change id.
 - Scope of changes.
 - Test results.
 - Known risks.
 - Screenshots or recordings when UI changes are included.
 
-Keep PRs focused on one OpenSpec change. Use Conventional Commits for commit messages.
+Keep PRs focused. Use Conventional Commits for commit messages.

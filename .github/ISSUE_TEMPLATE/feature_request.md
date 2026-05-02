@@ -18,12 +18,5 @@ assignees: ""
 - When:
 - Then:
 
-## OpenSpec Change
-
-New features should start with an OpenSpec change before implementation.
-
-- Suggested change id:
-
 ## Risks or Constraints
-
 

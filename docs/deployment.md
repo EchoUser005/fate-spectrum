@@ -8,8 +8,6 @@ It runs on pushes and pull requests to `main`:
 
 ```bash
 pnpm install --frozen-lockfile
-npm install -g @fission-ai/openspec@latest
-openspec validate --all --strict --no-interactive
 pnpm lint
 pnpm test
 pnpm build
@@ -61,22 +59,6 @@ curl http://127.0.0.1:3000/api/health
 ## Custom Domain
 
 Domain binding is intentionally left to the maintainer. Add the domain in Vercel or the chosen hosting layer after the GitHub repository and deployment target are ready.
-
-## Future Server Auto-Deploy
-
-Server auto-deploy is not enabled for public demo hardening. A guarded manual template exists at `.github/workflows/server-deploy.disabled.yml`.
-
-Do not enable automatic server deployment until the server is hardened, rollback is documented, and secrets are configured.
-
-Reserved GitHub Secrets:
-
-- `DEPLOY_HOST`
-- `DEPLOY_USER`
-- `DEPLOY_PORT`
-- `DEPLOY_PATH`
-- `SSH_PRIVATE_KEY`
-
-The current public demo review does not require server information.
 
 ## Environment Variables
 
