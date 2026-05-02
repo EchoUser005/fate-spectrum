@@ -3,7 +3,7 @@ import samplePaipan from "@/fixtures/sample-paipan.json";
 import { PaipanResponseSchema } from "@/lib/schemas/paipan";
 import { buildNarrativePrompt, LOCAL_NARRATIVE_PROMPT_NAME } from "@/lib/llm/prompts";
 import { buildRuleBasedReport } from "@/lib/scoring/engine";
-import promptDefinition from "../../../prompts/fate-spectrum-narrative.v1.json";
+import promptDefinition from "../../../prompts/fate-spectrum-narrative.v2.json";
 
 const birth = {
   nickname: "匿名样例",
@@ -29,7 +29,8 @@ describe("local prompt registry", () => {
       normalized: report.normalized,
       dimensions: report.dimensions,
       dayunScores: report.dayunScores,
-      yearlyScores: report.yearlyScores
+      yearlyScores: report.yearlyScores,
+      generatedAt: report.meta.generatedAt
     });
 
     expect(LOCAL_NARRATIVE_PROMPT_NAME).toBe(promptDefinition.name);
@@ -37,5 +38,8 @@ describe("local prompt registry", () => {
     expect(prompt.user).not.toContain("{{context}}");
     expect(prompt.user).toContain("requiredDisclaimers");
     expect(prompt.user).toContain("dayunScores");
+    expect(prompt.user).toContain("currentYearly");
+    expect(prompt.user).toContain("currentDayunYears");
+    expect(prompt.user).not.toContain("1999-09-15");
   });
 });

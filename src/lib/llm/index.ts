@@ -22,7 +22,8 @@ export async function generateLlmNarrative(
     normalized: baseReport.normalized,
     dimensions: baseReport.dimensions,
     dayunScores: baseReport.dayunScores,
-    yearlyScores: baseReport.yearlyScores
+    yearlyScores: baseReport.yearlyScores,
+    generatedAt: baseReport.meta.generatedAt
   });
   const fallbackMessages = [
     { role: "system" as const, content: prompt.system },

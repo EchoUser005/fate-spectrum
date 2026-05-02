@@ -4,6 +4,7 @@
 
 ### Added
 
+- Added `fate-spectrum-narrative-v2` local prompt with structured 日主、命盘格局、喜用神、忌神、当下大环境 overview requirements and current dayun/year context.
 - Added OpenSpec workflow.
 - Added BYOK LLM provider abstraction.
 - Added mock paipan provider.
@@ -27,6 +28,8 @@
 
 ### Changed
 
+- Changed share actions to generate watermarked PNG share images with the GitHub project address instead of copying plain text.
+- Changed the shared Select component to use the Fate Spectrum visual treatment instead of the browser-default control chrome.
 - Calibrated shenjige form mapping to include `h` and `m` fields and numeric `status` response handling.
 - Improved public demo copy, generation stages, dimension-first report presentation, mobile E2E coverage, and export disclaimer coverage.
 - Expanded deployment and contribution documentation for multi-person collaboration.
@@ -42,6 +45,8 @@
 
 ### Fixed
 
+- Fixed narrative prompt context so the model receives current-year/current-dayun windows instead of only early yearly rows, with sensitive date fields removed from prompt context.
+- Fixed overview rendering to support structured multi-section report copy instead of collapsing everything into a single short sentence.
 - Fixed JSON export so exported artifacts include professional-advice disclaimers.
 - Fixed true-solar-time notices so user-facing copy no longer mentions Mock Demo or provider internals.
 - Fixed report navigation so `星盘` opens the 紫微 chart focus and `总览` returns to 八字 focus.

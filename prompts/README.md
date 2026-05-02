@@ -9,6 +9,7 @@ Do not commit real Langfuse hosts, public keys, secret keys, model keys, user bi
 ## Prompts
 
 - `fate-spectrum-narrative.v1.json`: chat prompt for report narrative generation.
+- `fate-spectrum-narrative.v2.json`: structured report-editor prompt for 日主、命盘格局、喜用神、忌神、当下大环境, using sanitized runtime context and deterministic score rows.
 
 ## Template Variables
 
