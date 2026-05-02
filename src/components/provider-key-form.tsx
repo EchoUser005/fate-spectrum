@@ -1,8 +1,9 @@
 "use client";
 
-import { KeyRound, PlugZap } from "lucide-react";
-import { providerPresets } from "@/lib/config/providers";
+import { ExternalLink, KeyRound, PlugZap, Trash2 } from "lucide-react";
+import { deepseekModelOptions, providerPresets } from "@/lib/config/providers";
 import type { ProviderConfig } from "@/lib/schemas/provider";
+import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Select } from "@/components/ui/select";
 
@@ -13,6 +14,7 @@ type Props = {
   onPaipanChange: (config: ProviderConfig) => void;
   onLlmChange: (config: ProviderConfig) => void;
   onUseLlmChange: (enabled: boolean) => void;
+  onClearCachedLlm: () => void;
 };
 
 export function ProviderKeyForm({
@@ -21,8 +23,11 @@ export function ProviderKeyForm({
   useLlmNarrative,
   onPaipanChange,
   onLlmChange,
-  onUseLlmChange
+  onUseLlmChange,
+  onClearCachedLlm
 }: Props) {
+  const isDeepSeek = llmConfig.provider === "deepseek";
+
   return (
     <section className="rounded-md bg-white/92 p-5 shadow-spectrum ring-1 ring-slate-200">
       <div className="mb-4 flex items-center gap-3">
@@ -125,12 +130,52 @@ export function ProviderKeyForm({
 
         <label className="grid gap-1 text-sm font-medium text-slate-700">
           Model
-          <Input
-            disabled={!useLlmNarrative}
-            value={llmConfig.model ?? ""}
-            onChange={(event) => onLlmChange({ ...llmConfig, model: event.target.value })}
-          />
+          {isDeepSeek ? (
+            <Select
+              disabled={!useLlmNarrative}
+              value={llmConfig.model ?? providerPresets.deepseek.model}
+              onChange={(event) => onLlmChange({ ...llmConfig, model: event.target.value })}
+            >
+              {deepseekModelOptions.map((option) => (
+                <option key={option.value} value={option.value}>
+                  {option.label}
+                </option>
+              ))}
+            </Select>
+          ) : (
+            <Input
+              disabled={!useLlmNarrative}
+              value={llmConfig.model ?? ""}
+              onChange={(event) => onLlmChange({ ...llmConfig, model: event.target.value })}
+            />
+          )}
         </label>
+
+        {isDeepSeek ? (
+          <div className="rounded-md bg-slate-50 px-3 py-2 text-sm leading-6 text-slate-700">
+            <p>DeepSeek V4 当前推荐 `deepseek-v4-flash` 或 `deepseek-v4-pro`；`deepseek-chat` 是旧兼容别名。</p>
+            <div className="mt-2 flex flex-wrap gap-3">
+              <a
+                href="https://platform.deepseek.com"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 text-cyan-700 hover:text-cyan-900"
+              >
+                申请 API Key
+                <ExternalLink size={13} />
+              </a>
+              <a
+                href="https://api-docs.deepseek.com/"
+                target="_blank"
+                rel="noreferrer"
+                className="inline-flex items-center gap-1 text-cyan-700 hover:text-cyan-900"
+              >
+                查看模型文档
+                <ExternalLink size={13} />
+              </a>
+            </div>
+          </div>
+        ) : null}
 
         <label className="grid gap-1 text-sm font-medium text-slate-700">
           <span className="inline-flex items-center gap-2">
@@ -140,11 +185,18 @@ export function ProviderKeyForm({
           <Input
             type="password"
             disabled={!useLlmNarrative}
-            placeholder="仅本次请求使用，不落库"
+            placeholder="仅保存在当前浏览器会话"
             value={llmConfig.apiKey ?? ""}
             onChange={(event) => onLlmChange({ ...llmConfig, apiKey: event.target.value })}
           />
         </label>
+        <div className="flex flex-col gap-2 rounded-md bg-slate-50 px-3 py-2 text-sm text-slate-600">
+          <p>填写后会缓存在当前浏览器会话，刷新页面不用重复输入；不会写入后端、导出文件或源码。</p>
+          <Button type="button" size="sm" variant="secondary" onClick={onClearCachedLlm}>
+            <Trash2 size={14} />
+            清除本会话 Key
+          </Button>
+        </div>
       </div>
     </section>
   );

@@ -3,7 +3,9 @@ import type { ReportResponse } from "@/lib/schemas/report";
 export function YearlyScoreTable({ report }: { report: ReportResponse }) {
   return (
     <section className="rounded-md bg-white p-5 ring-1 ring-slate-200">
-      <h2 className="text-lg font-semibold text-ink">流年色阶</h2>
+      <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">Yearly Scale</p>
+      <h2 className="mt-1 text-lg font-semibold text-ink">年度色阶</h2>
+      <p className="mt-2 text-sm leading-6 text-slate-600">流年色阶用于看近年变化，不代表单一命运结论。</p>
       <div className="mt-4 overflow-x-auto">
         <table className="w-full min-w-[860px] border-collapse text-sm">
           <thead>

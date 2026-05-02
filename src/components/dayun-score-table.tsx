@@ -3,7 +3,9 @@ import type { ReportResponse } from "@/lib/schemas/report";
 export function DayunScoreTable({ report }: { report: ReportResponse }) {
   return (
     <section className="rounded-md bg-white p-5 ring-1 ring-slate-200">
-      <h2 className="text-lg font-semibold text-ink">大运光谱</h2>
+      <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">Decade Rhythm</p>
+      <h2 className="mt-1 text-lg font-semibold text-ink">十年节奏表</h2>
+      <p className="mt-2 text-sm leading-6 text-slate-600">大运光谱会被翻译成每十年的维度色阶，便于比较阶段主题。</p>
       <div className="mt-4 overflow-x-auto">
         <table className="w-full min-w-[860px] border-collapse text-sm">
           <thead>

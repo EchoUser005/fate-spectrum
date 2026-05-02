@@ -5,7 +5,7 @@
 - [x] 接入并实测真实排盘 Provider。
 - [ ] 补充真实排盘请求代码的生产级错误处理和重试策略。
 - [x] 校准真实排盘 response mapping，确认 `data.zw`、`data.bz`、`data.output` 的字段完整性。
-- [ ] 确认 DeepSeek / OpenAI-compatible model list。
+- [x] 确认 DeepSeek V4 model list：默认 `deepseek-v4-flash`，可选 `deepseek-v4-pro`，`deepseek-chat` 为 legacy alias。
 - [ ] 补充真实品牌 OG 图。
 - [ ] 部署到 Vercel。
 - [ ] 绑定域名。
@@ -16,7 +16,7 @@
 - [ ] 实现农历输入到真实 provider 的历法转换。
 - [ ] 实现海外时区换算策略。
 - [ ] 实现真太阳时经纬度校正。
-- [ ] 评估是否允许用户 `sessionStorage` 保存 Key，默认继续关闭。
+- [x] 允许当前浏览器会话用 `sessionStorage` 缓存 LLM Key，并提供清除动作。
 - [ ] 校准更多真实样例盘和评分规则。
 - [ ] 增加 CI 到自有服务器的自动发布方案。
 
@@ -40,6 +40,6 @@
 - [ ] 是否支持海外时区：后续实现，MVP 保留字段。
 - [ ] 域名：用户后续自办。
 - [ ] 是否启用历史报告保存：默认不启用。
-- [ ] 是否允许用户 sessionStorage 保存 Key：默认不允许。
+- [x] 是否允许用户 sessionStorage 保存 Key：允许当前浏览器会话缓存，UI 可清除，不写入后端。
 - [ ] 是否后续做 PDF 导出：列入 P2。
 - [ ] 是否后续做多语言：列入 P2。

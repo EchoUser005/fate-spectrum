@@ -1,12 +1,14 @@
 import type { ReportResponse } from "@/lib/schemas/report";
-import { BaziPillars } from "@/components/bazi-pillars";
+import { ActionPlanPanel } from "@/components/action-plan-panel";
+import { AdvancedSourceData } from "@/components/advanced-source-data";
 import { DayunHeatmap } from "@/components/dayun-heatmap";
 import { DayunScoreTable } from "@/components/dayun-score-table";
 import { DimensionCard } from "@/components/dimension-card";
 import { Disclaimer } from "@/components/disclaimer";
 import { ExportActions } from "@/components/export-actions";
-import { PalaceGrid } from "@/components/palace-grid";
-import { RawJsonViewer } from "@/components/raw-json-viewer";
+import { KeyWindowPanel } from "@/components/key-window-panel";
+import { LifeSpectrumRadar } from "@/components/life-spectrum-radar";
+import { ProductInsightSummary } from "@/components/product-insight-summary";
 import { ScoreLineChart } from "@/components/score-line-chart";
 import { YearlyScoreTable } from "@/components/yearly-score-table";
 
@@ -40,8 +42,10 @@ export function ReportDashboard({ report }: { report: ReportResponse }) {
         </section>
       ) : null}
 
-      <BaziPillars report={report} />
-      <PalaceGrid report={report} />
+      <ProductInsightSummary report={report} />
+      <LifeSpectrumRadar report={report} />
+      <ActionPlanPanel report={report} />
+      <KeyWindowPanel report={report} />
 
       <section className="rounded-md bg-white p-5 ring-1 ring-slate-200">
         <div className="mb-4">
@@ -62,7 +66,7 @@ export function ReportDashboard({ report }: { report: ReportResponse }) {
       <ScoreLineChart report={report} />
       <DayunHeatmap report={report} />
       <YearlyScoreTable report={report} />
-      <RawJsonViewer report={report} />
+      <AdvancedSourceData report={report} />
       <Disclaimer />
       <ExportActions report={report} />
     </div>

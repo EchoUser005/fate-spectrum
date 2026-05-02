@@ -34,3 +34,11 @@
 | issue-templates | collaboration | public-demo-hardening 4.3 | `.github/ISSUE_TEMPLATE/*` | docs review | Review | Added |
 | deployment-guide-completeness | deployment | public-demo-hardening 4.4 | `docs/deployment.md` | docs review | Review | Added |
 | disabled-server-deploy-template | deployment | public-demo-hardening 4.5 | `.github/workflows/server-deploy.disabled.yml` | docs review | Review | Added |
+| outcome-first-product-framing | product | product-experience-redesign 2.1, 2.2 | `src/components/app-shell.tsx`, `src/components/product-insight-summary.tsx` | `src/tests/e2e/generate-report.spec.ts` | E2E | Added |
+| advanced-source-data | product/ui-dashboard | product-experience-redesign 2.3 | `src/components/advanced-source-data.tsx`, `src/components/raw-json-viewer.tsx` | `src/tests/e2e/generate-report.spec.ts` | E2E | Added |
+| recharts-spectrum-overview | ui-dashboard | product-experience-redesign 2.4 | `src/components/life-spectrum-radar.tsx` | `src/tests/e2e/generate-report.spec.ts` | E2E | Added |
+| report-action-plan-prominence | ui-dashboard | product-experience-redesign 2.2, 2.5 | `src/components/action-plan-panel.tsx`, `src/components/key-window-panel.tsx` | `src/tests/e2e/generate-report.spec.ts` | E2E | Added |
+| deepseek-v4-default | llm-provider | product-experience-redesign 3.1 | `src/lib/config/providers.ts`, `src/components/provider-key-form.tsx` | `src/tests/unit/provider-config.test.ts`, `src/tests/e2e/generate-report.spec.ts` | Unit + E2E | Added |
+| deepseek-key-guidance | llm-provider | product-experience-redesign 3.2 | `src/components/provider-key-form.tsx`, `README.md` | `src/tests/e2e/generate-report.spec.ts` | E2E | Added |
+| session-key-cache | security | product-experience-redesign 3.3 | `src/components/app-shell.tsx`, `src/components/provider-key-form.tsx` | `src/tests/e2e/generate-report.spec.ts` | E2E | Added |
+| clear-cached-key | security | product-experience-redesign 3.4 | `src/components/provider-key-form.tsx` | `src/tests/e2e/generate-report.spec.ts` | E2E | Added |

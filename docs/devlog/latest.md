@@ -2,7 +2,7 @@
 
 ## Current Status
 
-Second-round public demo hardening is implemented locally. Bootstrap OpenSpec has been archived into main specs. `public-demo-hardening` remains active as the current review change.
+Product experience redesign is in progress on top of second-round public demo hardening. Bootstrap OpenSpec has been archived into main specs. `public-demo-hardening` remains active, and `product-experience-redesign` is the current product UX correction change.
 
 ## Current Branch
 
@@ -10,7 +10,7 @@ Second-round public demo hardening is implemented locally. Bootstrap OpenSpec ha
 
 ## Current OpenSpec Change
 
-`public-demo-hardening`
+`product-experience-redesign`
 
 ## Recently Completed
 
@@ -24,6 +24,11 @@ Second-round public demo hardening is implemented locally. Bootstrap OpenSpec ha
 - Hardened public demo UI copy, one-click Mock Demo, generation stages, dimension-first report explanation, mobile E2E coverage, and export disclaimer messaging.
 - Added or updated CONTRIBUTING, PR template, issue templates, deployment docs, and a disabled/manual server deploy workflow template.
 - Archived `bootstrap-fate-spectrum` as `openspec/changes/archive/2026-04-30-bootstrap-fate-spectrum/`.
+- Created `product-experience-redesign` after public-demo feedback that the UI was too raw-data/provider oriented.
+- Reworked the homepage and report around user outcomes, timing windows, action plan, and Recharts-backed spectrum shape.
+- Moved BaZi, Ziwei palace grid, and raw paipan JSON into an advanced source-data disclosure.
+- Updated DeepSeek default model to `deepseek-v4-flash`, added `deepseek-v4-pro`, retained `deepseek-chat` only as a legacy alias option.
+- Added official DeepSeek platform/docs links and browser-session-only LLM key caching with a clear action.
 
 ## Shenjige Calibration Summary
 
@@ -43,6 +48,10 @@ Second-round public demo hardening is implemented locally. Bootstrap OpenSpec ha
 - `openspec archive bootstrap-fate-spectrum -y` -> success.
 - `openspec validate --all --strict --no-interactive` -> success after archive.
 - `pnpm test:e2e` -> success after escalation and stale dev-server cleanup, 2 Chromium tests passed.
+- `pnpm test` -> success after product redesign, 25 unit tests passed.
+- `pnpm lint` -> success after product redesign.
+- `pnpm build` -> success after product redesign.
+- `pnpm test:e2e` -> success after product redesign, 3 Chromium tests passed.
 
 ## Fixed During This Round
 
@@ -54,9 +63,9 @@ Second-round public demo hardening is implemented locally. Bootstrap OpenSpec ha
 
 - Public demo deployment to Vercel is still user/maintainer-owned.
 - Production-grade retry/backoff for real paipan provider remains TODO.
-- DeepSeek/OpenAI-compatible model list confirmation remains TODO.
+- OpenAI-compatible non-DeepSeek model list confirmation remains TODO.
 - Domain binding and brand OG asset remain TODO.
 
 ## Next Codex Step
 
-Continue from `openspec/changes/public-demo-hardening/tasks.md`, `docs/test-matrix.md`, and this devlog. If public demo review accepts this change, archive `public-demo-hardening`; otherwise keep it active and add follow-up tasks under the same change.
+Continue from `openspec/changes/product-experience-redesign/tasks.md`, `docs/test-matrix.md`, and this devlog. If the product UX correction is accepted, archive `product-experience-redesign`; after public demo review, also decide whether to archive `public-demo-hardening`.

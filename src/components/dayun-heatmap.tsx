@@ -3,7 +3,8 @@ import type { ReportResponse } from "@/lib/schemas/report";
 export function DayunHeatmap({ report }: { report: ReportResponse }) {
   return (
     <section className="rounded-md bg-white p-5 ring-1 ring-slate-200">
-      <h2 className="text-lg font-semibold text-ink">色阶图</h2>
+      <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">Spectrum Heatmap</p>
+      <h2 className="mt-1 text-lg font-semibold text-ink">阶段色阶图</h2>
       <div className="mt-4 overflow-x-auto">
         <div className="grid min-w-[760px]" style={{ gridTemplateColumns: `140px repeat(${report.dimensions.length}, 1fr)` }}>
           <div className="border-b border-slate-200 pb-2 text-sm font-medium text-slate-500">大运 × 维度</div>

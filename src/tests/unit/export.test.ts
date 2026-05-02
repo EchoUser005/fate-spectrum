@@ -50,4 +50,9 @@ describe("report exports", () => {
     expect(exported.disclaimers.health).toBe(HEALTH_DISCLAIMER);
     expect(exported.disclaimers.wealth).toBe(WEALTH_DISCLAIMER);
   });
+
+  it("does not export cached API keys", () => {
+    expect(exportReportJson(buildReport())).not.toContain("sk-test");
+    expect(exportReportMarkdown(buildReport())).not.toContain("sk-test");
+  });
 });

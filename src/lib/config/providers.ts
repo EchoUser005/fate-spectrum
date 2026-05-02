@@ -14,7 +14,7 @@ export const providerPresets = {
     label: "DeepSeek",
     description: "只用于生成解释文案，不负责排盘或评分。",
     baseUrl: process.env.DEEPSEEK_BASE_URL ?? "https://api.deepseek.com",
-    model: process.env.DEFAULT_DEEPSEEK_MODEL ?? "deepseek-chat"
+    model: process.env.DEFAULT_DEEPSEEK_MODEL ?? "deepseek-v4-flash"
   },
   openaiCompatible: {
     label: "OpenAI-compatible",
@@ -23,6 +23,12 @@ export const providerPresets = {
     model: process.env.DEFAULT_OPENAI_COMPATIBLE_MODEL ?? "gpt-4o-mini"
   }
 } as const;
+
+export const deepseekModelOptions = [
+  { value: "deepseek-v4-flash", label: "deepseek-v4-flash · V4 Flash" },
+  { value: "deepseek-v4-pro", label: "deepseek-v4-pro · V4 Pro" },
+  { value: "deepseek-chat", label: "deepseek-chat · legacy alias" }
+] as const;
 
 export function allowSessionKeyStorage() {
   return process.env.ALLOW_SESSION_KEY_STORAGE === "true";

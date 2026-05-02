@@ -2,7 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Github, Loader2, Sparkles } from "lucide-react";
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useForm } from "react-hook-form";
 import { providerPresets } from "@/lib/config/providers";
 import type { BirthInput } from "@/lib/schemas/birth";
@@ -15,6 +15,7 @@ import { ProviderKeyForm } from "@/components/provider-key-form";
 import { ReportDashboard } from "@/components/report-dashboard";
 
 const generationSteps = ["校验输入", "获取排盘", "归一化排盘", "计算光谱分数", "生成解释", "渲染结果"];
+const LLM_SESSION_STORAGE_KEY = "fate-spectrum.llm-session.v1";
 
 export function AppShell() {
   const [paipanConfig, setPaipanConfig] = useState<ProviderConfig>({
@@ -47,11 +48,61 @@ export function AppShell() {
     }
   });
 
+  useEffect(() => {
+    try {
+      const cached = window.sessionStorage.getItem(LLM_SESSION_STORAGE_KEY);
+      if (!cached) return;
+      const parsed = JSON.parse(cached) as {
+        enabled?: boolean;
+        config?: ProviderConfig;
+      };
+      const timer = window.setTimeout(() => {
+        if (parsed.config) {
+          setLlmConfig(parsed.config);
+        }
+        if (parsed.enabled) {
+          setUseLlmNarrative(true);
+        }
+      }, 0);
+      return () => window.clearTimeout(timer);
+    } catch {
+      window.sessionStorage.removeItem(LLM_SESSION_STORAGE_KEY);
+    }
+    return undefined;
+  }, []);
+
+  useEffect(() => {
+    try {
+      if (!useLlmNarrative && !llmConfig.apiKey) {
+        return;
+      }
+      window.sessionStorage.setItem(
+        LLM_SESSION_STORAGE_KEY,
+        JSON.stringify({
+          enabled: useLlmNarrative,
+          config: llmConfig
+        })
+      );
+    } catch {
+      // Session cache is a UX convenience only.
+    }
+  }, [llmConfig, useLlmNarrative]);
+
+  const clearCachedLlm = () => {
+    window.sessionStorage.removeItem(LLM_SESSION_STORAGE_KEY);
+    setLlmConfig({
+      provider: "deepseek",
+      baseUrl: providerPresets.deepseek.baseUrl,
+      model: providerPresets.deepseek.model
+    });
+    setUseLlmNarrative(false);
+  };
+
   const providerNote = useMemo(() => {
     if (paipanConfig.provider === "mock") {
-      return "Mock Demo 一键生成，无需排盘 Key；没有真实排盘接口时使用匿名样例星盘。DeepSeek / OpenAI-compatible 只负责解释已有排盘和规则分数。";
+      return "先用匿名样例体验完整报告；想让解释更像人话，再打开 DeepSeek V4 润色。";
     }
-    return "shenjige provider 当前只支持公历和 male/female；暂不处理海外时区换算，真太阳时仅保留开关和提示。";
+    return "真实接口用于换成你的排盘来源，但报告仍然先呈现节奏、窗口和行动建议。";
   }, [paipanConfig.provider]);
 
   const onSubmit = form.handleSubmit(async (birth) => {
@@ -118,27 +169,27 @@ export function AppShell() {
           <div className="grid flex-1 items-center gap-8 py-10 lg:grid-cols-[0.92fr_1.08fr]">
             <div className="max-w-xl text-white">
               <p className="text-sm font-semibold uppercase tracking-[0.24em] text-white/78">
-                Turn birth charts into explainable multidimensional life spectra.
+                A life rhythm report you can actually read.
               </p>
               <h1 className="mt-4 text-5xl font-semibold leading-tight sm:text-6xl">
                 Fate Spectrum · 命运光谱
               </h1>
               <p className="mt-5 text-lg leading-8 text-white/88">
-                把八字、紫微、大运与流年拆解成可解释的多维人生光谱。
+                先看未来阶段怎么发力、哪里要稳住、下一步怎么做。
               </p>
               <p className="mt-3 max-w-lg text-sm leading-6 text-white/78">
-                首屏默认就是 Mock Demo，公开评审可以直接生成样例星盘，不需要填写任何 Key。
+                原始排盘和 JSON 会保留在高级源数据里，默认报告只讲人能读懂的节奏、窗口和行动。
               </p>
               <div className="mt-8 flex flex-wrap gap-3">
                 <Button type="submit" disabled={isGenerating}>
                   {isGenerating ? <Loader2 size={17} className="animate-spin" /> : <Sparkles size={17} />}
-                  生成我的命盘光谱
+                  生成我的人生光谱
                 </Button>
                 <a
                   href="#report"
                   className="inline-flex h-10 items-center rounded-md bg-white px-4 text-sm font-medium text-ink transition hover:bg-slate-100"
                 >
-                  查看报告区
+                  查看节奏报告
                 </a>
               </div>
               <p className="mt-5 max-w-lg text-sm leading-6 text-white/78">{providerNote}</p>
@@ -153,6 +204,7 @@ export function AppShell() {
                 onPaipanChange={setPaipanConfig}
                 onLlmChange={setLlmConfig}
                 onUseLlmChange={setUseLlmNarrative}
+                onClearCachedLlm={clearCachedLlm}
               />
             </div>
           </div>
@@ -163,8 +215,8 @@ export function AppShell() {
         <div className="rounded-md bg-white p-5 ring-1 ring-slate-200">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">Generation Status</p>
-              <h2 className="mt-1 text-xl font-semibold text-ink">生成状态</h2>
+              <p className="text-xs font-semibold uppercase tracking-wide text-cyan-700">Report Status</p>
+              <h2 className="mt-1 text-xl font-semibold text-ink">报告生成进度</h2>
             </div>
             <div className="grid gap-2 sm:grid-cols-3 lg:grid-cols-6">
               {generationSteps.map((step) => (
@@ -186,7 +238,7 @@ export function AppShell() {
           <ReportDashboard report={report} />
         ) : (
           <div className="rounded-md border border-dashed border-slate-300 bg-white p-8 text-center text-slate-500">
-            等待生成第一份人生光谱报告。
+            等待生成第一份节奏报告。
           </div>
         )}
       </section>

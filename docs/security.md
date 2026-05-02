@@ -2,7 +2,7 @@
 
 ## BYOK Boundary
 
-User API keys are accepted per request and are never stored, logged, fixture-backed, or exposed through `NEXT_PUBLIC_`. Optional sessionStorage is disabled by default.
+User API keys are accepted per request and are never stored on the backend, logged, fixture-backed, exported, or exposed through `NEXT_PUBLIC_`. LLM keys may be cached in browser `sessionStorage` for the current session only, and the UI provides a clear action to remove them.
 
 ## Log Redaction
 

@@ -2,7 +2,7 @@
 
 不是一个笼统总分，而是一组可解释的人生维度光谱。
 
-Fate Spectrum is an open-source BaZi and Ziwei visualization dashboard. It accepts birth input and BYOK provider configuration, obtains paipan JSON, computes rule-based dayun/yearly multidimensional scores, and renders an inspectable spectrum report.
+Fate Spectrum is an open-source life rhythm dashboard. It accepts birth input and BYOK provider configuration, computes rule-based multidimensional scores from paipan data, and renders an outcome-first spectrum report with source data kept in an advanced panel.
 
 ## Screenshot
 
@@ -13,8 +13,9 @@ Fate Spectrum is an open-source BaZi and Ziwei visualization dashboard. It accep
 - Mock Demo sample paipan with no key required
 - Custom paipan endpoint support, including the shenjige form-encoded mapping
 - Rule-based scoring for wealth, career, comfort, selfValue, relationship, healthEnergy, and riskControl
-- Optional DeepSeek or OpenAI-compatible narrative generation
-- BaZi pillars, Ziwei palace grid, dayun spectrum, yearly color scale, line chart, heatmap, raw JSON
+- Optional DeepSeek V4 or OpenAI-compatible narrative generation
+- Outcome summary, action plan, timing windows, radar spectrum, dayun spectrum, yearly color scale, line chart, heatmap
+- Advanced source panel for BaZi pillars, Ziwei palace grid, and raw JSON
 - JSON and Markdown export
 - OpenSpec, ADRs, devlog, handoff, test matrix, CI, Docker, Vercel
 
@@ -37,7 +38,11 @@ Select `Mock Demo · 样例星盘`, keep the default birth input, and click `生
 
 ## DeepSeek Key
 
-Enable LLM explanation, choose `DeepSeek`, enter a model and key. DeepSeek only writes explanation text from existing paipan JSON and rule-based scores. It does not calculate scores or fabricate a chart.
+Enable LLM explanation, choose `DeepSeek`, enter a model and key. Default model is `deepseek-v4-flash`; `deepseek-v4-pro` is also available. DeepSeek only writes explanation text from existing paipan JSON and rule-based scores. It does not calculate scores or fabricate a chart.
+
+Apply for a key at `https://platform.deepseek.com` and check current model names at `https://api-docs.deepseek.com/`.
+
+LLM keys are cached only in browser `sessionStorage` for the current session and can be cleared from the UI.
 
 ## OpenAI-Compatible Custom
 
@@ -113,8 +118,8 @@ The app listens on port `3000`.
 ## Security
 
 - User API keys are BYOK and per-request.
-- Keys are not stored, logged, exported, or exposed through `NEXT_PUBLIC_`.
-- Session key storage is disabled by default.
+- Keys are not stored on the backend, logged, exported, or exposed through `NEXT_PUBLIC_`.
+- Optional LLM key convenience cache uses browser `sessionStorage` only and can be cleared from the UI.
 - Custom paipan endpoints are HTTPS-only and block localhost/private IPs unless explicitly allowed for local development.
 - LLM prompts treat provider output as untrusted context.
 
