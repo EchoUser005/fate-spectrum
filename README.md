@@ -113,6 +113,8 @@ weekly daily-flow reports -> monthly rollup -> yearly memory -> next report cont
 
 The file layout is documented in `data/README.md`. Generated `data/owner/` and `data/guests/` files are ignored by Git.
 
+The planned adaptive memory architecture is documented in `docs/memory-flywheel.md`. It separates deterministic baseline scores from future memory-derived adaptive scores; model output will not directly own numeric scoring.
+
 ## Security
 
 - User API keys are BYOK and per-request.

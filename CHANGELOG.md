@@ -27,6 +27,8 @@
 - Added UI copy, golden scoring, chart-source, export, and responsive visual E2E coverage.
 - Added reviewer-correction coverage that blocks sample-entry copy, numbered steps, optional labels, advanced data, and manual-like dayun headings from the visible UI.
 - Added reviewer-correction coverage that requires model keys, verifies `custom-paipan` report requests, and blocks model-mode/local-rule copy from the visible UI.
+- Added `adaptive-memory-flywheel` OpenSpec design for owner/guest memory, SQLite indexing, weekly/monthly/yearly rollups, model gateway, replay tests, and bounded adaptive scoring.
+- Added public `docs/memory-flywheel.md` architecture proposal for the private data flywheel.
 - Added directory-based prompt registry with separate system/user files for overview, current environment, dimensions, windows, weekly daily-flow, monthly rollup, and yearly memory.
 - Added optional FastAPI memory service that persists 命主/缘主 snapshots plus weekly/monthly/yearly JSON and Markdown files.
 - Added `pnpm prompts:pull` to download tuned Langfuse `prod` prompts back into local prompt files.

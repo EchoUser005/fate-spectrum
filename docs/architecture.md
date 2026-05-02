@@ -81,6 +81,26 @@ LANGFUSE_PROMPT_LABEL=prod
 
 These values belong in `.env.local` or deployment secrets only.
 
+## Adaptive Memory Flywheel Direction
+
+The next architecture change is tracked in `openspec/changes/adaptive-memory-flywheel/` and summarized publicly in `docs/memory-flywheel.md`.
+
+The intended long-running product loop is:
+
+```text
+initial report -> daily guidance -> evening feedback -> daily memory -> weekly report -> monthly rollup -> yearly memory -> adaptive score candidate -> regenerated report context
+```
+
+Design constraints:
+
+- baseline paipan scores remain deterministic and inspectable
+- future adaptive scores are derived from memory evidence and bounded rules
+- default future blend is proposed as `baseScore * 0.7 + adaptiveScore * 0.3`
+- LLMs can summarize, classify, and explain, but cannot directly set numeric scores
+- JSON/Markdown files hold user-readable artifacts
+- SQLite holds indexes, events, prompt runs, score versions, and replay metadata
+- Docker Compose should run without Langfuse or a checked-in `.env`
+
 ## Boundaries
 
 - API keys are request-only.
