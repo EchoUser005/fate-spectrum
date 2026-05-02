@@ -84,8 +84,16 @@ export function getHiddenStems(branch?: string) {
 }
 
 export function splitGanzhi(value: string) {
+  const cleanValue = cleanGanzhiText(value);
   return {
-    stem: value === "未知" ? "" : value.slice(0, 1),
-    branch: value === "未知" ? "" : value.slice(1, 2)
+    stem: cleanValue === "未知" ? "" : cleanValue.slice(0, 1),
+    branch: cleanValue === "未知" ? "" : cleanValue.slice(1, 2)
   };
+}
+
+export function cleanGanzhiText(value?: string) {
+  return (value ?? "")
+    .replace(/<br\s*\/?>/gi, "")
+    .replace(/\s+/g, "")
+    .trim();
 }

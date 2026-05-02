@@ -71,6 +71,31 @@ describe("normalizePaipan", () => {
     expect(normalized.dayun[2]?.ganzhi).toBe("第3运");
   });
 
+  it("strips provider HTML breaks from ganzhi labels", () => {
+    const { normalized } = normalizePaipan({
+      status: 200,
+      data: {
+        bz: {
+          y: "甲<br/>子",
+          m: "乙<br />丑",
+          d: "丙 寅",
+          h: "丁\n卯",
+          dayunGZ: ["戊<br/>辰"],
+          dayunAge: [8],
+          dayunYear: [2007]
+        }
+      }
+    });
+
+    expect(normalized.pillars).toEqual({
+      year: "甲子",
+      month: "乙丑",
+      day: "丙寅",
+      hour: "丁卯"
+    });
+    expect(normalized.dayun[0]?.ganzhi).toBe("戊辰");
+  });
+
   it("handles missing optional palaces, dayun arrays, and output", () => {
     const { normalized } = normalizePaipan({
       status: 200,

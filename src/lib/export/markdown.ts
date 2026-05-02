@@ -5,6 +5,7 @@ import {
 } from "@/lib/constants";
 import type { DimensionDefinition, DimensionId, ReportResponse } from "@/lib/schemas/report";
 import { getCurrentDayun, getFocusedYearlyScores } from "@/lib/report-view-model";
+import { cleanGanzhiText } from "@/lib/wuxing";
 
 const dimensionColumnLabels: Record<DimensionId, string> = {
   wealth: "财富",
@@ -29,7 +30,7 @@ export function exportReportMarkdown(report: ReportResponse) {
   lines.push("");
   lines.push(`- 昵称：${report.birth.nickname || "未填写"}`);
   lines.push(
-    `- 四柱：${report.normalized.pillars.year} / ${report.normalized.pillars.month} / ${report.normalized.pillars.day} / ${report.normalized.pillars.hour}`
+    `- 四柱：${cleanGanzhiText(report.normalized.pillars.year)} / ${cleanGanzhiText(report.normalized.pillars.month)} / ${cleanGanzhiText(report.normalized.pillars.day)} / ${cleanGanzhiText(report.normalized.pillars.hour)}`
   );
   if (currentDayun) {
     lines.push(`- 当前阶段：${currentDayun.ganzhi}，${currentDayun.startYear}-${currentDayun.endYear}`);
@@ -45,7 +46,7 @@ export function exportReportMarkdown(report: ReportResponse) {
   );
   for (const dayun of report.dayunScores) {
     lines.push(
-      `| ${dayun.ganzhi} | ${dayun.age} | ${dayun.startYear}-${dayun.endYear} | ${dayun.scores.wealth} | ${dayun.scores.career} | ${dayun.scores.comfort} | ${dayun.scores.selfValue} | ${dayun.scores.relationship} | ${dayun.scores.healthEnergy} | ${dayun.scores.riskControl} | ${dayun.summary} |`
+      `| ${cleanGanzhiText(dayun.ganzhi)} | ${dayun.age} | ${dayun.startYear}-${dayun.endYear} | ${dayun.scores.wealth} | ${dayun.scores.career} | ${dayun.scores.comfort} | ${dayun.scores.selfValue} | ${dayun.scores.relationship} | ${dayun.scores.healthEnergy} | ${dayun.scores.riskControl} | ${dayun.summary} |`
     );
   }
   lines.push("");

@@ -1,4 +1,5 @@
 import type { DimensionId, ReportResponse, ScoreMap } from "@/lib/schemas/report";
+import { cleanGanzhiText } from "@/lib/wuxing";
 
 export const FEATURED_DIMENSIONS: DimensionId[] = ["wealth", "comfort", "selfValue", "relationship"];
 
@@ -13,7 +14,7 @@ export const SCORE_BANDS = [
 export function buildDayunCurveData(report: ReportResponse) {
   return report.dayunScores.map((dayun) => ({
     index: dayun.index,
-    ganzhi: dayun.ganzhi,
+    ganzhi: cleanGanzhiText(dayun.ganzhi) || dayun.ganzhi,
     startYear: dayun.startYear,
     endYear: dayun.endYear,
     age: dayun.age,
@@ -29,7 +30,7 @@ export function buildDayunHeatmapRows(report: ReportResponse) {
     dimensionMeaning: dimension.meaning,
     cells: report.dayunScores.map((dayun) => ({
       dayunIndex: dayun.index,
-      ganzhi: dayun.ganzhi,
+      ganzhi: cleanGanzhiText(dayun.ganzhi) || dayun.ganzhi,
       years: `${dayun.startYear}-${dayun.endYear}`,
       age: dayun.age,
       score: dayun.scores[dimension.id],
@@ -42,7 +43,7 @@ export function buildDayunHeatmapRows(report: ReportResponse) {
 export function buildDayunTableRows(report: ReportResponse) {
   return report.dayunScores.map((dayun) => ({
     index: dayun.index,
-    ganzhi: dayun.ganzhi,
+    ganzhi: cleanGanzhiText(dayun.ganzhi) || dayun.ganzhi,
     years: `${dayun.startYear}-${dayun.endYear}`,
     ageRange: `${dayun.age}-${dayun.age + 9}`,
     age: dayun.age,
@@ -56,11 +57,11 @@ export function buildDayunTableRows(report: ReportResponse) {
 
 export function getCurrentDayun(report: ReportResponse) {
   const generatedYear = Number(report.meta.generatedAt.slice(0, 4));
-  return (
+  const current =
     report.dayunScores.find((dayun) => generatedYear >= dayun.startYear && generatedYear <= dayun.endYear) ??
     report.dayunScores.find((dayun) => dayun.startYear > generatedYear) ??
-    report.dayunScores[0]
-  );
+    report.dayunScores[0];
+  return current ? { ...current, ganzhi: cleanGanzhiText(current.ganzhi) || current.ganzhi } : current;
 }
 
 export function getFocusedYearlyScores(report: ReportResponse) {

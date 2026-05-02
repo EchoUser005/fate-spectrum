@@ -1,6 +1,7 @@
 import type { ReportResponse } from "@/lib/schemas/report";
 import { CurrentCycleCard } from "@/components/report/current-cycle-card";
 import { MainSignalCards } from "@/components/report/main-signal-cards";
+import { cleanGanzhiText } from "@/lib/wuxing";
 
 export function ReportOverview({ report }: { report: ReportResponse }) {
   const overview = trimOverview(report.narratives.overview);
@@ -32,7 +33,7 @@ function Summary({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-md bg-fs-bg px-3 py-2">
       <p className="text-xs text-fs-muted">{label}</p>
-      <p className="mt-1 font-semibold text-fs-ink">{value}</p>
+      <p className="mt-1 font-semibold text-fs-ink">{cleanGanzhiText(value) || value}</p>
     </div>
   );
 }

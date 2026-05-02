@@ -1,4 +1,5 @@
 import { PaipanResponseSchema, type NormalizedPaipan, type PaipanResponse } from "@/lib/schemas/paipan";
+import { cleanGanzhiText } from "@/lib/wuxing";
 
 const palaceStarKeys = [
   "StarA",
@@ -57,17 +58,17 @@ export function normalizePaipan(raw: unknown): { paipan: PaipanResponse; normali
 
   const normalized: NormalizedPaipan = {
     pillars: {
-      year: bz.y ?? "未知",
-      month: bz.m ?? "未知",
-      day: bz.d ?? "未知",
-      hour: bz.h ?? "未知"
+      year: cleanGanzhiText(bz.y) || "未知",
+      month: cleanGanzhiText(bz.m) || "未知",
+      day: cleanGanzhiText(bz.d) || "未知",
+      hour: cleanGanzhiText(bz.h) || "未知"
     },
     dayun: Array.from({ length: dayunLength }, (_, index) => {
       const age = dayunAge[index] ?? 8 + index * 10;
       const startYear = dayunYear[index] ?? fallbackStartYear + index * 10;
       return {
         index,
-        ganzhi: dayunGZ[index] ?? `第${index + 1}运`,
+        ganzhi: cleanGanzhiText(dayunGZ[index]) || `第${index + 1}运`,
         age,
         startYear,
         endYear: startYear + 9
