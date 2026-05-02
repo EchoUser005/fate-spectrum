@@ -6,7 +6,7 @@ The dashboard SHALL keep ordinary user-facing landing, wizard, report navigation
 #### Scenario: Public report avoids engineering copy
 - **GIVEN** a user opens the app and generates the sample report
 - **WHEN** they inspect the workbench, report sections, and export controls
-- **THEN** they do not see Provider, Paipan, Mock Demo, Custom Paipan, shenjige, OpenAI-compatible, LLM, BYOK, JSON, OpenSpec, Zod, schema, raw, normalize, engine, prompt, endpoint, API route, report status, dimension spectrum, or birth input
+- **THEN** they do not see Provider, Paipan, Mock Demo, Custom Paipan, shenjige, OpenAI-compatible, LLM, BYOK, JSON, OpenSpec, Zod, schema, raw, normalize, engine, prompt, endpoint, API route, report status, dimension spectrum, birth input, 模型模式, 使用本地规则解读, or 适合先看结果
 
 ### Requirement: Technical details are not product UI
 The dashboard SHALL keep provider endpoints, shenjige details, raw response data, normalized data, and model request summaries out of the ordinary product UI.
@@ -22,7 +22,7 @@ The dashboard SHALL render a single first-viewport workbench with the title `命
 #### Scenario: First viewport is directly usable
 - **GIVEN** a first-time user opens the homepage
 - **WHEN** the first viewport loads
-- **THEN** the user can fill birth information, configure model mode/key, and generate the report without seeing sample-entry copy or numbered instructions
+- **THEN** the user can fill birth information, configure model name/key, and generate the report without seeing sample-entry copy, local-rule mode cards, or numbered instructions
 
 ### Requirement: No numbered generation wizard
 The dashboard SHALL NOT frame report generation as Step 1, Step 2, Step 3, or a sample/demo path.
@@ -63,6 +63,14 @@ The dashboard SHALL present birth configuration, model configuration, and the ge
 - **GIVEN** a user opens the product
 - **WHEN** the first viewport renders
 - **THEN** they see 生辰配置, 模型配置, and 生成报告 without 使用样例体验, 查看样例报告, Step, 第 1 步, 第 2 步, 第 3 步, or numbered wizard badges
+
+### Requirement: Model mode cards are not visible
+The dashboard SHALL NOT show local-rule/off/fast/quality/compatibility choice cards in the ordinary model configuration UI.
+
+#### Scenario: Model configuration is not a choice maze
+- **GIVEN** a user opens the product
+- **WHEN** they inspect 模型配置
+- **THEN** they see 模型名称 and 模型密钥 without 模型模式, 关闭, 使用本地规则解读, 适合先看结果, 高质量 card copy, or 兼容 card copy
 
 ### Requirement: No advanced data surface
 The dashboard SHALL NOT display advanced settings, developer data, raw JSON, normalized data, or model request summaries in the ordinary product UI.

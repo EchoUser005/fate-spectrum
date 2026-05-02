@@ -16,6 +16,14 @@ The generated report SHALL prioritize 维度评分, 大运光谱, and 流年色�
 - **WHEN** the user reaches the report first screen
 - **THEN** they see chart summary, current cycle, three main signal cards, the dayun spectrum curve, and dayun color scale before raw data, model settings, or full yearly tables
 
+### Requirement: Report avoids repeated score blocks
+The generated report SHALL use charts for trend shape, heatmaps/tables for detailed numeric scores, and narrative cards for judgement text instead of repeating the same numeric scores in every section.
+
+#### Scenario: Detailed reading is not another score table
+- **GIVEN** a report has been generated
+- **WHEN** the user scans overview and detailed reading cards
+- **THEN** those cards show qualitative labels and interpretation text while numeric dayun details remain in the curve, color scale, and score table
+
 ### Requirement: Report omits raw data surface
 The report SHALL NOT show raw provider JSON, normalized source data, model request summaries, or a 高级数据 section in the product UI.
 

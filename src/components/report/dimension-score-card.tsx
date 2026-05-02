@@ -12,13 +12,19 @@ export function DimensionScoreCard({ dimension, report }: { dimension: Dimension
           <h3 className="font-semibold text-fs-ink">{dimension.label}</h3>
           <p className="mt-1 text-xs leading-5 text-fs-muted">{dimension.meaning}</p>
         </div>
-        <span className="text-3xl font-semibold" style={{ color: dimension.color }}>
-          {score}
-        </span>
+        <span className="rounded-full bg-fs-bg px-2 py-1 text-xs font-medium text-fs-muted">{getSignalLabel(score)}</span>
       </div>
       <p className="mt-3 text-sm leading-6 text-fs-muted">{buildShortText(dimension.id, score, currentDayun?.summary)}</p>
     </article>
   );
+}
+
+function getSignalLabel(score: number) {
+  if (score >= 80) return "高能";
+  if (score >= 70) return "偏强";
+  if (score >= 60) return "可用";
+  if (score >= 50) return "中性";
+  return "低谷";
 }
 
 function buildShortText(id: DimensionDefinition["id"], score: number, summary?: string) {

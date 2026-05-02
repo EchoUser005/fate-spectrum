@@ -2,16 +2,15 @@
 
 ## MVP
 
-- Mock Demo with full report
-- Custom paipan provider and shenjige mapping
+- Real paipan provider and shenjige mapping
 - Rule-based seven-dimension scoring
-- Optional BYOK LLM narrative
-- Dashboard, Markdown export, JSON export
+- Required BYOK model narrative for interpreted reports
+- Dashboard and Markdown export
 - OpenSpec, docs, tests, CI, Docker, Vercel
 
 ## v0.2
 
-- Real shenjige response calibration
+- More real shenjige response calibration
 - More fixtures
 - Stronger scoring rules
 - Better error states

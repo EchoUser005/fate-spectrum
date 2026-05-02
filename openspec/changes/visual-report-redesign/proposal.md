@@ -16,6 +16,10 @@ The second-round public demo hardening made the app functional, but the interfac
 
 The first implementation still felt like a user manual. The next correction removes sample-entry language, numbered steps, optional copy, and all visible advanced/developer data. The ordinary UI becomes a single workbench: fill birth information, configure the model, generate the report, then read Excel-style score tables and charts.
 
+## Reviewer Correction 2
+
+The second review found three product-breaking issues: model mode cards still made the flow feel like a settings exercise, reports could be generated without a model key, and the UI still submitted the mock sample provider so different birth inputs produced the same chart. This correction requires 模型密钥, sends generation through the real paipan provider path, and reduces repeated numeric score cards outside the chart/table areas.
+
 ## Capabilities
 
 ### Modified Capabilities
@@ -23,7 +27,8 @@ The first implementation still felt like a user manual. The next correction remo
 - `ui-dashboard`: Single workbench layout, responsive report navigation, clean charts/tables, no advanced-data surface, and banned technical copy rules.
 - `report-generation`: Report sections and progress states aligned to user-facing phases instead of engineering internals.
 - `scoring-engine`: Sample paipan golden profile regression and traceable scoring outputs.
-- `llm-provider`: DeepSeek V4 model quality modes in the visible model configuration area, with narrative unable to change scores.
+- `llm-provider`: Direct DeepSeek model-name/key configuration; model narrative is required for interpreted reports and cannot change scores.
+- `paipan-provider`: Ordinary report generation uses the real custom/shenjige provider path instead of the mock sample provider.
 - `export`: Cleaner user-facing Markdown export without technical terminology in the main body.
 - `security`: API keys remain session-only; developer/provider details stay out of public UI and exports.
 

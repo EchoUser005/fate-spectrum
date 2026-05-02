@@ -2,7 +2,7 @@
 
 不是一个笼统总分，而是一组可解释的人生维度光谱。
 
-Fate Spectrum is an open-source life rhythm dashboard. It accepts birth input, computes rule-based multidimensional scores from paipan data, and renders a Chinese-first visual report. Provider, model, and source details stay in advanced settings for collaborators.
+Fate Spectrum is an open-source life rhythm dashboard. It accepts birth input, requests real paipan data, computes deterministic multidimensional scores, and renders a Chinese-first visual report. Source details stay in docs/tests rather than the ordinary product UI.
 
 ## Screenshot
 
@@ -10,15 +10,15 @@ Fate Spectrum is an open-source life rhythm dashboard. It accepts birth input, c
 
 ## Features
 
-- 使用样例体验 with no key required
-- 使用真实排盘 through an advanced custom endpoint, including the shenjige form-encoded mapping
+- 生辰配置 + 模型配置 in one direct workbench
+- Real paipan generation through the shenjige-compatible provider path
 - Rule-based scoring for wealth, career, comfort, selfValue, relationship, healthEnergy, and riskControl
-- Optional DeepSeek V4 narrative polish, with model details hidden from the main user flow
-- Visual report shell with 总览, 大运, 流年, 星盘, 详细解读, and 高级数据
+- Required DeepSeek V4 narrative generation for interpreted reports; scores remain deterministic and are not changed by the model
+- Visual report shell with 总览, 大运, 流年, 星盘, and 详细解读
 - Golden sample score regression aligned to the original Excel-style report target
 - Dayun spectrum curve, dayun color scale, dayun score table, yearly focus table
-- Advanced source panel for BaZi pillars, Ziwei palace grid, normalized data, and raw JSON
-- JSON and Markdown export
+- BaZi pillars and Ziwei palace summary without raw source data in the product UI
+- Markdown export
 - OpenSpec, ADRs, devlog, handoff, test matrix, CI, Docker, Vercel
 
 ## Why Fate Spectrum
@@ -34,25 +34,17 @@ pnpm dev
 
 Open `http://localhost:3000`.
 
-## Mock Demo
-
-Click `查看样例报告` or keep `使用样例体验` selected and click `生成报告`. No API key is needed.
-
 ## DeepSeek Key
 
-Open `高级设置` if you want model polish. The ordinary UI shows 关闭、快速、高质量、兼容. The default high-quality model is `deepseek-v4-pro`; `deepseek-v4-flash` is available for fast/low-cost use and `deepseek-chat` remains as a compatibility option. DeepSeek only writes explanation text from existing paipan data and rule-based scores. It does not calculate scores or fabricate a chart.
+Enter a model key in 模型配置 before generating a report. The default model is `deepseek-v4-pro`; `deepseek-v4-flash` and `deepseek-chat` remain selectable model names. DeepSeek writes explanation text from existing paipan data and deterministic scores. It does not calculate scores or fabricate a chart.
 
 Apply for a key at `https://platform.deepseek.com` and check current model names at `https://api-docs.deepseek.com/`.
 
 LLM keys are cached only in browser `sessionStorage` for the current session and can be cleared from the UI.
 
-## OpenAI-Compatible Custom
+## Real Paipan
 
-Enable LLM explanation, choose `OpenAI-compatible Custom`, then enter a compatible base URL, model, and key. The app calls `<baseUrl>/chat/completions`.
-
-## Custom Paipan
-
-Choose `使用真实排盘`, open `高级设置`, and provide an HTTPS endpoint. For `https://www.shenjige.cn/api/ziwei/getPlateArrangement`, the provider sends form data:
+Ordinary report generation uses the shenjige-compatible provider path. For `https://www.shenjige.cn/api/ziwei/getPlateArrangement`, the provider sends form data:
 
 - `year`, `month`, `day`
 - `hour`, `h`, `m`
@@ -121,7 +113,7 @@ The app listens on port `3000`.
 
 - User API keys are BYOK and per-request.
 - Keys are not stored on the backend, logged, exported, or exposed through `NEXT_PUBLIC_`.
-- Optional LLM key convenience cache uses browser `sessionStorage` only and can be cleared from the UI.
+- Model key convenience cache uses browser `sessionStorage` only and can be cleared from the UI.
 - Custom paipan endpoints are HTTPS-only and block localhost/private IPs unless explicitly allowed for local development.
 - LLM prompts treat provider output as untrusted context.
 
@@ -135,7 +127,7 @@ The app listens on port `3000`.
 
 ## Roadmap
 
-- MVP: mock report, custom paipan, rule scoring, dashboard, export, CI
+- MVP: real paipan path, required model narrative, rule scoring, dashboard, export, CI
 - v0.2: calibrate real provider mappings and richer scoring rules
 - v0.3: PDF export and stronger visual QA
 - v1.0: public demo, stable provider contracts, collaborator docs

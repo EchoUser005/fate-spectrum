@@ -13,7 +13,7 @@ import { ZiweiPalaceGrid } from "@/components/report/ziwei-palace-grid";
 
 export function ReportShell({ report }: { report: ReportResponse }) {
   return (
-    <div className="space-y-5 fade-in">
+    <div className="space-y-5">
       <ReportNav />
       <ReportOverview report={report} />
       {report.meta.notices.length > 0 ? (

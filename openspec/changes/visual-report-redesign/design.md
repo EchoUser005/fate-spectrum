@@ -29,9 +29,12 @@ Warm paper, restrained dashboard density, and editorial report hierarchy: a read
 - Remove numbered 1/2/3 step framing and `Step` headings.
 - Remove `可选` wording from ordinary labels.
 - Remove 高级设置 and 高级数据 from the product surface.
-- Make model configuration visible enough to use without reading a manual.
+- Make model configuration a direct model-name + model-key form, not a mode selector.
+- Require a model key before report generation; do not silently provide local-rule interpretation as the final product.
+- Use the real paipan provider path for ordinary report generation so different birth inputs request different charts.
 - Replace broad headings such as `先看这八步怎么起伏` with report/table headings such as `大运维度评分曲线`.
 - Add per-dayun opportunity, risk, and action columns so every score row has an explicit instruction.
+- Remove repeated large numeric score cards from overview/detailed reading; keep numeric detail in charts, heatmaps, and tables.
 
 ## Design Decisions
 
@@ -42,18 +45,18 @@ Warm paper, restrained dashboard density, and editorial report hierarchy: a read
 2. **Information architecture reset**
    - `AppShell` becomes state orchestration only.
    - Component folders separate workbench, report, charts, and UI copy.
-   - Model configuration is visible in the workbench; provider/raw-data details are omitted from the product surface.
+   - Model configuration is visible in the workbench as model name and model key; provider/raw-data details are omitted from the product surface.
 
 3. **Dashboard layout without product bloat**
    - Use shadcn dashboard-block density and chart guidance as references, but do not add auth/database/sidebar systems.
-   - Keep cards only for report sections and repeated score summaries.
+   - Keep cards only for report sections and concise qualitative summaries.
    - Use warm background tokens and the specified dimension/color scale palette.
 
 4. **Golden profile as MVP regression**
    - Add `src/lib/scoring/golden-profiles.ts` for the sample paipan target.
    - If the normalized pillars match `己卯 / 乙亥 / 戊寅 / 癸亥` and the dayun sequence contains `丙子` through `癸未`, override sample dayun scores and summaries.
    - Preserve general scoring rules for non-golden reports; this is demo calibration, not a permanent universal engine.
-   - LLM narrative may polish text but never changes scores.
+   - Model narrative is required for the interpreted report but never changes scores.
 
 5. **Chart and table consistency**
    - Dayun curve, heatmap, and score table all read from `report.dayunScores`.
@@ -67,9 +70,10 @@ Warm paper, restrained dashboard density, and editorial report hierarchy: a read
 
 ## Test Strategy
 
-- **Unit:** golden sample scores, LLM-on/off score invariance, chart/table source helpers, export copy, provider config defaults.
+- **Unit:** golden sample scores, narrative score invariance, chart/table source helpers, export copy, provider config defaults.
 - **UI copy:** public-facing component strings do not contain banned technical terms or manual-like labels.
 - **E2E:** desktop, tablet, and mobile generation; tabs; no advanced data disclosure; export buttons; no horizontal page overflow.
+- **E2E:** assert missing model key blocks generation and valid generation sends `custom-paipan` rather than `mock`.
 - **Visual review:** Playwright screenshot capture for desktop home, desktop overview, desktop dayun, mobile home, and mobile report.
 - **STT:** run OpenSpec validation, lint, unit tests, build, and E2E before commit.
 

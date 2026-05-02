@@ -29,7 +29,11 @@ export const BANNED_PUBLIC_TERMS = [
   "第 1 步",
   "第 2 步",
   "第 3 步",
-  "先看这八步怎么起伏"
+  "先看这八步怎么起伏",
+  "模型模式",
+  "使用本地规则解读",
+  "适合先看结果",
+  "保留旧模型兼容"
 ] as const;
 
 export const PUBLIC_UI_COPY = [
@@ -37,7 +41,6 @@ export const PUBLIC_UI_COPY = [
   "生辰配置",
   "模型配置",
   "生成报告",
-  "模型模式",
   "模型密钥",
   "正在排盘",
   "正在计算维度",

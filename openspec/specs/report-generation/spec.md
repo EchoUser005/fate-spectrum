@@ -3,13 +3,13 @@
 ## Purpose
 TBD - created by archiving change bootstrap-fate-spectrum. Update Purpose after archive.
 ## Requirements
-### Requirement: Generate complete report without LLM
-The system SHALL generate a complete report from valid birth input and calibrated internal paipan data even when no model key is provided.
+### Requirement: Generate interpreted report with model key
+The system SHALL generate a complete interpreted report from valid birth input, real paipan data, deterministic scores, and a configured model key.
 
-#### Scenario: Report with rule narrative
-- **GIVEN** valid birth input
-- **WHEN** the user requests a report without a model key
-- **THEN** the response includes metadata, birth data, normalized chart data, dimensions, dayun scores, yearly scores, and rule-based narratives
+#### Scenario: Report with model narrative
+- **GIVEN** valid birth input and a model key
+- **WHEN** the user requests a report
+- **THEN** the response includes metadata, birth data, normalized chart data, dimensions, dayun scores, yearly scores, and model-generated narrative that does not alter scores
 
 ### Requirement: Preserve source data internally
 The system SHALL preserve source paipan data and a normalized representation internally for scoring and compatibility tests while omitting source data from the ordinary product report UI.
@@ -46,15 +46,15 @@ The system SHALL keep report output focused on named dimensions and SHALL NOT pr
 ### Requirement: LLM explanation-only fallback
 The system SHALL generate complete reports from paipan data and rule-based scores when no LLM key is provided, and SHALL use LLM output only for explanatory text when enabled.
 
-#### Scenario: No real paipan endpoint uses internal chart instead of model paipan
-- **GIVEN** the user has no real paipan endpoint but enables or configures a model provider
+#### Scenario: Model never substitutes for paipan
+- **GIVEN** the user configures a model provider
 - **WHEN** they run the public report
-- **THEN** the app uses calibrated internal chart data and only asks the model to explain existing chart and score data if a valid model key is supplied
+- **THEN** the app obtains paipan data from the paipan provider and only asks the model to explain existing chart and score data
 
 ### Requirement: Export disclaimer coverage
-The system SHALL include the general, health, and wealth disclaimers in both Markdown and JSON report exports.
+The system SHALL include the general, health, and wealth disclaimers in Markdown report exports and any JSON helper output.
 
 #### Scenario: Exported report contains disclaimers
 - **GIVEN** a report is generated
-- **WHEN** the user exports Markdown or JSON
+- **WHEN** Markdown export or JSON helper output is created
 - **THEN** the exported artifact includes the professional-advice, health non-diagnosis, and wealth non-investment disclaimer text

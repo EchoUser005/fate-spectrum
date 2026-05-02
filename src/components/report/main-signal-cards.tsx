@@ -20,19 +20,20 @@ export function MainSignalCards({ report }: { report: ReportResponse }) {
               <p className="font-semibold text-fs-ink">{signal.label}</p>
               <p className="mt-1 text-xs leading-5 text-fs-muted">{signal.note}</p>
             </div>
-            <span className="text-3xl font-semibold text-fs-ink">{currentDayun.scores[signal.id]}</span>
-          </div>
-          <div className="mt-4 h-2 rounded-full bg-slate-100">
-            <div
-              className="h-2 rounded-full"
-              style={{
-                width: `${currentDayun.scores[signal.id]}%`,
-                backgroundColor: report.dimensions.find((dimension) => dimension.id === signal.id)?.color
-              }}
-            />
+            <span className="rounded-full bg-fs-bg px-2 py-1 text-xs font-medium text-fs-muted">
+              {getSignalLabel(currentDayun.scores[signal.id])}
+            </span>
           </div>
         </div>
       ))}
     </div>
   );
+}
+
+function getSignalLabel(score: number) {
+  if (score >= 80) return "主线很强";
+  if (score >= 70) return "适合发力";
+  if (score >= 60) return "稳步推进";
+  if (score >= 50) return "谨慎使用";
+  return "优先风控";
 }

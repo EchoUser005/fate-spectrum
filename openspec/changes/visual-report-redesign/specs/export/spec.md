@@ -16,10 +16,10 @@ If technical export details are included, they SHALL be placed in an explicit de
 - **WHEN** the content is inspected
 - **THEN** no raw provider response, model request summary, API key, or endpoint value appears in the Markdown
 
-### Requirement: Export buttons remain reachable
-The dashboard SHALL keep Markdown and JSON export actions visible after report generation on desktop, tablet, and mobile.
+### Requirement: Export button remains reachable
+The dashboard SHALL keep the ordinary Markdown report export action visible after report generation on desktop, tablet, and mobile.
 
 #### Scenario: Mobile export controls are visible
 - **GIVEN** a report is generated on a 390x844 viewport
 - **WHEN** the user scrolls to the export area
-- **THEN** Markdown and JSON export actions are visible and tappable without horizontal page overflow
+- **THEN** the Markdown report export action is visible and tappable without horizontal page overflow

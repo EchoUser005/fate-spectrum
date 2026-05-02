@@ -15,17 +15,17 @@ Fate Spectrum is a stateless Next.js App Router application.
 
 ## Text Architecture Diagram
 
-User Browser -> Birth/Provider Forms -> `/api/report` -> Paipan Provider -> Normalizer -> Rule Scoring Engine -> Optional LLM Narrative -> ReportResponse -> Dashboard/Export
+User Browser -> Birth/Model Workbench -> `/api/report` -> Real Paipan Provider -> Normalizer -> Rule Scoring Engine -> Required Model Narrative -> ReportResponse -> Dashboard/Export
 
 ## Data Flow
 
-1. `BirthInput` and `ProviderConfig` are validated by Zod.
-2. Paipan provider returns or wraps `PaipanResponse`.
+1. `BirthInput` and model/provider config are validated by Zod.
+2. The real paipan provider returns or wraps `PaipanResponse`.
 3. Normalizer creates pillars, palaces, identity, outputs, and dayun windows.
 4. Scoring engine computes dayun and yearly `ScoreMap` values.
 5. Rule explanations are generated.
-6. Optional LLM adapter receives only existing data and returns `Narrative`.
-7. UI renders report and prepares Markdown/JSON export.
+6. Model adapter receives only existing data and returns `Narrative`; if it fails, the API returns a clear error.
+7. UI renders report and prepares Markdown export.
 
 ## Boundaries
 

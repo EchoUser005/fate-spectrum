@@ -6,10 +6,18 @@ TBD - created by archiving change bootstrap-fate-spectrum. Update Purpose after 
 ### Requirement: Chinese-first spectrum dashboard
 The system SHALL provide a Chinese-first dashboard for entering birth data, configuring the model, generating reports, and viewing spectrum visualizations.
 
-#### Scenario: User generates mock report
+#### Scenario: User generates report
 - **GIVEN** the user fills valid birth input and model configuration
 - **WHEN** they click the generate action
 - **THEN** the page shows concise generation progress and renders the complete life spectrum report
+
+### Requirement: Model key required for interpretation
+The dashboard SHALL require a model key before generating an interpreted report and SHALL NOT offer a local-rule/off mode as an ordinary choice.
+
+#### Scenario: User cannot generate without model key
+- **GIVEN** valid birth input and an empty model key
+- **WHEN** the user clicks the generate action
+- **THEN** the dashboard asks for 模型密钥 and does not generate a report
 
 ### Requirement: Required report sections
 The dashboard SHALL display summary, BaZi pillars, Ziwei palace grid, dimension cards, dayun spectrum table, line chart, heatmap, yearly color scale table, and export actions.

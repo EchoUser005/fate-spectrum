@@ -57,3 +57,12 @@
 - [x] 7.4 Remove Advanced Settings and Developer Data from ordinary UI.
 - [x] 7.5 Rename report headings to Excel-style output labels and add per-dayun instruction columns.
 - [x] 7.6 Update docs/devlog/handoff/changelog and rerun validation.
+
+## 8. Reviewer Correction: Require Real Input and Model
+
+- [x] 8.1 Remove model mode cards and local-rule/off interpretation path from the ordinary UI.
+- [x] 8.2 Require 模型密钥 before generating a report.
+- [x] 8.3 Send report generation through the real paipan provider path instead of the mock sample provider.
+- [x] 8.4 Fail clearly if model narrative cannot be generated instead of silently returning local-rule interpretation.
+- [x] 8.5 Reduce repeated numeric score blocks in overview and detailed reading cards.
+- [x] 8.6 Add E2E assertions for required key, custom-paipan request payload, and absence of 模型模式/local-rule copy.

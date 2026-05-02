@@ -4,17 +4,16 @@
 
 1. Open homepage.
 2. Enter birth data.
-3. Choose Mock Demo or Custom Paipan.
-4. Optionally enable LLM narrative and provide BYOK key.
-5. Generate life spectrum report.
-6. Inspect pillars, palace grid, dimensions, dayun, yearly table, chart, heatmap, raw JSON.
-7. Export JSON or Markdown.
+3. Enter model name/key.
+4. Generate life spectrum report through the real paipan provider path.
+5. Inspect summary, pillars, palace summary, dimensions, dayun, yearly table, chart, and heatmap.
+6. Export Markdown.
 
 ## Page Structure
 
 - Hero/input workspace
 - Birth input panel
-- Provider and key panel
+- Model name/key panel
 - Generation status
 - Summary report
 - BaZi pillars
@@ -24,16 +23,14 @@
 - Spectrum line chart
 - Dayun heatmap
 - Yearly color scale table
-- Raw JSON viewer
 - Export actions
 - Disclaimers and footer
 
 ## MVP
 
-- Mock Demo report generation
-- Custom paipan provider with shenjige mapping
+- Real paipan provider with shenjige mapping
 - Rule-based scoring
-- Optional LLM narrative
+- Required model narrative for interpreted reports
 - Dashboard and exports
 
 ## v1

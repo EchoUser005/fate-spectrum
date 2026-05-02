@@ -16,14 +16,17 @@ Fate Spectrum is a Next.js repository at `/Users/m4pro/Documents/fate_spectrum/f
 - Created the `visual-report-redesign` OpenSpec change and traceability rows.
 - Rebuilt the product information architecture into a single first-viewport workbench: 生辰配置, 模型配置, and 生成报告.
 - Removed ordinary UI exposure of sample-entry CTAs, numbered steps, `可选` labels, Provider/Paipan/Mock Demo/OpenAI-compatible/LLM/Raw JSON style language, Advanced Settings, and Developer Data.
-- Kept model mode/model name/model key configuration visible in the workbench so the product is operable without a usage guide.
+- Kept only model name/model key configuration visible in the workbench; model mode cards and local-rule/off options were removed.
+- Report generation now requires 模型密钥 and submits the real `custom-paipan` provider path, not the mock sample provider.
+- If model narrative cannot be generated, the API returns a clear error instead of silently presenting local-rule interpretation.
 - Added sample paipan golden profile and tests for the target eight-step dayun scores.
 - Ensured dayun curve, heatmap, and table share `report.dayunScores`.
-- Changed DeepSeek default to `deepseek-v4-pro`; ordinary UI exposes 关闭、快速、高质量、兼容 while advanced settings expose exact model IDs.
+- Changed DeepSeek default to `deepseek-v4-pro`; ordinary UI exposes exact model-name selection and model key, without mode cards.
 - Reworked Markdown export to include target scores and disclaimers without technical terminology in the main body.
 - Added responsive E2E checks for 1440x1000, 768x1024, and 390x844.
 - Captured screenshot artifacts in `docs/design-review/screenshots/`.
 - Added a reviewer-correction pass after product feedback: no visible 高级数据, no sample experience path, no 1/2/3 wizard, and no “先看这八步怎么起伏” copy.
+- Added a second reviewer-correction pass after product feedback: no model-mode cards, no model-free interpretation, no mock provider for ordinary generation, and less repeated numeric score display.
 
 ## Current Risks
 

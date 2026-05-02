@@ -15,11 +15,11 @@ Replace single-score destiny framing with a spectrum model: wealth, career, comf
 ## Core Flow
 
 1. User enters birth data.
-2. User selects Mock Demo or a custom paipan endpoint.
-3. System normalizes raw paipan JSON.
+2. User enters model name/key.
+3. System requests real paipan data and normalizes it internally.
 4. Rule-based scoring engine computes dayun and yearly spectra.
-5. Optional BYOK LLM writes narrative explanations.
-6. UI renders charts, tables, palace grid, raw JSON, and exports.
+5. BYOK model writes narrative explanations without changing scores.
+6. UI renders charts, tables, palace summary, and exports.
 
 ## Non-Goals
 

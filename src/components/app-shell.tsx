@@ -8,7 +8,7 @@ import type { BirthInput } from "@/lib/schemas/birth";
 import { BirthInputSchema } from "@/lib/schemas/birth";
 import type { ProviderConfig } from "@/lib/schemas/provider";
 import { ReportResponseSchema, type ReportResponse } from "@/lib/schemas/report";
-import { generationPhaseLabels, type ReadingMode } from "@/lib/ui-copy/labels";
+import { generationPhaseLabels } from "@/lib/ui-copy/labels";
 import { ReportShell } from "@/components/report/report-shell";
 import { GenerationWizard } from "@/components/workbench/generation-wizard";
 
@@ -20,7 +20,6 @@ export function AppShell() {
     baseUrl: providerPresets.deepseek.baseUrl,
     model: providerPresets.deepseek.model
   });
-  const [readingMode, setReadingMode] = useState<ReadingMode>("quality");
   const [report, setReport] = useState<ReportResponse | null>(null);
   const [status, setStatus] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
@@ -46,12 +45,10 @@ export function AppShell() {
       const cached = window.sessionStorage.getItem(LLM_SESSION_STORAGE_KEY);
       if (!cached) return;
       const parsed = JSON.parse(cached) as {
-        readingMode?: ReadingMode;
         config?: ProviderConfig;
       };
       const timer = window.setTimeout(() => {
         if (parsed.config) setLlmConfig(parsed.config);
-        if (parsed.readingMode) setReadingMode(parsed.readingMode);
       }, 0);
       return () => window.clearTimeout(timer);
     } catch {
@@ -62,18 +59,16 @@ export function AppShell() {
 
   useEffect(() => {
     try {
-      if (readingMode === "off" && !llmConfig.apiKey) return;
       window.sessionStorage.setItem(
         LLM_SESSION_STORAGE_KEY,
         JSON.stringify({
-          readingMode,
           config: llmConfig
         })
       );
     } catch {
       // Session cache is a browser-only convenience.
     }
-  }, [llmConfig, readingMode]);
+  }, [llmConfig]);
 
   const clearCachedLlm = () => {
     window.sessionStorage.removeItem(LLM_SESSION_STORAGE_KEY);
@@ -82,10 +77,16 @@ export function AppShell() {
       baseUrl: providerPresets.deepseek.baseUrl,
       model: providerPresets.deepseek.model
     });
-    setReadingMode("quality");
   };
 
   const generateReport = form.handleSubmit(async (birth) => {
+    if (!llmConfig.apiKey?.trim()) {
+      setError("请先填写模型密钥。");
+      setStatus([]);
+      setReport(null);
+      return;
+    }
+
     setIsGenerating(true);
     setError(null);
     setReport(null);
@@ -100,13 +101,13 @@ export function AppShell() {
         body: JSON.stringify({
           birth,
           paipanProvider: {
-            provider: "mock",
+            provider: "custom-paipan",
             paipanEndpoint: providerPresets.customPaipan.endpoint
           },
           llmProvider: llmConfig,
           options: {
-            useLlmNarrative: readingMode !== "off",
-            includeRawJson: true
+            useLlmNarrative: true,
+            includeRawJson: false
           }
         })
       });
@@ -135,12 +136,10 @@ export function AppShell() {
       <GenerationWizard
         form={form}
         llmConfig={llmConfig}
-        readingMode={readingMode}
         status={status}
         error={error}
         isGenerating={isGenerating}
         onLlmChange={setLlmConfig}
-        onReadingModeChange={setReadingMode}
         onClearCachedLlm={clearCachedLlm}
         onSubmit={generateReport}
       />

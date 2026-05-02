@@ -3,12 +3,12 @@
 ## Purpose
 TBD - created by archiving change bootstrap-fate-spectrum. Update Purpose after archive.
 ## Requirements
-### Requirement: Mock provider
-The system SHALL include a mock paipan provider that returns an anonymous sample paipan response without requiring an API key.
+### Requirement: Internal mock provider
+The system SHALL keep an internal mock paipan provider for deterministic tests and golden regression, but ordinary product UI SHALL NOT expose it as a user path.
 
-#### Scenario: Mock demo succeeds
-- **GIVEN** the user selects Mock Demo
-- **WHEN** the paipan endpoint is called
+#### Scenario: Internal mock succeeds
+- **GIVEN** a test or developer tool calls the mock provider
+- **WHEN** the provider is invoked
 - **THEN** it returns the sample paipan response and normalized data
 
 ### Requirement: Custom paipan provider
@@ -76,10 +76,9 @@ The system SHALL reject shenjige requests for lunar calendar input or unknown/un
 - **THEN** the response contains a clear unsupported-input error and no external shenjige request is attempted
 
 ### Requirement: True solar time prompt
-The system SHALL surface a true-solar-time prompt when useTrueSolarTime is enabled without coordinates, while allowing Mock Demo generation to continue.
+The system SHALL surface a true-solar-time prompt when useTrueSolarTime is enabled without coordinates, while keeping report generation non-blocking.
 
-#### Scenario: Mock demo continues with true solar time prompt
-- **GIVEN** the user selects Mock Demo with useTrueSolarTime enabled and no latitude or longitude
+#### Scenario: Report continues with true solar time prompt
+- **GIVEN** the user enables useTrueSolarTime with no latitude or longitude
 - **WHEN** report generation is requested
-- **THEN** the system provides a non-blocking true-solar-time prompt and still generates the sample report
-
+- **THEN** the system provides a non-blocking true-solar-time prompt and continues report generation without exposing demo/provider language in the public UI

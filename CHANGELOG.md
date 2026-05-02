@@ -23,6 +23,7 @@
 - Added report view-model helpers so dayun curve, heatmap, and table share `report.dayunScores`.
 - Added UI copy, golden scoring, chart-source, export, and responsive visual E2E coverage.
 - Added reviewer-correction coverage that blocks sample-entry copy, numbered steps, optional labels, advanced data, and manual-like dayun headings from the visible UI.
+- Added reviewer-correction coverage that requires model keys, verifies `custom-paipan` report requests, and blocks model-mode/local-rule copy from the visible UI.
 
 ### Changed
 
@@ -34,6 +35,9 @@
 - Rebuilt the main UI as a Chinese-first single workbench: birth configuration, model configuration, generate action, sticky report navigation, overview, dayun, yearly, chart, detailed reading, export, and disclaimer.
 - Removed sample experience CTAs, numbered wizard steps, optional-label clutter, Advanced Settings, Developer Data, and raw source-data panels from the product UI.
 - Changed DeepSeek default to `deepseek-v4-pro` for high-quality interpretation while retaining `deepseek-v4-flash` and `deepseek-chat`.
+- Simplified model configuration from mode cards to direct model-name/key fields and require the key before generation.
+- Changed ordinary report generation to use the real custom/shenjige paipan provider path instead of the mock sample provider.
+- Reduced repeated numeric score cards in overview and detailed reading; detailed numbers stay in charts, heatmaps, and tables.
 - Reworked Markdown export into a cleaner user-facing report with target scores and disclaimers.
 
 ### Fixed

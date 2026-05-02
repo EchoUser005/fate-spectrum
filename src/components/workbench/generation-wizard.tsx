@@ -4,7 +4,6 @@ import { Loader2, Sparkles } from "lucide-react";
 import type { UseFormReturn } from "react-hook-form";
 import type { BirthInput } from "@/lib/schemas/birth";
 import type { ProviderConfig } from "@/lib/schemas/provider";
-import type { ReadingMode } from "@/lib/ui-copy/labels";
 import { Button } from "@/components/ui/button";
 import { BirthStep } from "@/components/workbench/birth-step";
 import { GenerationProgress } from "@/components/workbench/generation-progress";
@@ -13,12 +12,10 @@ import { ReadingStep } from "@/components/workbench/reading-step";
 type Props = {
   form: UseFormReturn<BirthInput>;
   llmConfig: ProviderConfig;
-  readingMode: ReadingMode;
   status: string[];
   error: string | null;
   isGenerating: boolean;
   onLlmChange: (config: ProviderConfig) => void;
-  onReadingModeChange: (mode: ReadingMode) => void;
   onClearCachedLlm: () => void;
   onSubmit: () => void;
 };
@@ -26,12 +23,10 @@ type Props = {
 export function GenerationWizard({
   form,
   llmConfig,
-  readingMode,
   status,
   error,
   isGenerating,
   onLlmChange,
-  onReadingModeChange,
   onClearCachedLlm,
   onSubmit
 }: Props) {
@@ -61,9 +56,7 @@ export function GenerationWizard({
             <div className="mt-4">
               <ReadingStep
                 llmConfig={llmConfig}
-                readingMode={readingMode}
                 onLlmChange={onLlmChange}
-                onReadingModeChange={onReadingModeChange}
                 onClearCachedLlm={onClearCachedLlm}
               />
             </div>

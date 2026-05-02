@@ -9,7 +9,7 @@ The repository SHALL document and support local setup with pnpm install and pnpm
 #### Scenario: Developer starts local app
 - **GIVEN** dependencies are installed
 - **WHEN** a developer runs pnpm dev
-- **THEN** the Next.js app starts on a local port and Mock Demo can generate a report
+- **THEN** the Next.js app starts on a local port and the report workbench can submit real-provider generation with a configured model key
 
 ### Requirement: CI validation
 The repository SHALL include GitHub Actions that install dependencies, install OpenSpec, validate specs, lint, test, and build.
@@ -58,4 +58,3 @@ The repository SHALL document reserved server deployment secrets without requiri
 - **GIVEN** server deployment is deferred
 - **WHEN** a maintainer reads the workflow template and deployment guide
 - **THEN** they see placeholders for DEPLOY_HOST, DEPLOY_USER, DEPLOY_PORT, DEPLOY_PATH, and SSH_PRIVATE_KEY
-

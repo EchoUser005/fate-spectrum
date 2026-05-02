@@ -15,9 +15,10 @@ Sources reviewed:
 
 - The first viewport now starts with `命运光谱`, 生辰配置, 模型配置, and one `生成报告` action.
 - Removed sample-entry copy, numbered steps, `可选` labels, 高级设置, and 高级数据 from the product UI.
-- Model configuration is visible where the user needs it; provider/source diagnostics stay out of the product surface.
+- Model configuration is now direct: model name plus model key, without mode cards or a model-free interpretation path.
+- Ordinary generation submits the real paipan path; E2E screenshots mock the API only to keep visual capture deterministic.
 - Report navigation now exposes 总览, 大运, 流年, 星盘, 详细解读.
-- Report body prioritizes summary, current cycle, three main signals, dayun curve, heatmap, table, and yearly focus.
+- Report body prioritizes summary, current cycle, qualitative main signals, dayun curve, heatmap, table, and yearly focus.
 - Raw provider data and normalized data are not rendered in the product report UI.
 - Sample paipan now uses a golden profile aligned to the original Excel target dayun scores.
 

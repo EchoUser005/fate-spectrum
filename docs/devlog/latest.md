@@ -2,7 +2,7 @@
 
 ## Current Status
 
-Third-round `visual-report-redesign` has completed a reviewer-correction pass. The app is simplified from a manual-like flow into one direct Chinese workbench: fill birth information, configure the model, generate the report, and read the Excel-style score output. `public-demo-hardening` remains archived after its completed requirements were absorbed into main specs.
+Third-round `visual-report-redesign` has completed two reviewer-correction passes. The app is simplified from a manual-like flow into one direct Chinese workbench: fill birth information, enter model name/key, generate the report through the real paipan path, and read the Excel-style score output. `public-demo-hardening` remains archived after its completed requirements were absorbed into main specs.
 
 ## Current Branch
 
@@ -20,9 +20,13 @@ Third-round `visual-report-redesign` has completed a reviewer-correction pass. T
 - Updated dayun scoring to apply the narrow sample golden regression while preserving the general rule-based engine for non-matching charts.
 - Rebuilt the main UI into one workbench with 生辰配置, 模型配置, and 生成报告 in the first viewport.
 - Removed the sample-report entry, numbered wizard steps, `可选` labels, advanced settings, developer data, raw JSON panels, and manual-like dayun headings from the product UI.
-- Kept model mode, model name, and session-only model key configuration visible enough to operate without a usage guide.
+- Removed model mode cards and kept only model name plus session-only model key configuration.
+- Required 模型密钥 before generation; missing key now blocks API submission with a clear error.
+- Changed ordinary generation to submit `custom-paipan` instead of `mock`, so real use no longer reuses the sample chart for different birth inputs.
+- The report API now returns a clear error if model narrative fails instead of silently falling back to local-rule interpretation.
+- Reduced repeated score displays in overview and detailed reading; those areas now use qualitative labels while numeric detail stays in charts, heatmaps, and tables.
 - Deleted obsolete unused components that still carried Provider/Mock Demo/Raw JSON UI copy.
-- Changed DeepSeek default to `deepseek-v4-pro`, with ordinary modes 关闭、快速、高质量、兼容 and exact model IDs only in advanced settings.
+- Changed DeepSeek default to `deepseek-v4-pro`; the product UI now shows model-name and model-key fields directly without mode cards.
 - Reworked Markdown export into a concise product-facing report with golden target scores and disclaimers.
 - Added Playwright screenshot capture for desktop home, desktop report overview, desktop dayun, mobile home, and mobile report.
 - Archived `public-demo-hardening` as `openspec/changes/archive/2026-05-02-public-demo-hardening/`.
@@ -50,6 +54,7 @@ Third-round `visual-report-redesign` has completed a reviewer-correction pass. T
 - Reviewer-correction validation: `pnpm test` -> success, 33 unit tests passed.
 - Reviewer-correction validation: `pnpm build` -> success with `next build --webpack`.
 - Reviewer-correction validation: `pnpm test:e2e` -> failed once in sandbox with `listen EPERM 0.0.0.0:3000`, then succeeded with escalation; 4 Chromium tests passed and screenshots were regenerated.
+- Reviewer-correction 2 validation: OpenSpec, lint, unit tests, build, and E2E passed; E2E uses route interception for deterministic screenshots while asserting the UI submits `custom-paipan`.
 
 ## Final Validation
 

@@ -9,6 +9,10 @@ import { readJsonWithLimit, safeErrorResponse } from "@/app/api/_lib";
 export async function POST(request: NextRequest) {
   try {
     const payload = ReportApiRequestSchema.parse(await readJsonWithLimit(request));
+    if (payload.options.useLlmNarrative && !payload.llmProvider.apiKey?.trim()) {
+      throw new Error("请先填写模型密钥。");
+    }
+
     const provider = getPaipanProvider(payload.paipanProvider);
     const paipan = await provider.generate(payload.birth, payload.paipanProvider);
     const generatedAt = new Date().toISOString();
@@ -25,7 +29,7 @@ export async function POST(request: NextRequest) {
 
     const narrative = await generateLlmNarrative(baseReport, payload.llmProvider);
     if (!narrative) {
-      return NextResponse.json(baseReport);
+      throw new Error("模型解读失败，请检查模型密钥或稍后重试。");
     }
 
     return NextResponse.json(
