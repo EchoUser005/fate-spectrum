@@ -75,7 +75,7 @@ Domain binding is intentionally left to the maintainer. Add the domain in Vercel
 
 See `.env.example`. Do not put user keys in `NEXT_PUBLIC_`.
 
-Langfuse prompt management uses server-only variables:
+Prompts are versioned locally in `prompts/` and work without any prompt server. Optional Langfuse prompt management uses server-only variables:
 
 ```env
 LANGFUSE_BASE_URL=
@@ -84,4 +84,4 @@ LANGFUSE_SECRET_KEY=
 LANGFUSE_PROMPT_LABEL=production
 ```
 
-Keep these values in deployment secrets or a local `.env.local` file only.
+Keep these values in deployment secrets or a local `.env.local` file only. Do not commit real Langfuse hosts, public keys, secret keys, traces, or private prompt payloads.

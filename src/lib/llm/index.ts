@@ -4,7 +4,7 @@ import type { ProviderConfig } from "@/lib/schemas/provider";
 import { callDeepSeekChat } from "@/lib/llm/deepseek";
 import { getLangfuseChatMessages } from "@/lib/llm/langfuse";
 import { callOpenAiCompatibleChat } from "@/lib/llm/openai-compatible";
-import { buildNarrativePrompt } from "@/lib/llm/prompts";
+import { buildNarrativePrompt, LOCAL_NARRATIVE_PROMPT_NAME } from "@/lib/llm/prompts";
 import { extractJsonObject } from "@/lib/llm/safe-json";
 
 export async function generateLlmNarrative(
@@ -29,7 +29,7 @@ export async function generateLlmNarrative(
     { role: "user" as const, content: prompt.user }
   ];
   const messages = await getLangfuseChatMessages({
-    name: "fate-spectrum-narrative",
+    name: LOCAL_NARRATIVE_PROMPT_NAME,
     variables: {
       context: prompt.user
     },

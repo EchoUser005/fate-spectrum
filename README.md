@@ -44,7 +44,7 @@ Apply for a key at `https://platform.deepseek.com` and check current model names
 
 LLM keys are cached only in browser `sessionStorage` for the current session and can be cleared from the UI.
 
-Server-side prompt management can be connected through Langfuse with `LANGFUSE_BASE_URL`, `LANGFUSE_PUBLIC_KEY`, and `LANGFUSE_SECRET_KEY`. Do not commit real keys.
+Prompts live in `prompts/` and are versioned with the repository. Optional Langfuse integration can read a managed prompt at runtime through server-only environment variables; if those variables are absent or Langfuse is unavailable, Fate Spectrum uses the local prompt file. Do not commit real Langfuse hosts, keys, or model keys.
 
 ## Real Paipan
 

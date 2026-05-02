@@ -17,7 +17,7 @@ Fate Spectrum is a single-user, private-first Next.js App Router application.
 
 First run:
 
-User Browser -> Birth/Model Workbench -> `/api/report` -> Real Paipan Provider -> Normalizer -> Rule Scoring Engine -> Langfuse-managed Prompt -> Required Model Narrative -> ReportResponse -> Browser Profile Store -> `/chart`
+User Browser -> Birth/Model Workbench -> `/api/report` -> Real Paipan Provider -> Normalizer -> Rule Scoring Engine -> Local Prompt Registry -> Optional Langfuse Override -> Required Model Narrative -> ReportResponse -> Browser Profile Store -> `/chart`
 
 Return visits:
 
@@ -46,14 +46,18 @@ This keeps the current version simple while preserving the product model: one pr
 
 ## Prompt and AI Backend Direction
 
-Prompt text is no longer treated as the long-term source of truth in code. Runtime prompt lookup checks Langfuse first:
+Prompt text is maintained in the repository instead of being hardcoded in business logic. The local source of truth is:
+
+- `prompts/fate-spectrum-narrative.v1.json`
+
+GitHub provides version history for prompt changes. Runtime Langfuse lookup is optional and environment-driven:
 
 - Prompt name: `fate-spectrum-narrative`
 - Default label: `production`
 - Runtime variables:
   - `{{context}}`: normalized paipan, dimensions, dayun scores, yearly scores, output shape, and disclaimers
 
-If Langfuse is not configured or unavailable, the local fallback prompt keeps development usable.
+If Langfuse is not configured or unavailable, the app uses the local prompt file. Do not commit real Langfuse hosts, keys, traces, or private prompt deployments.
 
 The next backend iteration should move calendar context generation out of UI code and into a dedicated AI backend service inspired by `zhoubazi`:
 
@@ -63,7 +67,7 @@ The next backend iteration should move calendar context generation out of UI cod
 - Add Langfuse tracing for each generation, including prompt version, model, input summary, output summary, and parse result.
 - Never store model keys in persisted profile data.
 
-Required environment variables:
+Optional server-only environment variables:
 
 ```env
 LANGFUSE_BASE_URL=
@@ -72,7 +76,7 @@ LANGFUSE_SECRET_KEY=
 LANGFUSE_PROMPT_LABEL=production
 ```
 
-Do not commit real Langfuse keys.
+These values belong in `.env.local` or deployment secrets only.
 
 ## Boundaries
 
