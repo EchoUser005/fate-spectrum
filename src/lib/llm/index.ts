@@ -2,6 +2,7 @@ import { providerPresets } from "@/lib/config/providers";
 import { NarrativeSchema, type Narrative, type ReportResponse } from "@/lib/schemas/report";
 import type { ProviderConfig } from "@/lib/schemas/provider";
 import { callDeepSeekChat } from "@/lib/llm/deepseek";
+import { getLangfuseChatMessages } from "@/lib/llm/langfuse";
 import { callOpenAiCompatibleChat } from "@/lib/llm/openai-compatible";
 import { buildNarrativePrompt } from "@/lib/llm/prompts";
 import { extractJsonObject } from "@/lib/llm/safe-json";
@@ -23,10 +24,17 @@ export async function generateLlmNarrative(
     dayunScores: baseReport.dayunScores,
     yearlyScores: baseReport.yearlyScores
   });
-  const messages = [
+  const fallbackMessages = [
     { role: "system" as const, content: prompt.system },
     { role: "user" as const, content: prompt.user }
   ];
+  const messages = await getLangfuseChatMessages({
+    name: "fate-spectrum-narrative",
+    variables: {
+      context: prompt.user
+    },
+    fallback: fallbackMessages
+  });
 
   try {
     const content =

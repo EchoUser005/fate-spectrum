@@ -13,26 +13,68 @@ type Props = {
   onClearCachedLlm: () => void;
 };
 
+const compatibleModelOptions = [
+  providerPresets.openaiCompatible.model,
+  "gpt-4o-mini",
+  "gpt-4.1-mini"
+].filter((value, index, options) => options.indexOf(value) === index);
+
 export function ReadingStep({
   llmConfig,
   onLlmChange,
   onClearCachedLlm
 }: Props) {
+  const defaultModelOptions =
+    llmConfig.provider === "openai-compatible"
+      ? compatibleModelOptions
+      : deepseekModelOptions.map((option) => option.value);
+  const modelOptions =
+    llmConfig.model && !defaultModelOptions.includes(llmConfig.model)
+      ? [llmConfig.model, ...defaultModelOptions]
+      : defaultModelOptions;
+
   return (
-    <div className="grid gap-4">
-      <div className="grid gap-4 md:grid-cols-[0.7fr_1fr]">
+    <div className="grid gap-3">
+      <div className="grid gap-3">
+        <label className="grid gap-1 text-sm font-medium text-fs-ink">
+          模型渠道
+          <Select
+            value={llmConfig.provider === "openai-compatible" ? "openai-compatible" : "deepseek"}
+            onChange={(event) => {
+              const provider = event.target.value as "deepseek" | "openai-compatible";
+              if (provider === "deepseek") {
+                onLlmChange({
+                  ...llmConfig,
+                  provider,
+                  baseUrl: providerPresets.deepseek.baseUrl,
+                  model: providerPresets.deepseek.model
+                });
+                return;
+              }
+              onLlmChange({
+                ...llmConfig,
+                provider,
+                baseUrl: providerPresets.openaiCompatible.baseUrl,
+                model: providerPresets.openaiCompatible.model
+              });
+            }}
+          >
+            <option value="deepseek">DeepSeek</option>
+            <option value="openai-compatible">兼容渠道</option>
+          </Select>
+        </label>
         <label className="grid gap-1 text-sm font-medium text-fs-ink">
           模型名称
           <Select
-            value={llmConfig.model ?? providerPresets.deepseek.model}
+            value={llmConfig.model || modelOptions[0]}
             onChange={(event) => {
               const value = event.target.value;
-              onLlmChange({ ...llmConfig, provider: "deepseek", model: value });
+              onLlmChange({ ...llmConfig, model: value });
             }}
           >
-            {deepseekModelOptions.map((option) => (
-              <option key={option.value} value={option.value}>
-                {option.value}
+            {modelOptions.map((option) => (
+              <option key={option} value={option}>
+                {option}
               </option>
             ))}
           </Select>
@@ -41,17 +83,17 @@ export function ReadingStep({
           模型密钥
           <Input
             type="password"
-            placeholder="填写后生成解读"
+            placeholder="填写后生成完整解读"
             value={llmConfig.apiKey ?? ""}
             onChange={(event) => onLlmChange({ ...llmConfig, apiKey: event.target.value })}
           />
         </label>
       </div>
-      <div className="flex items-center justify-between gap-3 text-sm text-fs-muted">
-        <p>密钥只保存在当前浏览器会话，生成时用于文字解读。</p>
+      <div className="flex items-center justify-between gap-3 text-xs text-fs-muted">
+        <p>密钥仅保存在当前浏览器会话。</p>
         <Button type="button" size="sm" variant="secondary" onClick={onClearCachedLlm}>
           <Trash2 size={14} />
-          清除本次密钥
+          清除密钥
         </Button>
       </div>
     </div>

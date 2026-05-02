@@ -24,6 +24,17 @@ pnpm dev
 
 Open `http://localhost:3000`.
 
+## Optional Conda Environment
+
+Use this when developing the future Python calendar/AI backend beside the Next.js app:
+
+```bash
+conda create -n fate-spectrum python=3.12 -y
+conda activate fate-spectrum
+```
+
+The current public app does not require Python at runtime.
+
 ## Vercel Manual Import
 
 1. Open Vercel and import `EchoUser005/fate-spectrum`.
@@ -63,3 +74,14 @@ Domain binding is intentionally left to the maintainer. Add the domain in Vercel
 ## Environment Variables
 
 See `.env.example`. Do not put user keys in `NEXT_PUBLIC_`.
+
+Langfuse prompt management uses server-only variables:
+
+```env
+LANGFUSE_BASE_URL=
+LANGFUSE_PUBLIC_KEY=
+LANGFUSE_SECRET_KEY=
+LANGFUSE_PROMPT_LABEL=production
+```
+
+Keep these values in deployment secrets or a local `.env.local` file only.

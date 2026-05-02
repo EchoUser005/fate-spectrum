@@ -33,6 +33,20 @@ describe("schemas", () => {
     ).toThrow();
   });
 
+  it("rejects missing birth time", () => {
+    expect(() =>
+      BirthInputSchema.parse({
+        gender: "female",
+        calendar: "solar",
+        birthDate: "1999-09-15",
+        birthTime: "",
+        timeBranch: "子",
+        timezone: "Asia/Shanghai",
+        useTrueSolarTime: false
+      })
+    ).toThrow("请填写出生时间");
+  });
+
   it("accepts provider config without a public key field", () => {
     const parsed = ProviderConfigSchema.parse({
       provider: "deepseek",

@@ -1,13 +1,13 @@
 import type { DimensionId, ReportResponse, ScoreMap } from "@/lib/schemas/report";
 
-export const FEATURED_DIMENSIONS: DimensionId[] = ["wealth", "comfort", "selfValue"];
+export const FEATURED_DIMENSIONS: DimensionId[] = ["wealth", "comfort", "selfValue", "relationship"];
 
 export const SCORE_BANDS = [
-  { min: 80, label: "高能", color: "#d97706", textColor: "#ffffff" },
-  { min: 70, label: "强", color: "#0891b2", textColor: "#ffffff" },
-  { min: 60, label: "可用", color: "#99f6e4", textColor: "#115e59" },
-  { min: 50, label: "中性", color: "#e5e7eb", textColor: "#374151" },
-  { min: 0, label: "低谷", color: "#fecdd3", textColor: "#9f1239" }
+  { min: 80, label: "高能", color: "#b99a4b", textColor: "#ffffff" },
+  { min: 70, label: "强", color: "#3a9b93", textColor: "#ffffff" },
+  { min: 60, label: "可用", color: "#d7eee6", textColor: "#24544d" },
+  { min: 50, label: "中性", color: "#edf0eb", textColor: "#51615c" },
+  { min: 0, label: "低位", color: "#dfe7e4", textColor: "#51615c" }
 ] as const;
 
 export function buildDayunCurveData(report: ReportResponse) {
