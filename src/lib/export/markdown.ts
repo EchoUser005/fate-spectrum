@@ -25,7 +25,7 @@ export function exportReportMarkdown(report: ReportResponse) {
   lines.push("");
   lines.push(`生成时间：${report.meta.generatedAt}`);
   lines.push("");
-  lines.push("## 命盘摘要");
+  lines.push("## 总览");
   lines.push("");
   lines.push(`- 昵称：${report.birth.nickname || "未填写"}`);
   lines.push(

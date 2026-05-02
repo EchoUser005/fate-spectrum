@@ -10,7 +10,7 @@ export function ReportOverview({ report }: { report: ReportResponse }) {
       <div className="grid gap-5 lg:grid-cols-[0.9fr_1.1fr]">
         <div>
           <p className="text-sm font-medium text-fs-gold">{report.birth.nickname || "匿名命盘"}</p>
-          <h2 className="mt-2 text-2xl font-semibold text-fs-ink md:text-3xl">命盘摘要</h2>
+          <h2 className="mt-2 text-2xl font-semibold text-fs-ink md:text-3xl">总览</h2>
           <p className="mt-3 max-w-2xl text-base leading-7 text-fs-muted">{overview}</p>
           <div className="mt-5 grid grid-cols-2 gap-2 text-sm md:grid-cols-4">
             <Summary label="年柱" value={report.normalized.pillars.year} />

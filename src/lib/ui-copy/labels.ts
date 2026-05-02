@@ -5,7 +5,8 @@ export const generationPhaseLabels = ["正在排盘", "正在计算维度", "正
 export const reportNavItems = [
   { id: "overview", label: "总览" },
   { id: "dayun", label: "大运" },
-  { id: "yearly", label: "流年" }
+  { id: "yearly", label: "流年" },
+  { id: "chart", label: "星盘" }
 ] as const;
 
 export const dimensionShortLabels: Record<DimensionId, string> = {

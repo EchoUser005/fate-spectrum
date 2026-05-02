@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { providerPresets } from "@/lib/config/providers";
-import { hasPrimaryReport, savePrimaryReport } from "@/lib/client/profile-storage";
+import { consumeAddProfileMode, hasPrimaryReport, savePrimaryReport } from "@/lib/client/profile-storage";
 import type { BirthInput } from "@/lib/schemas/birth";
 import { BirthInputSchema } from "@/lib/schemas/birth";
 import type { ProviderConfig } from "@/lib/schemas/provider";
@@ -25,6 +25,9 @@ export function AppShell() {
   const [status, setStatus] = useState<string[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [isAddingProfile] = useState(() =>
+    typeof window === "undefined" ? false : consumeAddProfileMode()
+  );
 
   const form = useForm<BirthInput>({
     resolver: zodResolver(BirthInputSchema),
@@ -42,8 +45,8 @@ export function AppShell() {
   });
 
   useEffect(() => {
-    if (hasPrimaryReport()) router.replace("/chart");
-  }, [router]);
+    if (!isAddingProfile && hasPrimaryReport()) router.replace("/chart");
+  }, [isAddingProfile, router]);
 
   useEffect(() => {
     try {

@@ -95,10 +95,13 @@ test("desktop user flow renders the report workbench and visual report", async (
   await expect(page.getByRole("navigation").getByText("总览")).toBeVisible();
   await expect(page.getByRole("navigation").getByText("大运")).toBeVisible();
   await expect(page.getByRole("navigation").getByText("流年")).toBeVisible();
-  await expect(page.getByRole("navigation").getByText("星盘")).not.toBeVisible();
+  await expect(page.getByRole("navigation").getByText("星盘")).toBeVisible();
+  await expect(page.getByLabel("命宫切换")).toBeVisible();
+  await expect(page.getByRole("button", { name: "新增命盘" })).toBeVisible();
   await expect(page.getByRole("navigation").getByText("详细解读")).not.toBeVisible();
   await expect(page.getByRole("navigation").getByText("高级数据")).not.toBeVisible();
-  await expect(page.getByRole("heading", { name: "命盘摘要" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "总览" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "命盘摘要" })).not.toBeVisible();
   await expect(page.getByText("财富量级").first()).toBeVisible();
   await expect(page.getByText("生活舒适度").first()).toBeVisible();
   await expect(page.getByText("自我价值成就").first()).toBeVisible();
@@ -108,6 +111,10 @@ test("desktop user flow renders the report workbench and visual report", async (
   await expect(page.getByRole("heading", { name: "大运色阶图" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "大运评分表" })).not.toBeVisible();
   await expect(page.getByRole("heading", { name: "星盘要点" })).not.toBeVisible();
+  await page.getByRole("navigation").getByText("星盘").click();
+  await expect(page.getByRole("heading", { name: "八字四柱" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "紫微十二宫" })).toBeVisible();
+  await expect(page.getByText("藏干未返回")).not.toBeVisible();
   await expect(page.getByRole("heading", { name: "七个维度分别看" })).not.toBeVisible();
   await expect(page.getByText("原始排盘 JSON")).not.toBeVisible();
   await expect(page.getByText("高级数据")).not.toBeVisible();
@@ -136,6 +143,9 @@ test("desktop user flow renders the report workbench and visual report", async (
   await page.getByRole("navigation").getByText("大运").click();
   await expect(page.getByRole("heading", { name: "大运维度评分曲线" })).toBeVisible();
   await page.screenshot({ path: `${screenshotDir}/desktop-dayun.png`, fullPage: true });
+  await page.getByRole("button", { name: "新增命盘" }).click();
+  await expect(page).toHaveURL(/\/$/);
+  await expect(page.getByRole("heading", { name: "填写生辰" })).toBeVisible();
 });
 
 test("model configuration is visible without advanced settings", async ({ page }) => {
