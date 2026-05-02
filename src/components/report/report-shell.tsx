@@ -1,4 +1,8 @@
+"use client";
+
+import { useState } from "react";
 import type { ReportResponse } from "@/lib/schemas/report";
+import type { CycleSource } from "@/components/report/current-cycle-card";
 import { DayunHeatmap } from "@/components/report/dayun-heatmap";
 import { DayunSpectrumChart } from "@/components/report/dayun-spectrum-chart";
 import { DisclaimerNote } from "@/components/report/disclaimer-note";
@@ -22,6 +26,8 @@ export function ReportShell({
   onSelectProfile?: (id: string) => void;
   onCreateProfile?: () => void;
 }) {
+  const [chartMode, setChartMode] = useState<CycleSource>("bazi");
+
   return (
     <div className="space-y-5">
       <ReportNav
@@ -30,8 +36,12 @@ export function ReportShell({
         activeProfileId={activeProfileId}
         onSelectProfile={onSelectProfile}
         onCreateProfile={onCreateProfile}
+        onNavigate={(id) => {
+          if (id === "overview") setChartMode("bazi");
+          if (id === "chart") setChartMode("ziwei");
+        }}
       />
-      <ReportOverview report={report} />
+      <ReportOverview report={report} chartMode={chartMode} onChartModeChange={setChartMode} />
       <section id="dayun" className="scroll-mt-20 space-y-5">
         <DayunSpectrumChart report={report} />
         <DayunHeatmap report={report} />

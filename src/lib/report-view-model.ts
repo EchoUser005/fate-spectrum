@@ -65,17 +65,33 @@ export function getCurrentDayun(report: ReportResponse) {
 }
 
 export function getCurrentZiweiLimit(report: ReportResponse) {
-  const currentDayun = getCurrentDayun(report);
-  if (!currentDayun) return null;
+  const fallbackDayun = getCurrentDayun(report);
+  if (!fallbackDayun) return null;
 
-  const palace = report.normalized.palaces[currentDayun.index % Math.max(report.normalized.palaces.length, 1)];
-  const palaceGanzhi = findPalaceGanzhi(palace) || currentDayun.ganzhi;
+  const palaces = report.normalized.palaces;
+  if (palaces.length === 0) return fallbackDayun;
+
+  const startAge = getZiweiStartAge(report.normalized.identity.fiveelement);
+  const currentAge = getCurrentAge(report);
+  const offset = Math.max(0, Math.floor((currentAge - startAge) / 10));
+  const direction = isForwardLimit(report.normalized.identity.yinyanggender) ? 1 : -1;
+  const palaceIndex = modulo(offset * direction, palaces.length);
+  const palace = palaces[palaceIndex];
+  const limitStartAge = startAge + offset * 10;
+  const limitEndAge = limitStartAge + 9;
+  const limitStartYear = getBirthYear(report) + limitStartAge - 1;
+  const palaceGanzhi = findPalaceGanzhi(palace) || fallbackDayun.ganzhi;
   const palaceName = findPalaceName(palace) || "紫微宫位";
 
   return {
-    ...currentDayun,
+    ...fallbackDayun,
+    index: palaceIndex,
     ganzhi: `${palaceGanzhi}大限`,
-    summary: `${palaceName}对应当前阶段，十年主题以该宫位星曜和宫干为主。`
+    age: limitStartAge,
+    startYear: limitStartYear,
+    endYear: limitStartYear + 9,
+    summary: `${palaceName}对应当前阶段，十年主题以该宫位星曜和宫干为主。`,
+    notes: [`${palaceName} ${palaceGanzhi}，约 ${limitStartAge}-${limitEndAge} 岁。`]
   };
 }
 
@@ -146,4 +162,35 @@ function findPalaceName(palace: ReportResponse["normalized"]["palaces"][number] 
 function isPalaceName(value?: string) {
   const cleanValue = cleanProviderText(value);
   return cleanValue.endsWith("宫");
+}
+
+function getZiweiStartAge(fiveelement?: string) {
+  const cleanValue = cleanProviderText(fiveelement);
+  const chineseNumber = cleanValue.match(/[二三四五六]/)?.[0];
+  if (chineseNumber) return { 二: 2, 三: 3, 四: 4, 五: 5, 六: 6 }[chineseNumber] ?? 4;
+  const digit = cleanValue.match(/[2-6]/)?.[0];
+  return digit ? Number(digit) : 4;
+}
+
+function getCurrentAge(report: ReportResponse) {
+  if (typeof report.normalized.identity.age === "number" && Number.isFinite(report.normalized.identity.age)) {
+    return report.normalized.identity.age;
+  }
+  return Math.max(1, Number(report.meta.generatedAt.slice(0, 4)) - getBirthYear(report) + 1);
+}
+
+function getBirthYear(report: ReportResponse) {
+  const year = Number(report.birth.birthDate.slice(0, 4));
+  return Number.isFinite(year) && year > 1800 ? year : Number(report.meta.generatedAt.slice(0, 4));
+}
+
+function isForwardLimit(yinyanggender?: string) {
+  const cleanValue = cleanProviderText(yinyanggender);
+  if (cleanValue.includes("阳男") || cleanValue.includes("阴女")) return true;
+  if (cleanValue.includes("阴男") || cleanValue.includes("阳女")) return false;
+  return true;
+}
+
+function modulo(value: number, divisor: number) {
+  return ((value % divisor) + divisor) % divisor;
 }

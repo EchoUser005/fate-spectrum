@@ -9,13 +9,15 @@ export function ReportNav({
   profiles = [],
   activeProfileId,
   onSelectProfile,
-  onCreateProfile
+  onCreateProfile,
+  onNavigate
 }: {
   onReset?: () => void;
   profiles?: Array<{ id: string; label: string; isPrimary: boolean }>;
   activeProfileId?: string;
   onSelectProfile?: (id: string) => void;
   onCreateProfile?: () => void;
+  onNavigate?: (id: string) => void;
 }) {
   return (
     <nav className="sticky top-0 z-30 -mx-4 border-b border-fs-line bg-fs-surface/95 px-4 py-2 backdrop-blur sm:mx-0 sm:rounded-md sm:border">
@@ -29,6 +31,7 @@ export function ReportNav({
             <a
               key={item.id}
               href={`#${item.id}`}
+              onClick={() => onNavigate?.(item.id)}
               className="shrink-0 rounded-md px-3 py-2 text-sm font-medium text-fs-muted transition hover:bg-white hover:text-fs-ink"
             >
               {item.label}
@@ -38,17 +41,16 @@ export function ReportNav({
         <div className="ml-auto flex flex-wrap items-center gap-2">
           {profiles.length > 0 ? (
             <div className="flex items-center gap-2">
-              <span className="shrink-0 text-xs font-medium text-fs-muted">命宫切换</span>
+              <span className="shrink-0 text-xs font-medium text-fs-muted">命盘切换</span>
               <Select
                 value={activeProfileId}
                 onChange={(event) => onSelectProfile?.(event.target.value)}
                 className="h-9 w-40 md:w-48"
-                aria-label="命宫切换"
+                aria-label="命盘切换"
               >
                 {profiles.map((profile) => (
                   <option key={profile.id} value={profile.id}>
-                    {profile.label}
-                    {profile.isPrimary ? " · 主命主" : ""}
+                    {formatProfileLabel(profile)}
                   </option>
                 ))}
               </Select>
@@ -77,4 +79,15 @@ export function ReportNav({
       </div>
     </nav>
   );
+}
+
+function formatProfileLabel(profile: { label: string; isPrimary: boolean }) {
+  const role = profile.isPrimary ? "命主" : "缘主";
+  const label = normalizeStoredProfileLabel(profile.label, role);
+  return label === role ? role : `${label} · ${role}`;
+}
+
+function normalizeStoredProfileLabel(label: string, fallback: string) {
+  if (label === "主命主" || label === "关心的角色") return fallback;
+  return label || fallback;
 }

@@ -48,9 +48,10 @@ export function hasPrimaryReport() {
 export function saveProfileReport(report: ReportResponse) {
   const profiles = loadProfiles();
   const hasPrimary = profiles.some((profile) => profile.isPrimary);
+  const role = hasPrimary ? "缘主" : "命主";
   const nextProfile: ProfileRecord = {
     id: createProfileId(report),
-    label: report.birth.nickname?.trim() || (hasPrimary ? "关心的角色" : "主命主"),
+    label: report.birth.nickname?.trim() || role,
     isPrimary: !hasPrimary,
     createdAt: report.meta.generatedAt,
     report
@@ -80,7 +81,7 @@ export function loadProfiles(): ProfileRecord[] {
   if (!legacy) return [];
   const migrated: ProfileRecord = {
     id: createProfileId(legacy),
-    label: legacy.birth.nickname?.trim() || "主命主",
+    label: legacy.birth.nickname?.trim() || "命主",
     isPrimary: true,
     createdAt: legacy.meta.generatedAt,
     report: legacy
@@ -123,11 +124,20 @@ function parseProfileRecord(value: unknown): ProfileRecord | null {
   if (!parsedReport.success) return null;
   return {
     id: candidate.id,
-    label: typeof candidate.label === "string" && candidate.label.trim() ? candidate.label : "未命名",
+    label: normalizeStoredLabel(candidate.label, Boolean(candidate.isPrimary)),
     isPrimary: Boolean(candidate.isPrimary),
     createdAt: typeof candidate.createdAt === "string" ? candidate.createdAt : parsedReport.data.meta.generatedAt,
     report: parsedReport.data
   };
+}
+
+function normalizeStoredLabel(label: unknown, isPrimary: boolean) {
+  const fallback = isPrimary ? "命主" : "缘主";
+  if (typeof label !== "string" || !label.trim()) return fallback;
+  const cleanLabel = label.trim();
+  if (cleanLabel === "主命主") return "命主";
+  if (cleanLabel === "关心的角色") return "缘主";
+  return cleanLabel;
 }
 
 function normalizePrimary(profiles: ProfileRecord[]) {

@@ -1,5 +1,5 @@
 import type { ReportResponse } from "@/lib/schemas/report";
-import { getCurrentDayun } from "@/lib/report-view-model";
+import { getCurrentDayun, getScoreBand } from "@/lib/report-view-model";
 
 const mainSignals = [
   { id: "wealth", label: "财富量级", note: "资源、现金流、变现上限" },
@@ -21,7 +21,10 @@ export function MainSignalCards({ report }: { report: ReportResponse }) {
               <p className="font-semibold text-fs-ink">{signal.label}</p>
               <p className="mt-1 text-xs leading-5 text-fs-muted">{signal.note}</p>
             </div>
-            <span className="rounded-full bg-fs-bg px-2 py-1 text-xs font-medium text-fs-muted">
+            <span
+              className="rounded-full px-2 py-1 text-xs font-semibold"
+              style={getSignalStyle(currentDayun.scores[signal.id])}
+            >
               {getSignalLabel(currentDayun.scores[signal.id])}
             </span>
           </div>
@@ -29,6 +32,14 @@ export function MainSignalCards({ report }: { report: ReportResponse }) {
       ))}
     </div>
   );
+}
+
+function getSignalStyle(score: number) {
+  const band = getScoreBand(score);
+  return {
+    backgroundColor: band.color,
+    color: band.textColor
+  };
 }
 
 function getSignalLabel(score: number) {

@@ -41,8 +41,8 @@ async function mockReportApi(page: Page) {
   return () => payload;
 }
 
-async function fillBirth(page: Page) {
-  await page.getByLabel("昵称").fill("匿名");
+async function fillBirth(page: Page, nickname = "匿名") {
+  await page.getByLabel("昵称").fill(nickname);
   await page.getByLabel("出生年份").selectOption("1999");
   await page.getByLabel("出生月份").selectOption("09");
   await page.getByLabel("出生日期").selectOption("15");
@@ -80,7 +80,7 @@ test("desktop user flow renders the report workbench and visual report", async (
   await expect(page.getByText("模型模式")).not.toBeVisible();
   await page.screenshot({ path: `${screenshotDir}/desktop-home.png`, fullPage: true });
 
-  await fillBirth(page);
+  await fillBirth(page, "命主A");
   await page.getByRole("button", { name: "生成命运光谱" }).click();
   await expect(page.getByText("请先填写模型密钥。")).toBeVisible();
   await page.getByLabel("模型密钥").fill("sk-test-session");
@@ -96,7 +96,7 @@ test("desktop user flow renders the report workbench and visual report", async (
   await expect(page.getByRole("navigation").getByText("大运")).toBeVisible();
   await expect(page.getByRole("navigation").getByText("流年")).toBeVisible();
   await expect(page.getByRole("navigation").getByText("星盘")).toBeVisible();
-  await expect(page.getByLabel("命宫切换")).toBeVisible();
+  await expect(page.getByLabel("命盘切换")).toBeVisible();
   await expect(page.getByRole("button", { name: "新增命盘" })).toBeVisible();
   await expect(page.getByRole("navigation").getByText("详细解读")).not.toBeVisible();
   await expect(page.getByRole("navigation").getByText("高级数据")).not.toBeVisible();
@@ -112,18 +112,18 @@ test("desktop user flow renders the report workbench and visual report", async (
   await expect(page.getByRole("heading", { name: "大运评分表" })).not.toBeVisible();
   await expect(page.getByRole("heading", { name: "星盘要点" })).not.toBeVisible();
   await page.getByRole("navigation").getByText("星盘").click();
-  await expect(page.getByRole("heading", { name: "八字四柱" })).toBeVisible();
-  await expect(page.getByText("当前阶段 · 八字")).toBeVisible();
-  await page.getByRole("button", { name: "紫微" }).click();
   await expect(page.getByText("当前阶段 · 紫微")).toBeVisible();
   await expect(page.getByRole("heading", { name: "紫微十二宫" })).toBeVisible();
+  await page.getByRole("navigation").getByText("总览").click();
+  await expect(page.getByText("当前阶段 · 八字")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "八字四柱" })).toBeVisible();
   await expect(page.getByText("藏干未返回")).not.toBeVisible();
   await expect(page.getByRole("heading", { name: "七个维度分别看" })).not.toBeVisible();
   await expect(page.getByText("原始排盘 JSON")).not.toBeVisible();
   await expect(page.getByText("高级数据")).not.toBeVisible();
   expect(getPayload()).toMatchObject({
     birth: {
-      nickname: "匿名",
+      nickname: "命主A",
       birthDate: "1999-09-15",
       birthTime: "21:30",
       timeBranch: "亥",
@@ -149,6 +149,14 @@ test("desktop user flow renders the report workbench and visual report", async (
   await page.getByRole("button", { name: "新增命盘" }).click();
   await expect(page).toHaveURL(/\/$/);
   await expect(page.getByRole("heading", { name: "填写生辰" })).toBeVisible();
+  await fillBirth(page, "缘主A");
+  await page.getByLabel("模型密钥").fill("sk-test-session");
+  await page.getByRole("button", { name: "生成命运光谱" }).click();
+  await expect(page).toHaveURL(/\/chart$/);
+  await expect(page.getByLabel("命盘切换")).toContainText("缘主A · 缘主");
+  await page.getByLabel("命盘切换").selectOption({ label: "命主A · 命主" });
+  await expect(page.locator("#overview").getByText("命主A").first()).toBeVisible();
+  await expect(page.getByLabel("命盘切换")).toContainText("命主A · 命主");
 });
 
 test("model configuration is visible without advanced settings", async ({ page }) => {

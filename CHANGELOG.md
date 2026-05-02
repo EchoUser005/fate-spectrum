@@ -44,6 +44,10 @@
 
 - Fixed JSON export so exported artifacts include professional-advice disclaimers.
 - Fixed true-solar-time notices so user-facing copy no longer mentions Mock Demo or provider internals.
+- Fixed report navigation so `星盘` opens the 紫微 chart focus and `总览` returns to 八字 focus.
+- Fixed current 紫微大限 calculation to use 五行局起限、阴阳男女顺逆、current age, and palace branch data.
+- Fixed profile labels from 主命主/关心的角色 to 命主/缘主 and kept 命盘切换 available after adding another chart.
+- Fixed 总览 by removing duplicated four-pillar cards, filtering disclaimer-like overview text, and coloring qualitative dimension badges.
 
 ### Security
 

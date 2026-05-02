@@ -3,9 +3,11 @@ import samplePaipan from "@/fixtures/sample-paipan.json";
 import {
   buildDayunCurveData,
   buildDayunHeatmapRows,
-  buildDayunTableRows
+  buildDayunTableRows,
+  getCurrentZiweiLimit
 } from "@/lib/report-view-model";
 import { buildRuleBasedReport } from "@/lib/scoring/engine";
+import type { ReportResponse } from "@/lib/schemas/report";
 
 const birth = {
   nickname: "匿名样例",
@@ -57,4 +59,71 @@ describe("dayun visual data sources", () => {
       });
     }
   });
+
+  it("calculates current ziwei limit from five-element bureau and gender direction", () => {
+    const report = withRealStyleZiweiPalaces(buildReport());
+    const currentLimit = getCurrentZiweiLimit(report);
+
+    expect(currentLimit).toMatchObject({
+      ganzhi: "丙寅大限",
+      age: 24,
+      startYear: 2022,
+      endYear: 2031
+    });
+    expect(currentLimit?.summary).toContain("福德宫");
+  });
 });
+
+function withRealStyleZiweiPalaces(report: ReportResponse): ReportResponse {
+  const branches = [
+    "丙子",
+    "丁丑",
+    "丙寅",
+    "丁卯",
+    "戊辰",
+    "己巳",
+    "庚午",
+    "辛未",
+    "壬申",
+    "癸酉",
+    "甲戌",
+    "乙亥"
+  ];
+  const names = [
+    "命宫",
+    "父母宫",
+    "福德宫",
+    "田宅宫",
+    "官禄宫",
+    "仆役宫",
+    "迁移宫",
+    "疾厄宫",
+    "财帛宫",
+    "子女宫",
+    "夫妻宫",
+    "兄弟宫"
+  ];
+
+  return {
+    ...report,
+    normalized: {
+      ...report.normalized,
+      identity: {
+        ...report.normalized.identity,
+        age: 27,
+        fiveelement: "金四局",
+        yinyanggender: "阴女"
+      },
+      palaces: branches.map((branch, index) => ({
+        index,
+        name: names[index] ?? "宫位",
+        branch,
+        stars: [],
+        raw: {
+          MangA: branch,
+          MangB: names[index] ?? "宫位"
+        }
+      }))
+    }
+  };
+}
