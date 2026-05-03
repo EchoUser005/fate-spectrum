@@ -1,6 +1,6 @@
 "use client";
 
-import { Trash2 } from "lucide-react";
+import { ExternalLink, Trash2 } from "lucide-react";
 import { deepseekModelOptions, providerPresets } from "@/lib/config/providers";
 import type { ProviderConfig } from "@/lib/schemas/provider";
 import { Button } from "@/components/ui/button";
@@ -90,7 +90,20 @@ export function ReadingStep({
         </label>
       </div>
       <div className="flex items-center justify-between gap-3 text-xs text-fs-muted">
-        <p>密钥仅保存在当前浏览器会话。</p>
+        <div className="space-y-1">
+          <p>密钥仅保存在当前浏览器会话。</p>
+          {llmConfig.provider === "deepseek" ? (
+            <a
+              href="https://platform.deepseek.com/api_keys"
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex items-center gap-1 font-medium text-fs-blue transition hover:text-fs-ink"
+            >
+              DeepSeek API 开放平台
+              <ExternalLink size={12} />
+            </a>
+          ) : null}
+        </div>
         <Button type="button" size="sm" variant="secondary" onClick={onClearCachedLlm}>
           <Trash2 size={14} />
           清除密钥

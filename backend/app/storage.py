@@ -5,9 +5,9 @@ import os
 import re
 from datetime import datetime, timezone
 from pathlib import Path
-from typing import Any
+from typing import Any, Optional
 
-from .schemas import ProfileSnapshot, RollupMemory, WeeklyMemory
+from .schemas import ProfileRole, ProfileSnapshot, ProfileUpsert, RollupMemory, WeeklyMemory
 
 
 def data_root() -> Path:
@@ -36,6 +36,39 @@ def save_profile_snapshot(snapshot: ProfileSnapshot) -> dict[str, str]:
     write_json(profile_dir / "profile.json", profile_payload)
     write_json(profile_dir / "reports" / f"{timestamp}.json", profile_payload)
     write_markdown(profile_dir / "memory" / "index.md", build_profile_index(snapshot))
+    return {"profileId": profile_id, "path": str(profile_dir)}
+
+
+def upsert_owner_profile(profile: ProfileUpsert) -> dict[str, str]:
+    return upsert_profile("owner", profile)
+
+
+def upsert_guest_profile(profile: ProfileUpsert) -> dict[str, str]:
+    return upsert_profile("guest", profile)
+
+
+def upsert_profile(role: ProfileRole, profile: ProfileUpsert) -> dict[str, str]:
+    profile_id = safe_id(profile.profile_id or profile.nickname or role)
+    profile_dir = profile_directory(role, profile_id)
+    payload = {
+        "role": role,
+        "profileId": profile_id,
+        "nickname": profile.nickname,
+        "birth": profile.birth,
+        "notes": profile.notes,
+        "updatedAt": now_id(),
+    }
+    existing = read_json(profile_dir / "profile.json") if (profile_dir / "profile.json").exists() else {}
+    if isinstance(existing, dict) and "createdAt" in existing:
+        payload["createdAt"] = existing["createdAt"]
+    else:
+        payload["createdAt"] = payload["updatedAt"]
+    if isinstance(existing, dict):
+        for key in ("generatedAt", "report"):
+            if key in existing:
+                payload[key] = existing[key]
+    write_json(profile_dir / "profile.json", payload)
+    write_markdown(profile_dir / "memory" / "index.md", build_profile_index_from_payload(payload))
     return {"profileId": profile_id, "path": str(profile_dir)}
 
 
@@ -70,6 +103,26 @@ def list_profiles() -> dict[str, Any]:
     }
 
 
+def get_owner_profile() -> Optional[dict[str, Any]]:
+    owner = data_root() / "owner" / "profile.json"
+    return read_json(owner) if owner.exists() else None
+
+
+def list_guest_profiles() -> list[dict[str, Any]]:
+    guests_dir = data_root() / "guests"
+    if not guests_dir.exists():
+        return []
+    return [
+        read_json(profile_path)
+        for profile_path in sorted(guests_dir.glob("*/profile.json"))
+    ]
+
+
+def get_guest_profile(guest_id: str) -> Optional[dict[str, Any]]:
+    profile_path = profile_directory("guest", safe_id(guest_id)) / "profile.json"
+    return read_json(profile_path) if profile_path.exists() else None
+
+
 def read_json(path: Path) -> Any:
     return json.loads(path.read_text(encoding="utf-8"))
 
@@ -82,6 +135,20 @@ def build_profile_index(snapshot: ProfileSnapshot) -> str:
             "",
             f"- 角色：{'命主' if snapshot.role == 'owner' else '缘主'}",
             f"- 最近生成：{snapshot.generated_at}",
+            "- 说明：这里沉淀命盘、周报、月报、年报和长期记忆索引。",
+        ]
+    )
+
+
+def build_profile_index_from_payload(payload: dict[str, Any]) -> str:
+    role = payload.get("role")
+    nickname = payload.get("nickname") or ("命主" if role == "owner" else "缘主")
+    return "\n".join(
+        [
+            f"# {nickname}",
+            "",
+            f"- 角色：{'命主' if role == 'owner' else '缘主'}",
+            f"- 最近更新：{payload.get('updatedAt', '')}",
             "- 说明：这里沉淀命盘、周报、月报、年报和长期记忆索引。",
         ]
     )
@@ -114,5 +181,11 @@ def now_id() -> str:
 
 
 def safe_id(value: str) -> str:
-    cleaned = re.sub(r"[^a-zA-Z0-9._-]+", "-", value.strip())
+    cleaned = re.sub(r"[^\w.-]+", "-", value.strip(), flags=re.UNICODE)
     return cleaned.strip("-")[:96] or "default"
+
+
+def profile_directory(role: ProfileRole, profile_id: str) -> Path:
+    if role == "owner":
+        return data_root() / "owner"
+    return data_root() / "guests" / safe_id(profile_id)

@@ -1,0 +1,13 @@
+{
+  "name": "fate-spectrum/adaptive-score-candidate",
+  "version": 1,
+  "type": "chat",
+  "description": "Classify memory evidence into bounded adaptive score candidates; rules still own final scoring.",
+  "input": {
+    "context": "Base scores, recent daily summaries, weekly/monthly rollups, existing score adjustments, and configured score bounds."
+  },
+  "output": {
+    "candidates": "Array of dimension/scope/targetKey/direction/strength/reason/evidenceIds candidates.",
+    "reviewNotes": "Array of caveats for deterministic scoring rules."
+  }
+}

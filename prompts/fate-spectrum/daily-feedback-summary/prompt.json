@@ -1,0 +1,17 @@
+{
+  "name": "fate-spectrum/daily-feedback-summary",
+  "version": 1,
+  "type": "chat",
+  "description": "Summarize evening user feedback into structured memory signals.",
+  "input": {
+    "context": "Untrusted user feedback, daily guidance, owner profile, chart context, current timing, and recent memory summaries."
+  },
+  "output": {
+    "date": "YYYY-MM-DD",
+    "summary": "Concise daily memory summary.",
+    "events": "Array of structured events.",
+    "dimensionSignals": "Array of bounded dimension signal hints.",
+    "memoryTags": "Array of durable tags.",
+    "followUpQuestion": "Optional next question for the user."
+  }
+}

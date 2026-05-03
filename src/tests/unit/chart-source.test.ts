@@ -13,11 +13,11 @@ const birth = {
   nickname: "匿名样例",
   gender: "female" as const,
   calendar: "solar" as const,
-  birthDate: "1999-09-15",
-  birthTime: "23:00",
-  timeBranch: "子" as const,
+  birthDate: "1992-09-29",
+  birthTime: "12:00",
+  timeBranch: "午" as const,
   timezone: "Asia/Shanghai",
-  birthPlace: "Shanghai",
+  birthPlace: "示例城市",
   useTrueSolarTime: false
 };
 
@@ -65,10 +65,10 @@ describe("dayun visual data sources", () => {
     const currentLimit = getCurrentZiweiLimit(report);
 
     expect(currentLimit).toMatchObject({
-      ganzhi: "丙寅大限",
-      age: 24,
-      startYear: 2022,
-      endYear: 2031
+      ganzhi: "戊申大限",
+      age: 25,
+      startYear: 2016,
+      endYear: 2025
     });
     expect(currentLimit?.summary).toContain("福德宫");
   });
@@ -76,18 +76,18 @@ describe("dayun visual data sources", () => {
 
 function withRealStyleZiweiPalaces(report: ReportResponse): ReportResponse {
   const branches = [
-    "丙子",
-    "丁丑",
-    "丙寅",
-    "丁卯",
-    "戊辰",
-    "己巳",
-    "庚午",
-    "辛未",
     "壬申",
-    "癸酉",
-    "甲戌",
-    "乙亥"
+    "己酉",
+    "戊申",
+    "庚戌",
+    "辛亥",
+    "壬子",
+    "癸丑",
+    "甲寅",
+    "乙卯",
+    "丙辰",
+    "丁巳",
+    "戊午"
   ];
   const names = [
     "命宫",
@@ -111,8 +111,8 @@ function withRealStyleZiweiPalaces(report: ReportResponse): ReportResponse {
       identity: {
         ...report.normalized.identity,
         age: 27,
-        fiveelement: "金四局",
-        yinyanggender: "阴女"
+        fiveelement: "土五局",
+        yinyanggender: "阳男"
       },
       palaces: branches.map((branch, index) => ({
         index,

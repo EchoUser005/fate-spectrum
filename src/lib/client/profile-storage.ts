@@ -6,17 +6,25 @@ const PROFILE_STORAGE_KEY = "fate-spectrum.primary-report.v1";
 const PROFILE_COLLECTION_KEY = "fate-spectrum.profile-collection.v1";
 const ACTIVE_PROFILE_KEY = "fate-spectrum.active-profile.v1";
 const ADD_PROFILE_MODE_KEY = "fate-spectrum.add-profile-mode.v1";
+type ProfileRole = "owner" | "guest";
+export type ProfileRelationship = "friend" | "family";
 
 export type ProfileRecord = {
   id: string;
   label: string;
   isPrimary: boolean;
+  relationship?: ProfileRelationship;
   createdAt: string;
   report: ReportResponse;
 };
 
+type MemoryProfilesPayload = {
+  owner?: unknown;
+  guests?: unknown;
+};
+
 export function savePrimaryReport(report: ReportResponse) {
-  const profile = saveProfileReport(report);
+  const profile = saveProfileReport(report, "owner");
   if (profile.isPrimary) {
     window.localStorage.setItem(PROFILE_STORAGE_KEY, JSON.stringify(report));
   }
@@ -47,18 +55,34 @@ export function hasPrimaryReport() {
   return loadProfiles().length > 0 || Boolean(window.localStorage.getItem(PROFILE_STORAGE_KEY));
 }
 
-export function saveProfileReport(report: ReportResponse) {
+export function hasOwnerProfile() {
+  return loadProfiles().some((profile) => profile.isPrimary) || Boolean(window.localStorage.getItem(PROFILE_STORAGE_KEY));
+}
+
+export function saveProfileReport(
+  report: ReportResponse,
+  role: ProfileRole = "owner",
+  options?: { relationship?: ProfileRelationship }
+) {
   const profiles = loadProfiles();
-  const hasPrimary = profiles.some((profile) => profile.isPrimary);
-  const role = hasPrimary ? "缘主" : "命主";
+  const owner = profiles.find((profile) => profile.isPrimary);
+  if (role === "guest" && !owner) {
+    throw new Error("请先创建命主，再添加缘主。");
+  }
+  const fallbackLabel = role === "owner" ? "命主" : "缘主";
   const nextProfile: ProfileRecord = {
-    id: createProfileId(report),
-    label: report.birth.nickname?.trim() || role,
-    isPrimary: !hasPrimary,
+    id: role === "owner" ? owner?.id ?? createProfileId(report) : createProfileId(report),
+    label: report.birth.nickname?.trim() || fallbackLabel,
+    isPrimary: role === "owner",
+    relationship: role === "guest" ? options?.relationship : undefined,
     createdAt: report.meta.generatedAt,
     report
   };
-  const nextProfiles = [...profiles, nextProfile];
+
+  const nextProfiles =
+    role === "owner"
+      ? [nextProfile, ...profiles.filter((profile) => !profile.isPrimary)]
+      : [...profiles, nextProfile];
   persistProfiles(nextProfiles);
   setActiveProfileId(nextProfile.id);
   if (nextProfile.isPrimary) {
@@ -91,6 +115,39 @@ export function loadProfiles(): ProfileRecord[] {
   persistProfiles([migrated]);
   setActiveProfileId(migrated.id);
   return [migrated];
+}
+
+export async function syncProfilesFromMemoryApi(): Promise<ProfileRecord[]> {
+  try {
+    const response = await fetch("/api/profiles", {
+      cache: "no-store"
+    });
+    if (!response.ok) return loadProfiles();
+
+    const profiles = profilesFromMemoryPayload((await response.json()) as unknown);
+    if (profiles.length === 0) return loadProfiles();
+
+    persistProfiles(profiles);
+    const activeId = window.localStorage.getItem(ACTIVE_PROFILE_KEY);
+    if (!activeId || !profiles.some((profile) => profile.id === activeId)) {
+      setActiveProfileId(profiles.find((profile) => profile.isPrimary)?.id ?? profiles[0]?.id ?? "");
+    }
+    return profiles;
+  } catch {
+    return loadProfiles();
+  }
+}
+
+export function profilesFromMemoryPayload(value: unknown): ProfileRecord[] {
+  if (!value || typeof value !== "object") return [];
+  const payload = value as MemoryProfilesPayload;
+  const owner = parseMemoryProfile(payload.owner, true);
+  const guests = Array.isArray(payload.guests)
+    ? payload.guests
+        .map((profile) => parseMemoryProfile(profile, false))
+        .filter((profile): profile is ProfileRecord => Boolean(profile))
+    : [];
+  return normalizePrimary([...(owner ? [owner] : []), ...guests]);
 }
 
 export function loadActiveProfile() {
@@ -128,9 +185,50 @@ function parseProfileRecord(value: unknown): ProfileRecord | null {
     id: candidate.id,
     label: normalizeStoredLabel(candidate.label, Boolean(candidate.isPrimary)),
     isPrimary: Boolean(candidate.isPrimary),
+    relationship: parseRelationship((candidate as { relationship?: unknown }).relationship),
     createdAt: typeof candidate.createdAt === "string" ? candidate.createdAt : parsedReport.data.meta.generatedAt,
     report: parsedReport.data
   };
+}
+
+function parseMemoryProfile(value: unknown, isPrimary: boolean): ProfileRecord | null {
+  if (!value || typeof value !== "object") return null;
+  const candidate = value as {
+    profileId?: unknown;
+    nickname?: unknown;
+    generatedAt?: unknown;
+    updatedAt?: unknown;
+    report?: unknown;
+  };
+  const parsedReport = ReportResponseSchema.safeParse(candidate.report);
+  if (!parsedReport.success) return null;
+  const role = isPrimary ? "owner" : "guest";
+  const profileId =
+    typeof candidate.profileId === "string" && candidate.profileId.trim()
+      ? candidate.profileId.trim()
+      : parsedReport.data.birth.nickname?.trim() || role;
+  const label =
+    typeof candidate.nickname === "string" && candidate.nickname.trim()
+      ? candidate.nickname.trim()
+      : parsedReport.data.birth.nickname?.trim();
+
+  return {
+    id: `${role}-${profileId}`,
+    label: normalizeStoredLabel(label, isPrimary),
+    isPrimary,
+    relationship: parseRelationship((candidate as { relationship?: unknown }).relationship),
+    createdAt:
+      typeof candidate.generatedAt === "string"
+        ? candidate.generatedAt
+        : typeof candidate.updatedAt === "string"
+          ? candidate.updatedAt
+          : parsedReport.data.meta.generatedAt,
+    report: parsedReport.data
+  };
+}
+
+function parseRelationship(value: unknown): ProfileRelationship | undefined {
+  return value === "friend" || value === "family" ? value : undefined;
 }
 
 function normalizeStoredLabel(label: unknown, isPrimary: boolean) {

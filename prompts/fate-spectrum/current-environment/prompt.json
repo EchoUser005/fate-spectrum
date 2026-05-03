@@ -1,6 +1,18 @@
 {
   "name": "fate-spectrum/current-environment",
-  "version": 1,
+  "version": 3,
   "type": "chat",
-  "description": "Current dayun and yearly environment narrative."
+  "description": "Current dayun/year environment signals. Extract 2-4 strongest triggered images from natal chart, dayun, and current year.",
+  "input": {
+    "context": "Sanitized Fate context with userInfo, currentDayun, currentYearly, natal chart, palaces, and scoring context."
+  },
+  "output": {
+    "currentEnvironment": "Backward-compatible one paragraph summary.",
+    "currentEnvironmentDetail": {
+      "title": "当前大环境",
+      "cycleLabel": "Current dayun and year label.",
+      "summary": "One concise current-stage summary.",
+      "signals": "2-4 strongest triggered images, each with title, trigger, and summary."
+    }
+  }
 }

@@ -3,14 +3,23 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useLayoutEffect, useState } from "react";
 import {
-  beginAddProfile,
   clearPrimaryReport,
   loadActiveProfile,
   loadProfiles,
+  saveProfileReport,
   setActiveProfileId,
+  syncProfilesFromMemoryApi,
+  type ProfileRelationship,
   type ProfileRecord
 } from "@/lib/client/profile-storage";
+import {
+  clearLlmSessionConfig,
+  defaultLlmConfig,
+  loadLlmSessionConfig,
+  saveLlmSessionConfig
+} from "@/lib/client/llm-session";
 import { ReportShell } from "@/components/report/report-shell";
+import { AddProfileModal, ModelConfigModal } from "@/components/report/profile-modals";
 
 export function ChartShell() {
   const router = useRouter();
@@ -20,10 +29,36 @@ export function ChartShell() {
   const [activeProfile, setActiveProfile] = useState<ProfileRecord | null>(() =>
     typeof window === "undefined" ? null : loadActiveProfile()
   );
+  const [isLoadingProfiles, setIsLoadingProfiles] = useState(true);
+  const [isAddProfileOpen, setIsAddProfileOpen] = useState(false);
+  const [isModelConfigOpen, setIsModelConfigOpen] = useState(false);
+  const [llmConfig, setLlmConfig] = useState(() =>
+    typeof window === "undefined" ? defaultLlmConfig() : loadLlmSessionConfig()
+  );
 
   useEffect(() => {
-    if (!activeProfile) router.replace("/");
-  }, [activeProfile, router]);
+    let cancelled = false;
+    syncProfilesFromMemoryApi()
+      .then((nextProfiles) => {
+        if (cancelled) return;
+        setProfiles(nextProfiles);
+        setActiveProfile(loadActiveProfile());
+      })
+      .finally(() => {
+        if (!cancelled) setIsLoadingProfiles(false);
+      });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  useEffect(() => {
+    saveLlmSessionConfig(llmConfig);
+  }, [llmConfig]);
+
+  useEffect(() => {
+    if (!isLoadingProfiles && !activeProfile) router.replace("/");
+  }, [activeProfile, isLoadingProfiles, router]);
 
   useLayoutEffect(() => {
     if (activeProfile) window.scrollTo({ top: 0, left: 0 });
@@ -42,8 +77,20 @@ export function ChartShell() {
   };
 
   const createProfile = () => {
-    beginAddProfile();
-    router.push("/");
+    setIsAddProfileOpen(true);
+  };
+
+  const saveGeneratedGuest = (report: Parameters<typeof saveProfileReport>[0], relationship?: ProfileRelationship) => {
+    const profile = saveProfileReport(report, "guest", { relationship });
+    const nextProfiles = loadProfiles();
+    setProfiles(nextProfiles);
+    setActiveProfile(nextProfiles.find((item) => item.id === profile.id) ?? loadActiveProfile());
+    setIsAddProfileOpen(false);
+  };
+
+  const clearCachedLlm = () => {
+    clearLlmSessionConfig();
+    setLlmConfig(defaultLlmConfig());
   };
 
   if (!activeProfile) {
@@ -70,10 +117,28 @@ export function ChartShell() {
           activeProfileId={activeProfile.id}
           onSelectProfile={selectProfile}
           onCreateProfile={createProfile}
+          onOpenModelConfig={() => setIsModelConfigOpen(true)}
         />
       </section>
+      <AddProfileModal
+        open={isAddProfileOpen}
+        llmConfig={llmConfig}
+        onClose={() => setIsAddProfileOpen(false)}
+        onGenerated={saveGeneratedGuest}
+        onOpenModelConfig={() => {
+          setIsAddProfileOpen(false);
+          setIsModelConfigOpen(true);
+        }}
+      />
+      <ModelConfigModal
+        open={isModelConfigOpen}
+        llmConfig={llmConfig}
+        onLlmChange={setLlmConfig}
+        onClearCachedLlm={clearCachedLlm}
+        onClose={() => setIsModelConfigOpen(false)}
+      />
       <footer className="border-t border-fs-line bg-fs-surface px-4 py-6 text-center text-sm text-fs-muted">
-        仅供自我反思、娱乐和规划参考。
+        仅供自我洞察、娱乐和规划参考。
       </footer>
     </main>
   );

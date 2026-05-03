@@ -6,12 +6,12 @@ describe("normalizePaipan", () => {
   it("normalizes sample paipan", () => {
     const { normalized } = normalizePaipan(samplePaipan);
 
-    expect(normalized.pillars.year).toBe("己卯");
+    expect(normalized.pillars.year).toBe("壬申");
     expect(normalized.palaces).toHaveLength(12);
-    expect(normalized.pillars.month).toBe("乙亥");
-    expect(normalized.pillars.day).toBe("戊寅");
-    expect(normalized.pillars.hour).toBe("癸亥");
-    expect(normalized.dayun[0]?.ganzhi).toBe("丙子");
+    expect(normalized.pillars.month).toBe("己酉");
+    expect(normalized.pillars.day).toBe("戊申");
+    expect(normalized.pillars.hour).toBe("未知");
+    expect(normalized.dayun[0]?.ganzhi).toBe("庚戌");
   });
 
   it("normalizes a shenjige response with numeric status", () => {
@@ -25,18 +25,18 @@ describe("normalizePaipan", () => {
             MangB: "子",
             GongWei: 1,
             ganzhi: { tg: 0, dz: 0 },
-            StarA: ["紫微"],
-            StarB: ["文昌"]
+            StarA: ["演示主星"],
+            StarB: ["演示辅星"]
           }
         ],
         bz: {
-          y: "甲子",
-          m: "乙丑",
-          d: "丙寅",
-          h: "丁卯",
-          dayunGZ: ["戊辰"],
+          y: "壬申",
+          m: "己酉",
+          d: "戊申",
+          h: "未知",
+          dayunGZ: ["庚戌"],
           dayunAge: [8],
-          dayunYear: [2007]
+          dayunYear: [2012]
         },
         output: {
           all: "匿名 shenjige minimal fixture"
@@ -45,8 +45,13 @@ describe("normalizePaipan", () => {
     });
 
     expect(paipan.status).toBe("200");
-    expect(normalized.pillars.year).toBe("甲子");
-    expect(normalized.palaces[0]?.stars).toContain("紫微");
+    expect(normalized.pillars).toEqual({
+      year: "壬申",
+      month: "己酉",
+      day: "戊申",
+      hour: "未知"
+    });
+    expect(normalized.palaces[0]?.stars).toContain("演示主星");
     expect(normalized.outputs.all).toBe("匿名 shenjige minimal fixture");
   });
 
@@ -55,11 +60,11 @@ describe("normalizePaipan", () => {
       status: "success",
       data: {
         bz: {
-          y: "甲子",
-          m: "乙丑",
-          d: "丙寅",
-          h: "丁卯",
-          dayunGZ: ["戊辰", "己巳"],
+          y: "壬申",
+          m: "己酉",
+          d: "戊申",
+          h: "未知",
+          dayunGZ: ["庚戌", "辛亥"],
           dayunAge: [10],
           dayunYear: [2010, 2020, 2030]
         }
@@ -79,32 +84,32 @@ describe("normalizePaipan", () => {
           {
             MangA: "丙<br/>子",
             MangB: "命宫",
-            StarA: ["廉贞<br/>平"]
+            StarA: ["演示<br/>主星"]
           }
         ],
         bz: {
-          y: "甲<br/>子",
-          m: "乙<br />丑",
-          d: "丙 寅",
-          h: "丁\n卯",
-          dayunGZ: ["戊<br/>辰"],
+          y: "壬<br/>申",
+          m: "己<br />酉",
+          d: "戊 申",
+          h: "未\n知",
+          dayunGZ: ["庚<br/>戌"],
           dayunAge: [8],
-          dayunYear: [2007]
+          dayunYear: [2012]
         }
       }
     });
 
     expect(normalized.pillars).toEqual({
-      year: "甲子",
-      month: "乙丑",
-      day: "丙寅",
-      hour: "丁卯"
+      year: "壬申",
+      month: "己酉",
+      day: "戊申",
+      hour: "未知"
     });
-    expect(normalized.dayun[0]?.ganzhi).toBe("戊辰");
+    expect(normalized.dayun[0]?.ganzhi).toBe("庚戌");
     expect(normalized.palaces[0]).toMatchObject({
       name: "命宫",
       branch: "丙子",
-      stars: ["廉贞平"]
+      stars: ["演示主星"]
     });
   });
 
@@ -113,10 +118,10 @@ describe("normalizePaipan", () => {
       status: 200,
       data: {
         bz: {
-          y: "甲子",
-          m: "乙丑",
-          d: "丙寅",
-          h: "丁卯"
+          y: "壬申",
+          m: "己酉",
+          d: "戊申",
+          h: "未知"
         }
       }
     });

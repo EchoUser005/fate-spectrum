@@ -14,11 +14,11 @@ const baseBirth: BirthInput = {
   nickname: "匿名样例",
   gender: "female",
   calendar: "solar",
-  birthDate: "1999-09-15",
-  birthTime: "23:00",
-  timeBranch: "子",
+  birthDate: "1992-09-29",
+  birthTime: "12:00",
+  timeBranch: "午",
   timezone: "Asia/Shanghai",
-  birthPlace: "Shanghai",
+  birthPlace: "示例城市",
   useTrueSolarTime: false
 };
 
@@ -26,11 +26,11 @@ describe("custom paipan provider", () => {
   it("builds the calibrated shenjige form body", () => {
     const body = buildShenjigeFormBody(baseBirth);
 
-    expect(body.get("year")).toBe("1999");
+    expect(body.get("year")).toBe("1992");
     expect(body.get("month")).toBe("9");
-    expect(body.get("day")).toBe("15");
-    expect(body.get("hour")).toBe("子");
-    expect(body.get("h")).toBe("23");
+    expect(body.get("day")).toBe("29");
+    expect(body.get("hour")).toBe("午");
+    expect(body.get("h")).toBe("12");
     expect(body.get("m")).toBe("0");
     expect(body.get("genderValue")).toBe("F");
     expect(body.get("settings[sihua]")).toBe("D");

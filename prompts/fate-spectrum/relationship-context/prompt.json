@@ -1,0 +1,15 @@
+{
+  "name": "fate-spectrum/relationship-context",
+  "version": 1,
+  "type": "chat",
+  "description": "Compare owner and guest context for future relationship/interaction analysis.",
+  "input": {
+    "context": "Owner profile, guest profile, sanitized chart summaries, relationship notes, and allowed analysis scope."
+  },
+  "output": {
+    "relationshipContext": "Concise interaction context.",
+    "supportSignals": "Array of supportive interaction signals.",
+    "frictionSignals": "Array of friction signals.",
+    "boundaryAdvice": "Array of practical boundary suggestions."
+  }
+}

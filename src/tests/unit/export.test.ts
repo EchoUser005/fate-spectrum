@@ -12,11 +12,11 @@ const birth: BirthInput = {
   nickname: "匿名样例",
   gender: "female",
   calendar: "solar",
-  birthDate: "1999-09-15",
-  birthTime: "23:00",
-  timeBranch: "子",
+  birthDate: "1992-09-29",
+  birthTime: "12:00",
+  timeBranch: "午",
   timezone: "Asia/Shanghai",
-  birthPlace: "Shanghai",
+  birthPlace: "示例城市",
   useTrueSolarTime: false
 };
 
@@ -60,7 +60,7 @@ describe("report exports", () => {
   it("keeps the Markdown export product-facing and includes target scores", () => {
     const markdown = exportReportMarkdown(buildReport());
 
-    expect(markdown).toContain("| 戊寅 | 26 | 2024-2033 | 76 | 84 | 52 | 86 | 78 | 55 | 50 | 当前主战场，开创、竞争、身份升级，但很耗 |");
+    expect(markdown).toContain("| 辛亥 | 18 | 2022-2031 | 66 | 70 | 59 | 72 | 63 | 58 | 61 | 匿名样例当前阶段，适合验证趋势和解读位置 |");
     expect(markdown).toContain("财富分高不等于适合冒险");
     for (const term of BANNED_PUBLIC_TERMS) {
       expect(markdown).not.toContain(term);

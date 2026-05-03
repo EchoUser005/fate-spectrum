@@ -2,5 +2,11 @@
   "name": "fate-spectrum/dimensions",
   "version": 1,
   "type": "chat",
-  "description": "Seven dimension reading based on deterministic scores."
+  "description": "Seven dimension reading based on deterministic scores.",
+  "input": {
+    "context": "Sanitized report context with dimension definitions, current dayun scores, current yearly scores, and chart summary."
+  },
+  "output": {
+    "dimensions": "Object keyed by wealth, career, comfort, selfValue, relationship, healthEnergy, and riskControl."
+  }
 }

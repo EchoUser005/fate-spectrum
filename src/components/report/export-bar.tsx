@@ -6,19 +6,16 @@ import type { ReportResponse } from "@/lib/schemas/report";
 import { Button } from "@/components/ui/button";
 import { getCurrentDayun } from "@/lib/report-view-model";
 
-type ShareTarget = "wechat" | "rednote";
-
-const targetLabels: Record<ShareTarget, string> = {
-  wechat: "微信",
-  rednote: "小红书"
-};
-
 export function ShareBar({ report }: { report: ReportResponse }) {
-  const [copiedTarget, setCopiedTarget] = useState<ShareTarget | null>(null);
+  return <ShareButton report={report} showLabel />;
+}
 
-  async function handleShare(target: ShareTarget) {
-    const blob = await buildShareImage(report, target);
-    const file = new File([blob], `fate-spectrum-${target}.png`, { type: "image/png" });
+export function ShareButton({ report, showLabel = false }: { report: ReportResponse; showLabel?: boolean }) {
+  const [copied, setCopied] = useState(false);
+
+  async function handleShare() {
+    const blob = await buildShareImage(report);
+    const file = new File([blob], "fate-spectrum-share.png", { type: "image/png" });
     const title = "命运光谱报告";
 
     if (typeof navigator !== "undefined" && navigator.share && navigator.canShare?.({ files: [file] })) {
@@ -34,38 +31,36 @@ export function ShareBar({ report }: { report: ReportResponse }) {
       try {
         await navigator.clipboard.write([new ClipboardItem({ "image/png": blob })]);
       } catch {
-        downloadShareImage(blob, target);
+        downloadShareImage(blob);
       }
     } else {
-      downloadShareImage(blob, target);
+      downloadShareImage(blob);
     }
 
-    setCopiedTarget(target);
-    window.setTimeout(() => setCopiedTarget(null), 1800);
+    setCopied(true);
+    window.setTimeout(() => setCopied(false), 1800);
   }
 
   return (
-    <section className="rounded-md border border-fs-line bg-white px-5 py-4 md:px-6">
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <h2 className="text-lg font-semibold text-fs-ink">分享报告</h2>
-        <div className="flex flex-wrap gap-3">
-          {(["wechat", "rednote"] as const).map((target) => (
-            <Button key={target} type="button" onClick={() => void handleShare(target)}>
-              {copiedTarget === target ? <Check size={16} /> : <Share2 size={16} />}
-              {copiedTarget === target ? `已生成${targetLabels[target]}图` : `分享到${targetLabels[target]}`}
-            </Button>
-          ))}
-        </div>
-      </div>
-    </section>
+    <Button
+      type="button"
+      variant="secondary"
+      aria-label={copied ? "已复制水印截图" : "复制水印截图"}
+      title={copied ? "已复制水印截图" : "复制水印截图"}
+      onClick={() => void handleShare()}
+      className="h-10 border border-fs-line bg-white px-3 text-fs-cyan ring-0 hover:border-fs-cyan hover:bg-fs-surface hover:text-fs-ink"
+    >
+      {copied ? <Check size={18} /> : <Share2 size={18} />}
+      {showLabel ? <span>{copied ? "已复制水印截图" : "复制水印截图"}</span> : null}
+    </Button>
   );
 }
 
-async function buildShareImage(report: ReportResponse, target: ShareTarget) {
+async function buildShareImage(report: ReportResponse) {
   const currentDayun = getCurrentDayun(report);
   const canvas = document.createElement("canvas");
   const width = 1080;
-  const height = target === "rednote" ? 1440 : 1350;
+  const height = 1350;
   canvas.width = width;
   canvas.height = height;
   const context = canvas.getContext("2d");
@@ -73,8 +68,14 @@ async function buildShareImage(report: ReportResponse, target: ShareTarget) {
 
   context.fillStyle = "#f7f3ea";
   context.fillRect(0, 0, width, height);
-  drawSoftOrb(context, 900, 120, 260, "rgba(181, 138, 53, 0.16)");
-  drawSoftOrb(context, 120, 1260, 320, "rgba(31, 143, 138, 0.12)");
+  context.strokeStyle = "rgba(31, 143, 138, 0.18)";
+  context.lineWidth = 2;
+  context.beginPath();
+  context.moveTo(64, 220);
+  context.lineTo(1016, 112);
+  context.moveTo(64, 320);
+  context.lineTo(1016, 420);
+  context.stroke();
 
   context.fillStyle = "#fffaf2";
   roundRect(context, 58, 58, width - 116, height - 116, 34);
@@ -209,16 +210,6 @@ function roundRect(context: CanvasRenderingContext2D, x: number, y: number, widt
   context.closePath();
 }
 
-function drawSoftOrb(context: CanvasRenderingContext2D, x: number, y: number, radius: number, color: string) {
-  const gradient = context.createRadialGradient(x, y, 0, x, y, radius);
-  gradient.addColorStop(0, color);
-  gradient.addColorStop(1, "rgba(255, 255, 255, 0)");
-  context.fillStyle = gradient;
-  context.beginPath();
-  context.arc(x, y, radius, 0, Math.PI * 2);
-  context.fill();
-}
-
 function canvasToBlob(canvas: HTMLCanvasElement) {
   return new Promise<Blob>((resolve, reject) => {
     canvas.toBlob((blob) => {
@@ -228,11 +219,11 @@ function canvasToBlob(canvas: HTMLCanvasElement) {
   });
 }
 
-function downloadShareImage(blob: Blob, target: ShareTarget) {
+function downloadShareImage(blob: Blob) {
   const url = URL.createObjectURL(blob);
   const link = document.createElement("a");
   link.href = url;
-  link.download = `fate-spectrum-${target}.png`;
+  link.download = "fate-spectrum-share.png";
   link.click();
   window.setTimeout(() => URL.revokeObjectURL(url), 500);
 }

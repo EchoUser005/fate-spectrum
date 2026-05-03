@@ -9,15 +9,15 @@ describe("schemas", () => {
       nickname: "匿名",
       gender: "female",
       calendar: "solar",
-      birthDate: "1999-09-15",
-      birthTime: "23:00",
-      timeBranch: "子",
+      birthDate: "1992-09-29",
+      birthTime: "12:00",
+      timeBranch: "午",
       timezone: "Asia/Shanghai",
-      birthPlace: "Shanghai",
+      birthPlace: "示例城市",
       useTrueSolarTime: false
     });
 
-    expect(parsed.timeBranch).toBe("子");
+    expect(parsed.timeBranch).toBe("午");
   });
 
   it("rejects invalid birth date", () => {
@@ -25,8 +25,8 @@ describe("schemas", () => {
       BirthInputSchema.parse({
         gender: "female",
         calendar: "solar",
-        birthDate: "1999/09/15",
-        timeBranch: "子",
+        birthDate: "1992/09/29",
+        timeBranch: "午",
         timezone: "Asia/Shanghai",
         useTrueSolarTime: false
       })
@@ -38,9 +38,9 @@ describe("schemas", () => {
       BirthInputSchema.parse({
         gender: "female",
         calendar: "solar",
-        birthDate: "1999-09-15",
+        birthDate: "1992-09-29",
         birthTime: "",
-        timeBranch: "子",
+        timeBranch: "午",
         timezone: "Asia/Shanghai",
         useTrueSolarTime: false
       })
@@ -63,9 +63,9 @@ describe("schemas", () => {
       birth: {
         gender: "female",
         calendar: "solar",
-        birthDate: "1999-09-15",
-        birthTime: "23:00",
-        timeBranch: "子",
+        birthDate: "1992-09-29",
+        birthTime: "12:00",
+        timeBranch: "午",
         timezone: "Asia/Shanghai",
         useTrueSolarTime: false
       },

@@ -60,9 +60,94 @@ export const KeyWindowSchema = z.object({
   actions: z.array(z.string())
 });
 
+export const FateContextSchema = z.object({
+  nowtime: z.string().optional(),
+  calendar: z.array(z.string()).default([]),
+  name: z.string().default("匿名命主"),
+  gender: z.string().default("unknown"),
+  isTai: z.string().optional(),
+  birth_correct: z.string().optional(),
+  city: z.string().optional(),
+  bazi: z.string(),
+  dayun_time: z.string().default(""),
+  qiyun_time: z.string().optional(),
+  jiaoyun_time: z.string().optional()
+});
+
+export const PortraitSchema = z.object({
+  tags: z.array(z.string()).default([]),
+  summary: z.string().default("")
+});
+
+export const ElementEnergyStanceSchema = z.enum(["favorable", "unfavorable", "mixed", "neutral"]);
+
+export const ElementEnergyNodeSchema = z.object({
+  id: z.string(),
+  label: z.string(),
+  symbol: z.string(),
+  element: z.enum(["wood", "fire", "earth", "metal", "water", "unknown"]),
+  score: ScoreValueSchema,
+  tenGod: z.string(),
+  carrier: z.string(),
+  category: z.enum(["stem", "branch", "hidden", "interaction"]).default("stem"),
+  stance: ElementEnergyStanceSchema.default("neutral"),
+  relationTags: z.array(z.string()).default([]),
+  description: z.string()
+});
+
+export const ElementInteractionSchema = z.object({
+  id: z.string(),
+  title: z.string(),
+  type: z.string(),
+  element: z.enum(["wood", "fire", "earth", "metal", "water", "unknown"]),
+  participants: z.array(z.string()),
+  participantIds: z.array(z.string()).default([]),
+  score: ScoreValueSchema,
+  stance: ElementEnergyStanceSchema.default("neutral"),
+  description: z.string()
+});
+
+export const ElementProfileSchema = z.object({
+  overall: z.string().default(""),
+  nodes: z.array(ElementEnergyNodeSchema).default([]),
+  interactions: z.array(ElementInteractionSchema).default([]),
+  favorableElements: z.array(z.enum(["wood", "fire", "earth", "metal", "water"])).default([]),
+  unfavorableElements: z.array(z.enum(["wood", "fire", "earth", "metal", "water"])).default([]),
+  elementScores: z.object({
+    wood: ScoreValueSchema,
+    fire: ScoreValueSchema,
+    earth: ScoreValueSchema,
+    metal: ScoreValueSchema,
+    water: ScoreValueSchema
+  })
+});
+
+export const CurrentEnvironmentSignalSchema = z.object({
+  title: z.string(),
+  trigger: z.string(),
+  summary: z.string()
+});
+
+export const CurrentEnvironmentDetailSchema = z.object({
+  title: z.string().default("当前大环境"),
+  cycleLabel: z.string().default(""),
+  summary: z.string().default(""),
+  signals: z.array(CurrentEnvironmentSignalSchema).default([])
+});
+
+export const ReportAnalysisSchema = z.object({
+  context: FateContextSchema,
+  portrait: PortraitSchema,
+  elementProfile: ElementProfileSchema,
+  currentEnvironment: CurrentEnvironmentDetailSchema
+});
+
 export const NarrativeSchema = z.object({
   overview: z.string(),
   currentEnvironment: z.string().default(""),
+  portrait: PortraitSchema.optional(),
+  elementProfile: ElementProfileSchema.optional(),
+  currentEnvironmentDetail: CurrentEnvironmentDetailSchema.optional(),
   dimensions: z.object({
     wealth: z.string(),
     career: z.string(),
@@ -90,6 +175,7 @@ export const ReportResponseSchema = z.object({
   dayunScores: z.array(DayunScoreSchema),
   yearlyScores: z.array(YearlyScoreSchema),
   narratives: NarrativeSchema,
+  analysis: ReportAnalysisSchema.optional(),
   rawPaipan: PaipanResponseSchema
 });
 
@@ -120,6 +206,15 @@ export type ScoreMap = z.infer<typeof ScoreMapSchema>;
 export type DayunScore = z.infer<typeof DayunScoreSchema>;
 export type YearlyScore = z.infer<typeof YearlyScoreSchema>;
 export type KeyWindow = z.infer<typeof KeyWindowSchema>;
+export type FateContext = z.infer<typeof FateContextSchema>;
+export type Portrait = z.infer<typeof PortraitSchema>;
+export type ElementEnergyStance = z.infer<typeof ElementEnergyStanceSchema>;
+export type ElementEnergyNode = z.infer<typeof ElementEnergyNodeSchema>;
+export type ElementInteraction = z.infer<typeof ElementInteractionSchema>;
+export type ElementProfile = z.infer<typeof ElementProfileSchema>;
+export type CurrentEnvironmentSignal = z.infer<typeof CurrentEnvironmentSignalSchema>;
+export type CurrentEnvironmentDetail = z.infer<typeof CurrentEnvironmentDetailSchema>;
+export type ReportAnalysis = z.infer<typeof ReportAnalysisSchema>;
 export type Narrative = z.infer<typeof NarrativeSchema>;
 export type ReportResponse = z.infer<typeof ReportResponseSchema>;
 export type ReportApiRequest = z.infer<typeof ReportApiRequestSchema>;

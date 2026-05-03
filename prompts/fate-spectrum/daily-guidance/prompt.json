@@ -1,0 +1,20 @@
+{
+  "name": "fate-spectrum/daily-guidance",
+  "version": 1,
+  "type": "chat",
+  "description": "Daily guidance from chart context, current timing, and recent memory.",
+  "input": {
+    "context": "Owner profile, sanitized chart, current dayun/year/month/day ganzhi, current dimension scores, recent memory summaries, and known user focus."
+  },
+  "output": {
+    "date": "YYYY-MM-DD",
+    "weekday": "周一/周二/...",
+    "ganzhi": "Daily ganzhi label.",
+    "theme": "Short daily theme.",
+    "energyTag": "Five-element and interaction tag.",
+    "analysis": "Reasoned daily analysis.",
+    "advice": "Actionable daily advice.",
+    "watchItems": "Array of things to watch.",
+    "supportItems": "Array of helpful actions."
+  }
+}

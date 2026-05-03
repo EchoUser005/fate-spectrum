@@ -142,7 +142,7 @@ export function BirthStep({ form }: { form: UseFormReturn<BirthInput> }) {
         {errors.birthTime?.message ? <span className="text-xs text-fs-rose">{errors.birthTime.message}</span> : null}
       </div>
       <Field label="出生地">
-        <Input placeholder="上海" {...register("birthPlace")} />
+        <Input placeholder="出生城市" {...register("birthPlace")} />
       </Field>
       <input type="hidden" {...register("timeBranch")} />
       <label className="flex items-center gap-2 rounded-md border border-fs-line bg-white px-3 py-3 text-sm font-medium text-fs-ink sm:col-span-2">

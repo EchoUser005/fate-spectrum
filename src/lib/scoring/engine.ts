@@ -5,6 +5,7 @@ import type { ProviderConfig } from "@/lib/schemas/provider";
 import type { Narrative, ReportResponse } from "@/lib/schemas/report";
 import { ReportResponseSchema } from "@/lib/schemas/report";
 import { normalizePaipan } from "@/lib/paipan/normalize";
+import { buildReportAnalysis } from "@/lib/analysis/report-analysis";
 import { buildReportNotices } from "@/lib/report-notices";
 import { DIMENSIONS } from "@/lib/scoring/dimensions";
 import { buildRuleNarrative } from "@/lib/scoring/explanations";
@@ -23,10 +24,11 @@ export function buildRuleBasedReport(params: {
   const yearlyScores = scoreYearly(normalized, dayunScores);
   const ruleNarrative = buildRuleNarrative(dayunScores, yearlyScores);
   const hasLlmNarrative = Boolean(params.narrativeOverride);
+  const generatedAt = params.generatedAt ?? new Date().toISOString();
 
   const report: ReportResponse = {
     meta: {
-      generatedAt: params.generatedAt ?? new Date().toISOString(),
+      generatedAt,
       engineVersion: ENGINE_VERSION,
       provider: params.provider.provider,
       hasLlmNarrative,
@@ -38,6 +40,13 @@ export function buildRuleBasedReport(params: {
     dayunScores,
     yearlyScores,
     narratives: params.narrativeOverride ?? ruleNarrative,
+    analysis: buildReportAnalysis({
+      birth: params.birth,
+      normalized,
+      dayunScores,
+      yearlyScores,
+      generatedAt
+    }),
     rawPaipan: paipan
   };
 

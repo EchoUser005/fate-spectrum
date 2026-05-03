@@ -2,6 +2,7 @@
   "name": "fate-spectrum",
   "version": "0.1.0",
   "private": false,
+  "packageManager": "pnpm@10.32.1",
   "description": "Open-source BaZi and Ziwei multidimensional life spectrum dashboard.",
   "license": "MIT",
   "scripts": {
@@ -12,8 +13,11 @@
     "test": "vitest run",
     "test:watch": "vitest",
     "test:e2e": "playwright test",
+    "prompts:check": "node scripts/check-langfuse-prompts.mjs",
+    "prompts:seed": "node scripts/seed-langfuse-prompts.mjs",
     "prompts:sync": "node scripts/sync-langfuse-prompts.mjs",
     "prompts:pull": "node scripts/pull-langfuse-prompts.mjs",
+    "backend:test": "PYTHONPATH=backend python -m pytest backend/tests",
     "format": "prettier --check .",
     "format:write": "prettier --write ."
   },

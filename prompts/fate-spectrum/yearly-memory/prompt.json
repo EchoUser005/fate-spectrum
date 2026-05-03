@@ -2,5 +2,18 @@
   "name": "fate-spectrum/yearly-memory",
   "version": 1,
   "type": "chat",
-  "description": "Roll monthly reports into a yearly owner memory."
+  "description": "Roll monthly reports into a yearly owner memory.",
+  "input": {
+    "context": "Monthly rollups, important events, user feedback, decade main line, and score context for one year."
+  },
+  "output": {
+    "year": "Four-digit year.",
+    "yearTheme": "Year theme.",
+    "coreLessons": "Durable lessons.",
+    "relationshipPattern": "Relationship pattern.",
+    "workAndMoneyPattern": "Work and money pattern.",
+    "bodyRhythmPattern": "Body/rhythm pattern.",
+    "nextYearStrategy": "Next-year strategy list.",
+    "memoryMarkdown": "Durable markdown memory."
+  }
 }

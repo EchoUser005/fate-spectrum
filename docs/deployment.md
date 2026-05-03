@@ -55,6 +55,8 @@ pnpm build
 
 ## Docker Compose
 
+No `.env` file is required for a first boot. Docker Compose uses safe defaults from `docker-compose.yml`; a local `.env` can override them when needed.
+
 ```bash
 docker compose up -d --build
 ```
@@ -69,13 +71,27 @@ curl http://127.0.0.1:3000/api/health
 curl http://127.0.0.1:8000/health
 ```
 
+Runtime data is stored in the named volume `fate-spectrum-data`. The image build context excludes `.env`, `data/`, `.git/`, test reports, and local workspace files through `.dockerignore`.
+
+To remove containers only:
+
+```bash
+docker compose down
+```
+
+To remove the private local data volume too:
+
+```bash
+docker compose down -v
+```
+
 ## Custom Domain
 
 Domain binding is intentionally left to the maintainer. Add the domain in Vercel or the chosen hosting layer after the GitHub repository and deployment target are ready.
 
 ## Environment Variables
 
-See `.env.example`. Do not put user keys in `NEXT_PUBLIC_`.
+See `.env.example`. Do not put user model keys in `.env`, deployment secrets, or `NEXT_PUBLIC_` variables for the public BYOK app. Users enter model keys in the browser when generating a report; the backend treats them as request-only data.
 
 Prompts are versioned locally in `prompts/` and work without any prompt server. Optional Langfuse prompt management uses server-only variables:
 

@@ -102,6 +102,8 @@ Planned memory prompt functions:
 - `adaptive-score-candidate`
 - `relationship-context`
 
+Each prompt directory declares an MVP input/output contract in `prompt.json`, with `system.md` and `user.md` as the editable prompt body. The contracts are intentionally small so prompt text can be refined in Langfuse without changing application code.
+
 Runtime behavior:
 
 - Open-source users can run from local prompt files.

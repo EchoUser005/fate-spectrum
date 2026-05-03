@@ -2,5 +2,19 @@
   "name": "fate-spectrum/monthly-rollup",
   "version": 1,
   "type": "chat",
-  "description": "Roll weekly reports into a monthly insight memory."
+  "description": "Roll weekly reports into a monthly insight memory.",
+  "input": {
+    "context": "Weekly reports, user feedback summaries, actual event records, chart main line, and score context for one month."
+  },
+  "output": {
+    "month": "YYYY-MM month key.",
+    "theme": "Monthly theme.",
+    "confirmedPatterns": "Patterns verified by user feedback.",
+    "missedSignals": "Signals that were predicted but not observed.",
+    "relationshipNotes": "Relationship memory notes.",
+    "moneyAndWorkNotes": "Work and money memory notes.",
+    "bodyAndRhythmNotes": "Body/rhythm memory notes.",
+    "nextMonthFocus": "Next-month focus list.",
+    "memoryMarkdown": "Durable markdown memory."
+  }
 }

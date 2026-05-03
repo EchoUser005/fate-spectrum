@@ -9,49 +9,50 @@
     "nickname": "匿名样例",
     "gender": "female",
     "calendar": "solar",
-    "birthDate": "1999-09-15",
-    "birthTime": "23:00",
-    "timeBranch": "子",
+    "birthDate": "1992-09-29",
+    "birthTime": "12:00",
+    "timeBranch": "午",
     "timezone": "Asia/Shanghai",
-    "birthPlace": "Shanghai",
+    "birthPlace": "示例城市",
     "useTrueSolarTime": false
   },
   "normalized": {
     "pillars": {
-      "year": "己卯",
-      "month": "癸酉",
-      "day": "庚午",
-      "hour": "丙子"
+      "year": "壬申",
+      "month": "己酉",
+      "day": "戊申",
+      "hour": "未知"
     },
     "dayun": [
       {
         "index": 0,
-        "ganzhi": "甲戌",
+        "ganzhi": "庚戌",
         "age": 8,
-        "startYear": 2007,
-        "endYear": 2016
+        "startYear": 2012,
+        "endYear": 2021
       }
     ],
     "palaces": [],
     "identity": {
-      "solarday": "1999-09-15",
-      "lunarday": "己卯年八月初六",
-      "shenxiao": "兔",
-      "age": 27,
-      "mingzhu": "禄存",
-      "shenzhu": "天梁",
-      "fiveelement": "金四局",
-      "yinyanggender": "阴女"
+      "solarday": "匿名日期",
+      "lunarday": "匿名农历",
+      "shenxiao": "匿名",
+      "age": 0,
+      "mingzhu": "未返回",
+      "shenzhu": "未返回",
+      "fiveelement": "未知局",
+      "yinyanggender": "未返回"
     },
     "outputs": {
-      "all": "匿名开发样例"
+      "all": "匿名结构样例"
     }
   },
   "dimensions": [],
   "dayunScores": [],
   "yearlyScores": [],
   "narratives": {
-    "overview": "匿名样例报告占位。",
+    "overview": "匿名结构样例报告占位。",
+    "currentEnvironment": "匿名结构样例当前阶段占位。",
     "dimensions": {
       "wealth": "占位",
       "career": "占位",

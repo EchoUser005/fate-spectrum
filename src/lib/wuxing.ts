@@ -75,12 +75,31 @@ const branchHiddenStems: Record<string, string[]> = {
   亥: ["壬", "甲"]
 };
 
+const branchElements: Record<string, WuxingElement> = {
+  子: "water",
+  丑: "earth",
+  寅: "wood",
+  卯: "wood",
+  辰: "earth",
+  巳: "fire",
+  午: "fire",
+  未: "earth",
+  申: "metal",
+  酉: "metal",
+  戌: "earth",
+  亥: "water"
+};
+
 export function getStemElement(stem?: string): WuxingElement {
   return stem ? stemElements[stem] ?? "unknown" : "unknown";
 }
 
 export function getHiddenStems(branch?: string) {
   return branch ? branchHiddenStems[branch] ?? [] : [];
+}
+
+export function getBranchElement(branch?: string): WuxingElement {
+  return branch ? branchElements[branch] ?? "unknown" : "unknown";
 }
 
 export function splitGanzhi(value: string) {

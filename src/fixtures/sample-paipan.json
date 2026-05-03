@@ -1,145 +1,144 @@
 {
   "status": "success",
-  "message": "anonymous development sample",
+  "message": "anonymous computed development sample for 1992-09-29, date-only hour unknown",
   "data": {
     "zw": [
       {
         "MangA": "命宫",
-        "MangB": "辰",
-        "MangC": "开创",
+        "MangB": "子",
+        "MangC": "匿名结构样例",
         "GongWei": 1,
-        "ganzhi": { "tg": 4, "dz": 4 },
-        "StarA": ["紫微", "天府"],
-        "StarB": ["文昌"],
-        "StarC": ["禄存"]
+        "ganzhi": { "tg": 0, "dz": 0 },
+        "StarA": ["演示主星一"],
+        "StarB": ["演示辅星一"],
+        "StarC": ["演示杂曜一"]
       },
       {
         "MangA": "兄弟",
-        "MangB": "巳",
+        "MangB": "丑",
         "GongWei": 2,
-        "ganzhi": { "tg": 5, "dz": 5 },
-        "StarA": ["太阳"],
-        "StarB": ["天魁"],
-        "StarC": ["地空"]
+        "ganzhi": { "tg": 1, "dz": 1 },
+        "StarA": ["演示主星二"],
+        "StarB": ["演示辅星二"],
+        "StarC": ["演示杂曜二"]
       },
       {
         "MangA": "夫妻",
-        "MangB": "午",
+        "MangB": "寅",
         "GongWei": 3,
-        "ganzhi": { "tg": 6, "dz": 6 },
-        "StarA": ["天相"],
-        "StarB": ["左辅"],
-        "StarC": ["红鸾"]
+        "ganzhi": { "tg": 2, "dz": 2 },
+        "StarA": ["演示主星三"],
+        "StarB": ["演示辅星三"],
+        "StarC": ["演示杂曜三"]
       },
       {
         "MangA": "子女",
-        "MangB": "未",
+        "MangB": "卯",
         "GongWei": 4,
-        "ganzhi": { "tg": 7, "dz": 7 },
-        "StarA": ["武曲"],
-        "StarB": ["右弼"],
-        "StarC": ["天喜"]
+        "ganzhi": { "tg": 3, "dz": 3 },
+        "StarA": ["演示主星四"],
+        "StarB": ["演示辅星四"],
+        "StarC": ["演示杂曜四"]
       },
       {
         "MangA": "财帛",
-        "MangB": "申",
+        "MangB": "辰",
         "GongWei": 5,
-        "ganzhi": { "tg": 8, "dz": 8 },
-        "StarA": ["天机"],
-        "StarB": ["化禄"],
-        "StarC": ["擎羊"]
+        "ganzhi": { "tg": 4, "dz": 4 },
+        "StarA": ["演示主星五"],
+        "StarB": ["演示辅星五"],
+        "StarC": ["演示杂曜五"]
       },
       {
         "MangA": "疾厄",
-        "MangB": "酉",
+        "MangB": "巳",
         "GongWei": 6,
-        "ganzhi": { "tg": 9, "dz": 9 },
-        "StarA": ["太阴"],
-        "StarB": ["天钺"],
-        "StarC": ["火星"]
+        "ganzhi": { "tg": 5, "dz": 5 },
+        "StarA": ["演示主星六"],
+        "StarB": ["演示辅星六"],
+        "StarC": ["演示杂曜六"]
       },
       {
         "MangA": "迁移",
-        "MangB": "戌",
+        "MangB": "午",
         "GongWei": 7,
-        "ganzhi": { "tg": 0, "dz": 10 },
-        "StarA": ["贪狼"],
-        "StarB": ["化权"],
-        "StarC": ["天马"]
+        "ganzhi": { "tg": 6, "dz": 6 },
+        "StarA": ["演示主星七"],
+        "StarB": ["演示辅星七"],
+        "StarC": ["演示杂曜七"]
       },
       {
         "MangA": "仆役",
-        "MangB": "亥",
+        "MangB": "未",
         "GongWei": 8,
-        "ganzhi": { "tg": 1, "dz": 11 },
-        "StarA": ["巨门"],
-        "StarB": ["文曲"],
-        "StarC": ["铃星"]
+        "ganzhi": { "tg": 7, "dz": 7 },
+        "StarA": ["演示主星八"],
+        "StarB": ["演示辅星八"],
+        "StarC": ["演示杂曜八"]
       },
       {
         "MangA": "官禄",
-        "MangB": "子",
+        "MangB": "申",
         "GongWei": 9,
-        "ganzhi": { "tg": 2, "dz": 0 },
-        "StarA": ["廉贞"],
-        "StarB": ["化科"],
-        "StarC": ["天官"]
+        "ganzhi": { "tg": 8, "dz": 8 },
+        "StarA": ["演示主星九"],
+        "StarB": ["演示辅星九"],
+        "StarC": ["演示杂曜九"]
       },
       {
         "MangA": "田宅",
-        "MangB": "丑",
+        "MangB": "酉",
         "GongWei": 10,
-        "ganzhi": { "tg": 3, "dz": 1 },
-        "StarA": ["破军"],
-        "StarB": ["天福"],
-        "StarC": ["陀罗"]
+        "ganzhi": { "tg": 9, "dz": 9 },
+        "StarA": ["演示主星十"],
+        "StarB": ["演示辅星十"],
+        "StarC": ["演示杂曜十"]
       },
       {
         "MangA": "福德",
-        "MangB": "寅",
+        "MangB": "戌",
         "GongWei": 11,
-        "ganzhi": { "tg": 4, "dz": 2 },
-        "StarA": ["七杀"],
-        "StarB": ["天巫"],
-        "StarC": ["封诰"]
+        "ganzhi": { "tg": 0, "dz": 10 },
+        "StarA": ["演示主星十一"],
+        "StarB": ["演示辅星十一"],
+        "StarC": ["演示杂曜十一"]
       },
       {
         "MangA": "父母",
-        "MangB": "卯",
+        "MangB": "亥",
         "GongWei": 12,
-        "ganzhi": { "tg": 5, "dz": 3 },
-        "StarA": ["天梁"],
-        "StarB": ["恩光"],
-        "StarC": ["天刑"]
+        "ganzhi": { "tg": 1, "dz": 11 },
+        "StarA": ["演示主星十二"],
+        "StarB": ["演示辅星十二"],
+        "StarC": ["演示杂曜十二"]
       }
     ],
     "bz": {
-      "y": "己卯",
-      "m": "乙亥",
-      "d": "戊寅",
-      "h": "癸亥",
-      "dayunStartDay": "2004-02-01",
-      "dayunGZ": ["丙子", "丁丑", "戊寅", "己卯", "庚辰", "辛巳", "壬午", "癸未"],
-      "dayunAge": [6, 16, 26, 36, 46, 56, 66, 76],
-      "dayunYear": [2004, 2014, 2024, 2034, 2044, 2054, 2064, 2074]
+      "y": "壬申",
+      "m": "己酉",
+      "d": "戊申",
+      "h": "未知",
+      "dayunGZ": ["庚戌", "辛亥", "壬子", "癸丑", "甲寅", "乙卯", "丙辰", "丁巳"],
+      "dayunAge": [8, 18, 28, 38, 48, 58, 68, 78],
+      "dayunYear": [2012, 2022, 2032, 2042, 2052, 2062, 2072, 2082]
     },
-    "solarday": "1999-09-15",
-    "lunarday": "己卯年八月初六",
-    "shenxiao": "兔",
-    "age": 27,
-    "mingzhu": "禄存",
-    "shenzhu": "天梁",
-    "fiveelement": "金四局",
-    "yinyanggender": "阴女",
+    "solarday": "匿名日期",
+    "lunarday": "匿名农历",
+    "shenxiao": "匿名",
+    "age": 0,
+    "mingzhu": "未返回",
+    "shenzhu": "未返回",
+    "fiveelement": "未知局",
+    "yinyanggender": "未返回",
     "output": {
-      "character": "命宫主星稳中带进，适合在复杂系统中建立秩序。",
-      "career": "官禄宫有化科，事业推进重在专业可信度、公开表达和长期项目。",
-      "wealth": "财帛宫见化禄，也见擎羊，变现窗口清晰但需要预算、合约和边界。",
-      "marriage": "关系维度偏向互相成就，合作关系需要清晰分工。",
-      "healthy": "疾厄宫提示压力管理和作息稳定比短期冲刺更重要。",
-      "dashian": "26 岁后进入戊寅大运，开创、竞争、身份升级的显影更强。",
-      "liunian": "2026 至 2030 年适合建立更清晰的项目结构和风险控制。",
-      "all": "这是一份匿名开发样例，用于验证 Fate Spectrum 多维度人生光谱报告。"
+      "character": "匿名结构样例：只用于验证报告字段和渲染流程。",
+      "career": "匿名结构样例：事业维度文本不对应任何真实命盘。",
+      "wealth": "匿名结构样例：财富维度文本不对应任何真实命盘。",
+      "marriage": "匿名结构样例：关系维度文本不对应任何真实命盘。",
+      "healthy": "匿名结构样例：健康能量文本不对应任何真实命盘。",
+      "dashian": "匿名结构样例：大运说明仅用于开发测试。",
+      "liunian": "匿名结构样例：流年说明仅用于开发测试。",
+      "all": "这是一份匿名结构样例，不对应任何真实用户命盘。"
     }
   }
 }

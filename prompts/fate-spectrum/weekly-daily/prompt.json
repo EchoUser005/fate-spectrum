@@ -2,5 +2,15 @@
   "name": "fate-spectrum/weekly-daily",
   "version": 1,
   "type": "chat",
-  "description": "Weekly report with daily flow reading, designed for later memory rollup."
+  "description": "Weekly report with daily flow reading, designed for later memory rollup.",
+  "input": {
+    "context": "Owner chart context, current dayun/year/month, seven daily ganzhi rows, recent memory summaries, and dimension scores."
+  },
+  "output": {
+    "weeklyTitle": "Weekly report title.",
+    "weekSummary": "Concise weekly summary.",
+    "days": "Array of daily flow rows with date, weekday, ganzhi, theme, energyTag, analysis, and advice.",
+    "keyEvents": "Potential key events or windows.",
+    "nextWeekPreview": "Short next-week preview."
+  }
 }

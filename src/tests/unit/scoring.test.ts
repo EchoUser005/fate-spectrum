@@ -7,11 +7,11 @@ const birth = {
   nickname: "匿名样例",
   gender: "female" as const,
   calendar: "solar" as const,
-  birthDate: "1999-09-15",
-  birthTime: "23:00",
-  timeBranch: "子" as const,
+  birthDate: "1992-09-29",
+  birthTime: "12:00",
+  timeBranch: "午" as const,
   timezone: "Asia/Shanghai",
-  birthPlace: "Shanghai",
+  birthPlace: "示例城市",
   useTrueSolarTime: false
 };
 
@@ -25,6 +25,15 @@ describe("scoring engine", () => {
     });
 
     expect(report.meta.hasLlmNarrative).toBe(false);
+    expect(report.analysis?.context.bazi).toBe("壬申 己酉 戊申 未知");
+    expect(report.analysis?.portrait.summary).toContain("日主");
+    expect(report.analysis?.elementProfile.nodes.length).toBeGreaterThanOrEqual(6);
+    expect(report.analysis?.elementProfile.nodes.map((node) => `${node.carrier}${node.symbol}`)).toEqual(
+      expect.arrayContaining(["年干壬", "年支申", "月干己", "月支酉", "日干戊", "日支申"])
+    );
+    expect(report.analysis?.elementProfile.interactions.length).toBeGreaterThan(0);
+    expect(report.analysis?.elementProfile.favorableElements.length).toBeGreaterThan(0);
+    expect(report.analysis?.currentEnvironment.signals.length).toBeGreaterThanOrEqual(2);
     expect(report.dayunScores.length).toBeGreaterThan(0);
     for (const dimensionId of DIMENSION_IDS) {
       expect(report.dayunScores[0]?.scores[dimensionId]).toBeGreaterThanOrEqual(0);
@@ -40,10 +49,10 @@ describe("scoring engine", () => {
         status: "success",
         data: {
           bz: {
-            y: "甲子",
-            m: "乙丑",
-            d: "丙寅",
-            h: "丁卯"
+            y: "壬申",
+            m: "己酉",
+            d: "戊申",
+            h: "未知"
           }
         }
       },

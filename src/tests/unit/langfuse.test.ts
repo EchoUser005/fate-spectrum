@@ -1,5 +1,9 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { ensureLangfusePromptCatalogSeeded, getLangfuseChatMessages } from "@/lib/llm/langfuse";
+import {
+  createLangfuseReportTrace,
+  ensureLangfusePromptCatalogSeeded,
+  getLangfuseChatMessages
+} from "@/lib/llm/langfuse";
 
 const originalEnv = { ...process.env };
 
@@ -87,6 +91,63 @@ describe("Langfuse prompt registry", () => {
       config: {
         seedMode: "missing-only"
       }
+    });
+  });
+
+  it("records redacted trace generations without leaking direct birth identifiers", async () => {
+    process.env.LANGFUSE_BASE_URL = "https://langfuse.local";
+    process.env.LANGFUSE_PUBLIC_KEY = "pk-test";
+    process.env.LANGFUSE_SECRET_KEY = "sk-test";
+    process.env.LANGFUSE_TRACE_CONTENT = "redacted";
+    const fetchMock = vi.fn().mockResolvedValue(new Response("accepted", { status: 207 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    const trace = createLangfuseReportTrace({
+      name: "fate-spectrum/report-generation",
+      input: {
+        name: "真实姓名",
+        birthDate: "1992-09-29",
+        bazi: "壬申 己酉 戊申 未知"
+      },
+      tags: ["report"]
+    });
+
+    expect(trace).not.toBeNull();
+    trace?.recordGeneration({
+      name: "prompt:fate-spectrum/portrait",
+      promptName: "fate-spectrum/portrait",
+      promptVersion: 2,
+      promptSource: "langfuse",
+      provider: "deepseek",
+      model: "deepseek-chat",
+      startTime: "2026-05-03T00:00:00.000Z",
+      endTime: "2026-05-03T00:00:01.000Z",
+      input: {
+        messages: [
+          {
+            role: "user",
+            content: "{\"name\":\"真实姓名\",\"birthDate\":\"1992-09-29\",\"bazi\":\"壬申 己酉 戊申 未知\"}"
+          }
+        ]
+      },
+      output: { content: "{\"portrait\":{\"summary\":\"ok\"}}" },
+      usage: { promptTokens: 10, completionTokens: 5, totalTokens: 15 }
+    });
+    await trace?.flush({ output: { ok: true } });
+
+    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(String(fetchMock.mock.calls[0]?.[0])).toBe("https://langfuse.local/api/public/ingestion");
+    const body = JSON.parse(String(fetchMock.mock.calls[0]?.[1]?.body));
+    const serialized = JSON.stringify(body);
+    expect(body.batch.map((event: { type: string }) => event.type)).toEqual(["trace-create", "generation-create"]);
+    expect(serialized).toContain("壬申 己酉 戊申 未知");
+    expect(serialized).not.toContain("1992-09-29");
+    expect(serialized).not.toContain("真实姓名");
+    expect(body.batch[1].body).toMatchObject({
+      promptName: "fate-spectrum/portrait",
+      promptVersion: 2,
+      usage: { promptTokens: 10, completionTokens: 5, totalTokens: 15 },
+      usageDetails: { input: 10, output: 5, total: 15 }
     });
   });
 });

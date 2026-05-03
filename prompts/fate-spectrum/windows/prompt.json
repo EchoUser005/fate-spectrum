@@ -2,5 +2,12 @@
   "name": "fate-spectrum/windows",
   "version": 1,
   "type": "chat",
-  "description": "Key windows and action plan for the current dayun."
+  "description": "Key windows and action plan for the current dayun.",
+  "input": {
+    "context": "Sanitized report context with currentDayunYears, highWindows, pressureWindows, and deterministic score rows."
+  },
+  "output": {
+    "keyWindows": "Array of key timing windows with title, startYear, endYear, reason, and actions.",
+    "actionPlan": "Array of concise action items."
+  }
 }

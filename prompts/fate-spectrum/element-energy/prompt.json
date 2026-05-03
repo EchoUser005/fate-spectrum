@@ -1,0 +1,16 @@
+{
+  "name": "fate-spectrum/element-energy",
+  "version": 3,
+  "type": "chat",
+  "description": "五行与十神能量谱。把喜用和忌神从二分法改成可解释的量化节点。",
+  "input": {
+    "context": "Fate context with chart, day master, pillars, hidden stems, dayun/year signals, and output shape."
+  },
+  "output": {
+    "elementProfile": {
+      "overall": "One concise paragraph describing the overall energy preference.",
+      "nodes": "Ranked energy nodes with score, tenGod, carrier, and description.",
+      "elementScores": "Normalized five-element scores."
+    }
+  }
+}

@@ -2,5 +2,11 @@
   "name": "fate-spectrum/overview",
   "version": 1,
   "type": "chat",
-  "description": "Report overview sections for day master, chart pattern, favorable elements, and unfavorable elements."
+  "description": "Report overview sections for day master, chart pattern, favorable elements, and unfavorable elements.",
+  "input": {
+    "context": "Sanitized report context with normalized chart, dimensions, dayunScores, yearlyScores, currentDayun, currentYearly, palaces, and output shape."
+  },
+  "output": {
+    "overview": "String containing 日主、命盘格局、喜用神、忌神 sections."
+  }
 }

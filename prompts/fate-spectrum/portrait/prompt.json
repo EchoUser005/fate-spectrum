@@ -1,0 +1,15 @@
+{
+  "name": "fate-spectrum/portrait",
+  "version": 2,
+  "type": "chat",
+  "description": "命主格局画像。抓最能定义命主运行方式的结构，输出 tags 与 summary。",
+  "input": {
+    "context": "Fate context with userInfo, sanitized chart, scoringContext, current dayun/year, palaces, and output shape."
+  },
+  "output": {
+    "portrait": {
+      "tags": ["String array of the strongest explainable structure labels."],
+      "summary": "Readable product-style portrait of the native operating pattern."
+    }
+  }
+}

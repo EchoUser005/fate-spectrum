@@ -9,11 +9,11 @@ const birth = {
   nickname: "匿名样例",
   gender: "female" as const,
   calendar: "solar" as const,
-  birthDate: "1999-09-15",
-  birthTime: "23:00",
-  timeBranch: "子" as const,
+  birthDate: "1992-09-29",
+  birthTime: "12:00",
+  timeBranch: "午" as const,
   timezone: "Asia/Shanghai",
-  birthPlace: "Shanghai",
+  birthPlace: "示例城市",
   useTrueSolarTime: false
 };
 
@@ -44,14 +44,14 @@ function buildReport(useNarrativeOverride = false) {
 }
 
 describe("sample paipan golden profile", () => {
-  it("matches the target pillars and dayun sequence", () => {
+  it("matches the anonymous sample pillars and dayun sequence", () => {
     const report = buildReport();
 
     expect(report.normalized.pillars).toEqual({
-      year: "己卯",
-      month: "乙亥",
-      day: "戊寅",
-      hour: "癸亥"
+      year: "壬申",
+      month: "己酉",
+      day: "戊申",
+      hour: "未知"
     });
     expect(report.dayunScores.map((dayun) => dayun.ganzhi)).toEqual(
       SAMPLE_GOLDEN_DAYUN_PROFILE.map((dayun) => dayun.ganzhi)

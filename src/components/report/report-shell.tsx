@@ -6,7 +6,6 @@ import type { CycleSource } from "@/components/report/current-cycle-card";
 import { DayunHeatmap } from "@/components/report/dayun-heatmap";
 import { DayunSpectrumChart } from "@/components/report/dayun-spectrum-chart";
 import { DisclaimerNote } from "@/components/report/disclaimer-note";
-import { ShareBar } from "@/components/report/export-bar";
 import { ReportNav } from "@/components/report/report-nav";
 import { ReportOverview } from "@/components/report/report-overview";
 import { YearlyFocusTable } from "@/components/report/yearly-focus-table";
@@ -17,7 +16,8 @@ export function ReportShell({
   profiles,
   activeProfileId,
   onSelectProfile,
-  onCreateProfile
+  onCreateProfile,
+  onOpenModelConfig
 }: {
   report: ReportResponse;
   onReset?: () => void;
@@ -25,6 +25,7 @@ export function ReportShell({
   activeProfileId?: string;
   onSelectProfile?: (id: string) => void;
   onCreateProfile?: () => void;
+  onOpenModelConfig?: () => void;
 }) {
   const [chartMode, setChartMode] = useState<CycleSource>("bazi");
 
@@ -36,6 +37,8 @@ export function ReportShell({
         activeProfileId={activeProfileId}
         onSelectProfile={onSelectProfile}
         onCreateProfile={onCreateProfile}
+        onOpenModelConfig={onOpenModelConfig}
+        report={report}
         onNavigate={(id) => {
           if (id === "overview") setChartMode("bazi");
           if (id === "chart") setChartMode("ziwei");
@@ -48,7 +51,6 @@ export function ReportShell({
       </section>
       <YearlyFocusTable report={report} />
       <DisclaimerNote />
-      <ShareBar report={report} />
     </div>
   );
 }

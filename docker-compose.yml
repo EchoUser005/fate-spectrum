@@ -12,11 +12,23 @@ services:
     build: .
     ports:
       - "3000:3000"
-    env_file:
-      - path: .env
-        required: false
     environment:
       NODE_ENV: production
+      NEXT_PUBLIC_APP_NAME: ${NEXT_PUBLIC_APP_NAME:-Fate Spectrum}
+      DEFAULT_LLM_PROVIDER: ${DEFAULT_LLM_PROVIDER:-deepseek}
+      DEEPSEEK_BASE_URL: ${DEEPSEEK_BASE_URL:-https://api.deepseek.com}
+      DEFAULT_DEEPSEEK_MODEL: ${DEFAULT_DEEPSEEK_MODEL:-deepseek-v4-pro}
+      OPENAI_COMPATIBLE_BASE_URL: ${OPENAI_COMPATIBLE_BASE_URL:-https://api.openai.com/v1}
+      DEFAULT_OPENAI_COMPATIBLE_MODEL: ${DEFAULT_OPENAI_COMPATIBLE_MODEL:-gpt-4o-mini}
+      SHENJIGE_PAIPAN_ENDPOINT: ${SHENJIGE_PAIPAN_ENDPOINT:-https://www.shenjige.cn/api/ziwei/getPlateArrangement}
+      ALLOW_SESSION_KEY_STORAGE: ${ALLOW_SESSION_KEY_STORAGE:-false}
+      ALLOW_INSECURE_PROVIDER_ENDPOINT: ${ALLOW_INSECURE_PROVIDER_ENDPOINT:-false}
+      LANGFUSE_BASE_URL: ${LANGFUSE_BASE_URL:-}
+      LANGFUSE_PUBLIC_KEY: ${LANGFUSE_PUBLIC_KEY:-}
+      LANGFUSE_SECRET_KEY: ${LANGFUSE_SECRET_KEY:-}
+      LANGFUSE_PROMPT_LABEL: ${LANGFUSE_PROMPT_LABEL:-prod}
+      LANGFUSE_TRACE_ENABLED: ${LANGFUSE_TRACE_ENABLED:-true}
+      LANGFUSE_TRACE_CONTENT: ${LANGFUSE_TRACE_CONTENT:-redacted}
       FATE_MEMORY_API_URL: http://fate-spectrum-api:8000
     depends_on:
       - fate-spectrum-api

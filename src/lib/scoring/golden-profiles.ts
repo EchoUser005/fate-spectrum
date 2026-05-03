@@ -11,140 +11,140 @@ export type GoldenDayunProfile = {
 };
 
 const SAMPLE_GOLDEN_PILLARS = {
-  year: "己卯",
-  month: "乙亥",
-  day: "戊寅",
-  hour: "癸亥"
+  year: "壬申",
+  month: "己酉",
+  day: "戊申",
+  hour: "未知"
 };
 
 export const SAMPLE_GOLDEN_DAYUN_PROFILE: GoldenDayunProfile[] = [
   {
-    ganzhi: "丙子",
-    startYear: 2004,
-    endYear: 2013,
-    age: 6,
+    ganzhi: "庚戌",
+    startYear: 2012,
+    endYear: 2021,
+    age: 8,
     scores: {
-      wealth: 62,
-      career: 73,
-      comfort: 58,
-      selfValue: 61,
-      relationship: 64,
-      healthEnergy: 63,
-      riskControl: 56
+      wealth: 60,
+      career: 64,
+      comfort: 62,
+      selfValue: 63,
+      relationship: 58,
+      healthEnergy: 61,
+      riskControl: 60
     },
-    summary: "火透但水旺，学习、环境适应、规则建立期"
+    summary: "匿名样例第一阶段，适合验证基础光谱渲染"
   },
   {
-    ganzhi: "丁丑",
-    startYear: 2014,
-    endYear: 2023,
-    age: 16,
+    ganzhi: "辛亥",
+    startYear: 2022,
+    endYear: 2031,
+    age: 18,
+    scores: {
+      wealth: 66,
+      career: 70,
+      comfort: 59,
+      selfValue: 72,
+      relationship: 63,
+      healthEnergy: 58,
+      riskControl: 61
+    },
+    summary: "匿名样例当前阶段，适合验证趋势和解读位置"
+  },
+  {
+    ganzhi: "壬子",
+    startYear: 2032,
+    endYear: 2041,
+    age: 28,
+    scores: {
+      wealth: 72,
+      career: 74,
+      comfort: 56,
+      selfValue: 76,
+      relationship: 65,
+      healthEnergy: 55,
+      riskControl: 57
+    },
+    summary: "匿名样例推进阶段，适合验证高低色阶"
+  },
+  {
+    ganzhi: "癸丑",
+    startYear: 2042,
+    endYear: 2051,
+    age: 38,
     scores: {
       wealth: 68,
-      career: 78,
-      comfort: 70,
-      selfValue: 68,
-      relationship: 66,
-      healthEnergy: 72,
-      riskControl: 70
+      career: 71,
+      comfort: 60,
+      selfValue: 69,
+      relationship: 67,
+      healthEnergy: 62,
+      riskControl: 64
     },
-    summary: "基础最稳，适合学历、证书、专业信用"
+    summary: "匿名样例承载阶段，适合验证稳定区间"
   },
   {
-    ganzhi: "戊寅",
-    startYear: 2024,
-    endYear: 2033,
-    age: 26,
+    ganzhi: "甲寅",
+    startYear: 2052,
+    endYear: 2061,
+    age: 48,
     scores: {
-      wealth: 76,
-      career: 84,
-      comfort: 52,
-      selfValue: 86,
-      relationship: 78,
-      healthEnergy: 55,
-      riskControl: 50
+      wealth: 75,
+      career: 78,
+      comfort: 54,
+      selfValue: 80,
+      relationship: 70,
+      healthEnergy: 56,
+      riskControl: 55
     },
-    summary: "当前主战场，开创、竞争、身份升级，但很耗"
+    summary: "匿名样例开拓阶段，适合验证机会与压力并存"
   },
   {
-    ganzhi: "己卯",
-    startYear: 2034,
-    endYear: 2043,
-    age: 36,
+    ganzhi: "乙卯",
+    startYear: 2062,
+    endYear: 2071,
+    age: 58,
+    scores: {
+      wealth: 77,
+      career: 80,
+      comfort: 52,
+      selfValue: 82,
+      relationship: 72,
+      healthEnergy: 53,
+      riskControl: 52
+    },
+    summary: "匿名样例高能阶段，适合验证风险提示"
+  },
+  {
+    ganzhi: "丙辰",
+    startYear: 2072,
+    endYear: 2081,
+    age: 68,
     scores: {
       wealth: 73,
-      career: 82,
-      comfort: 46,
-      selfValue: 80,
-      relationship: 74,
-      healthEnergy: 48,
-      riskControl: 45
-    },
-    summary: "责任、人事、家庭或组织压力最重之一"
-  },
-  {
-    ganzhi: "庚辰",
-    startYear: 2044,
-    endYear: 2053,
-    age: 46,
-    scores: {
-      wealth: 86,
-      career: 87,
-      comfort: 68,
-      selfValue: 88,
-      relationship: 72,
-      healthEnergy: 67,
-      riskControl: 66
-    },
-    summary: "中年变现佳，适合产品化、资产化、顾问化"
-  },
-  {
-    ganzhi: "辛巳",
-    startYear: 2054,
-    endYear: 2063,
-    age: 56,
-    scores: {
-      wealth: 90,
-      career: 92,
-      comfort: 45,
-      selfValue: 93,
-      relationship: 63,
-      healthEnergy: 42,
-      riskControl: 38
-    },
-    summary: "财富事业成就峰值，但冲动、健康、合规风险最大"
-  },
-  {
-    ganzhi: "壬午",
-    startYear: 2064,
-    endYear: 2073,
-    age: 66,
-    scores: {
-      wealth: 88,
-      career: 78,
-      comfort: 78,
-      selfValue: 76,
+      career: 69,
+      comfort: 72,
+      selfValue: 68,
       relationship: 70,
-      healthEnergy: 72,
+      healthEnergy: 71,
       riskControl: 73
     },
-    summary: "晚年较舒服，能享财、持有资产、做高质量项目"
+    summary: "匿名样例回稳阶段，适合验证舒适区间"
   },
   {
-    ganzhi: "癸未",
-    startYear: 2074,
-    endYear: 2083,
-    age: 76,
+    ganzhi: "丁巳",
+    startYear: 2082,
+    endYear: 2091,
+    age: 78,
     scores: {
-      wealth: 82,
-      career: 65,
-      comfort: 66,
-      selfValue: 70,
-      relationship: 76,
-      healthEnergy: 58,
-      riskControl: 62
+      wealth: 69,
+      career: 66,
+      comfort: 68,
+      selfValue: 67,
+      relationship: 74,
+      healthEnergy: 64,
+      riskControl: 66
     },
-    summary: "家族、传承、资产整理、人情责任明显"
+    summary: "匿名样例收束阶段，适合验证长期表格"
   }
 ];
 
